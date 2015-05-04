@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BF8AE423-4549-45B9-83E3-AD7B27B72A82}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JCsTools.JCQ.IcqInterface.DataTypes</RootNamespace>
+    <AssemblyName>Jcq.IcqProtocol.DataTypes</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ByteConverter.cs" />
+    <Compile Include="Flap.cs" />
+    <Compile Include="FlapChannel.cs" />
+    <Compile Include="FlapDescriptor.cs" />
+    <Compile Include="FlapRequestSignInCookie.cs" />
+    <Compile Include="FlapSendSignInCookie.cs" />
+    <Compile Include="Icq Meta Data\DeleteOfflineMessagesRequest.cs" />
+    <Compile Include="Icq Meta Data\EndOfOfflineMessagesResponse.cs" />
+    <Compile Include="Icq Meta Data\MessageFlag.cs" />
+    <Compile Include="Icq Meta Data\MessageType.cs" />
+    <Compile Include="Icq Meta Data\MetaInformationRequest.cs" />
+    <Compile Include="Icq Meta Data\MetaInformationResponse.cs" />
+    <Compile Include="Icq Meta Data\MetaRequest.cs" />
+    <Compile Include="Icq Meta Data\MetaRequestSubType.cs" />
+    <Compile Include="Icq Meta Data\MetaRequestType.cs" />
+    <Compile Include="Icq Meta Data\MetaResponse.cs" />
+    <Compile Include="Icq Meta Data\MetaResponseSubType.cs" />
+    <Compile Include="Icq Meta Data\MetaResponseType.cs" />
+    <Compile Include="Icq Meta Data\MetaSearchByTlvRequest.cs" />
+    <Compile Include="Icq Meta Data\MetaSearchByUinResponse.cs" />
+    <Compile Include="Icq Meta Data\MetaShortUserInformationRequest.cs" />
+    <Compile Include="Icq Meta Data\MetaShortUserInformationResponse.cs" />
+    <Compile Include="Icq Meta Data\OfflineMessageRequest.cs" />
+    <Compile Include="Icq Meta Data\OfflineMessageResponse.cs" />
+    <Compile Include="Icq Meta Data\SearchByUinRequest.cs" />
+    <Compile Include="Icq Meta Data\SearchUserStatus.cs" />
+    <Compile Include="ISerializable.cs" />
+    <Compile Include="LETlv.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationContext.cs" />
+    <Compile Include="Snac Family 01\ExtendedStatusNotification.cs" />
+    <Compile Include="Snac Family 01\ExtendedStatusNotificationType.cs" />
+    <Compile Include="Snac Family 01\FamilyIdToolPair.cs" />
+    <Compile Include="Snac Family 01\FamilySubtypePair.cs" />
+    <Compile Include="Snac Family 01\FamilyVersionPair.cs" />
+    <Compile Include="Snac Family 01\IChatAvailableNotification.cs" />
+    <Compile Include="Snac Family 01\MessageCode.cs" />
+    <Compile Include="Snac Family 01\MessageOfTheDayType.cs" />
+    <Compile Include="Snac Family 01\RateClass.cs" />
+    <Compile Include="Snac Family 01\RateGroup.cs" />
+    <Compile Include="Snac Family 01\Snac0101.cs" />
+    <Compile Include="Snac Family 01\Snac0102.cs" />
+    <Compile Include="Snac Family 01\Snac0103.cs" />
+    <Compile Include="Snac Family 01\Snac0104.cs" />
+    <Compile Include="Snac Family 01\Snac0105.cs" />
+    <Compile Include="Snac Family 01\Snac0106.cs" />
+    <Compile Include="Snac Family 01\Snac0107.cs" />
+    <Compile Include="Snac Family 01\Snac0108.cs" />
+    <Compile Include="Snac Family 01\Snac0109.cs" />
+    <Compile Include="Snac Family 01\Snac010A.cs" />
+    <Compile Include="Snac Family 01\Snac010B.cs" />
+    <Compile Include="Snac Family 01\Snac010C.cs" />
+    <Compile Include="Snac Family 01\Snac010D.cs" />
+    <Compile Include="Snac Family 01\Snac010E.cs" />
+    <Compile Include="Snac Family 01\Snac010F.cs" />
+    <Compile Include="Snac Family 01\Snac0110.cs" />
+    <Compile Include="Snac Family 01\Snac0111.cs" />
+    <Compile Include="Snac Family 01\Snac0112.cs" />
+    <Compile Include="Snac Family 01\Snac0113.cs" />
+    <Compile Include="Snac Family 01\Snac0114.cs" />
+    <Compile Include="Snac Family 01\Snac0116.cs" />
+    <Compile Include="Snac Family 01\Snac0117.cs" />
+    <Compile Include="Snac Family 01\Snac0118.cs" />
+    <Compile Include="Snac Family 01\Snac011e.cs" />
+    <Compile Include="Snac Family 01\Snac011f.cs" />
+    <Compile Include="Snac Family 01\Snac0120.cs" />
+    <Compile Include="Snac Family 01\Snac0121.cs" />
+    <Compile Include="Snac Family 01\TlvMessageOfTheDay.cs" />
+    <Compile Include="Snac Family 01\TlvOnlineTime.cs" />
+    <Compile Include="Snac Family 01\TlvServerAddress.cs" />
+    <Compile Include="Snac Family 01\TlvServiceFamilyId.cs" />
+    <Compile Include="Snac Family 01\UploadIconFlag.cs" />
+    <Compile Include="Snac Family 01\UploadIconNotification.cs" />
+    <Compile Include="Snac Family 02\IcqClientCapabilities.cs" />
+    <Compile Include="Snac Family 02\LocationInfoRequestType.cs" />
+    <Compile Include="Snac Family 02\Snac0202.cs" />
+    <Compile Include="Snac Family 02\Snac0203.cs" />
+    <Compile Include="Snac Family 02\Snac0204.cs" />
+    <Compile Include="Snac Family 02\Snac0205.cs" />
+    <Compile Include="Snac Family 02\Snac0206.cs" />
+    <Compile Include="Snac Family 02\TlvAwayMessageEncoding.cs" />
+    <Compile Include="Snac Family 02\TlvAwayMessageString.cs" />
+    <Compile Include="Snac Family 02\TlvCapabilities.cs" />
+    <Compile Include="Snac Family 02\TlvClientProfileString.cs" />
+    <Compile Include="Snac Family 02\TlvEncodingType.cs" />
+    <Compile Include="Snac Family 02\TlvMaxCapabilities.cs" />
+    <Compile Include="Snac Family 02\TlvMimeType.cs" />
+    <Compile Include="Snac Family 02\TlvProfileMaxLength.cs" />
+    <Compile Include="Snac Family 03\Snac0302.cs" />
+    <Compile Include="Snac Family 03\Snac0303.cs" />
+    <Compile Include="Snac Family 03\Snac030B.cs" />
+    <Compile Include="Snac Family 03\Snac030C.cs" />
+    <Compile Include="Snac Family 03\TlvMaxBuddylistSize.cs" />
+    <Compile Include="Snac Family 03\TlvMaxNumberOfWatchers.cs" />
+    <Compile Include="Snac Family 03\TlvMaxOnlineNotifications.cs" />
+    <Compile Include="Snac Family 04\MessageChannel.cs" />
+    <Compile Include="Snac Family 04\MissedMessageInfo.cs" />
+    <Compile Include="Snac Family 04\MissedMessageReason.cs" />
+    <Compile Include="Snac Family 04\NotificationType.cs" />
+    <Compile Include="Snac Family 04\Snac0402.cs" />
+    <Compile Include="Snac Family 04\Snac0403.cs" />
+    <Compile Include="Snac Family 04\Snac0404.cs" />
+    <Compile Include="Snac Family 04\Snac0405.cs" />
+    <Compile Include="Snac Family 04\Snac0406.cs" />
+    <Compile Include="Snac Family 04\Snac0407.cs" />
+    <Compile Include="Snac Family 04\Snac040A.cs" />
+    <Compile Include="Snac Family 04\Snac040B.cs" />
+    <Compile Include="Snac Family 04\Snac040C.cs" />
+    <Compile Include="Snac Family 04\Snac0414.cs" />
+    <Compile Include="Snac Family 04\TlvAccountCreationTime.cs" />
+    <Compile Include="Snac Family 04\TlvMessageData.cs" />
+    <Compile Include="Snac Family 04\TlvRequestAckFromServer.cs" />
+    <Compile Include="Snac Family 04\TlvStoreMessageIfRecipientOffline.cs" />
+    <Compile Include="Snac Family 09\Snac0902.cs" />
+    <Compile Include="Snac Family 09\Snac0903.cs" />
+    <Compile Include="Snac Family 09\Snac0904.cs" />
+    <Compile Include="Snac Family 09\Snac0905.cs" />
+    <Compile Include="Snac Family 09\Snac0906.cs" />
+    <Compile Include="Snac Family 09\Snac0907.cs" />
+    <Compile Include="Snac Family 09\Snac0908.cs" />
+    <Compile Include="Snac Family 09\Snac0909.cs" />
+    <Compile Include="Snac Family 09\TlvErrorDescriptionUrl.cs" />
+    <Compile Include="Snac Family 09\TlvMaxInvisibleListSize.cs" />
+    <Compile Include="Snac Family 09\TlvMaxVisibleListSize.cs" />
+    <Compile Include="Snac Family 0B\Snac0B02.cs" />
+    <Compile Include="Snac Family 0B\Snac0B03.cs" />
+    <Compile Include="Snac Family 0B\Snac0B04.cs" />
+    <Compile Include="Snac Family 0B\TlvUsageReport.cs" />
+    <Compile Include="Snac Family 10\Snac1002.cs" />
+    <Compile Include="Snac Family 10\Snac1003.cs" />
+    <Compile Include="Snac Family 10\Snac1004.cs" />
+    <Compile Include="Snac Family 10\Snac1005.cs" />
+    <Compile Include="Snac Family 13\AllowOtherToSeeSetting.cs" />
+    <Compile Include="Snac Family 13\BuddyAlert.cs" />
+    <Compile Include="Snac Family 13\BuddyAlertType.cs" />
+    <Compile Include="Snac Family 13\PrivacySetting.cs" />
+    <Compile Include="Snac Family 13\Snac1302.cs" />
+    <Compile Include="Snac Family 13\Snac1303.cs" />
+    <Compile Include="Snac Family 13\Snac1304.cs" />
+    <Compile Include="Snac Family 13\Snac1305.cs" />
+    <Compile Include="Snac Family 13\Snac1306.cs" />
+    <Compile Include="Snac Family 13\Snac1307.cs" />
+    <Compile Include="Snac Family 13\Snac1308.cs" />
+    <Compile Include="Snac Family 13\Snac1309.cs" />
+    <Compile Include="Snac Family 13\Snac130A.cs" />
+    <Compile Include="Snac Family 13\Snac130E.cs" />
+    <Compile Include="Snac Family 13\Snac130F.cs" />
+    <Compile Include="Snac Family 13\Snac1311.cs" />
+    <Compile Include="Snac Family 13\Snac1312.cs" />
+    <Compile Include="Snac Family 13\Snac1314.cs" />
+    <Compile Include="Snac Family 13\Snac1315.cs" />
+    <Compile Include="Snac Family 13\Snac1316.cs" />
+    <Compile Include="Snac Family 13\Snac1318.cs" />
+    <Compile Include="Snac Family 13\Snac1319.cs" />
+    <Compile Include="Snac Family 13\Snac131A.cs" />
+    <Compile Include="Snac Family 13\Snac131B.cs" />
+    <Compile Include="Snac Family 13\Snac131C.cs" />
+    <Compile Include="Snac Family 13\SSIActionResultCode.cs" />
+    <Compile Include="Snac Family 13\SSIBuddyIcon.cs" />
+    <Compile Include="Snac Family 13\SSIBuddyRecord.cs" />
+    <Compile Include="Snac Family 13\SSIDenyRecord.cs" />
+    <Compile Include="Snac Family 13\SSIGroupRecord.cs" />
+    <Compile Include="Snac Family 13\SSIIgnoreListRecord.cs" />
+    <Compile Include="Snac Family 13\SSIItemDescriptor.cs" />
+    <Compile Include="Snac Family 13\SSIItemType.cs" />
+    <Compile Include="Snac Family 13\SSIPermitDenySettings.cs" />
+    <Compile Include="Snac Family 13\SSIPermitRecord.cs" />
+    <Compile Include="Snac Family 13\SSIRecord.cs" />
+    <Compile Include="Snac Family 13\SSIRosterImportTime.cs" />
+    <Compile Include="Snac Family 13\TlvAllowOtherToSee.cs" />
+    <Compile Include="Snac Family 13\TlvBuddyCommentField.cs" />
+    <Compile Include="Snac Family 13\TlvBuddyListImportTime.cs" />
+    <Compile Include="Snac Family 13\TlvLocalEmailAddress.cs" />
+    <Compile Include="Snac Family 13\TlvLocalScreenName.cs" />
+    <Compile Include="Snac Family 13\TlvLocalSmsNumber.cs" />
+    <Compile Include="Snac Family 13\TlvMaxItemNumbers.cs" />
+    <Compile Include="Snac Family 13\TlvPersonalBuddyAlerts.cs" />
+    <Compile Include="Snac Family 13\TlvPrivacySetting.cs" />
+    <Compile Include="Snac Family 13\TlvSSIInnerItems.cs" />
+    <Compile Include="Snac Family 15\Snac1502.cs" />
+    <Compile Include="Snac Family 15\Snac1503.cs" />
+    <Compile Include="Snac.cs" />
+    <Compile Include="SnacDescriptor.cs" />
+    <Compile Include="Tlv.cs" />
+    <Compile Include="TlvAuthorizationCookie.cs" />
+    <Compile Include="TlvBosServerAddress.cs" />
+    <Compile Include="Tlv\AuthFailedCode.cs" />
+    <Compile Include="Tlv\DcType.cs" />
+    <Compile Include="Tlv\ErrorCode.cs" />
+    <Compile Include="Tlv\TlvClientBuildNumber.cs" />
+    <Compile Include="Tlv\TlvClientCountry.cs" />
+    <Compile Include="Tlv\TlvClientDistributionNumber.cs" />
+    <Compile Include="Tlv\TlvClientId.cs" />
+    <Compile Include="Tlv\TlvClientIdString.cs" />
+    <Compile Include="Tlv\TlvClientLanguage.cs" />
+    <Compile Include="Tlv\TlvClientLesserVersion.cs" />
+    <Compile Include="Tlv\TlvClientMajorVersion.cs" />
+    <Compile Include="Tlv\TlvClientMinorVersion.cs" />
+    <Compile Include="Tlv\TlvDescriptor.cs" />
+    <Compile Include="Tlv\TlvMetaRequestData.cs" />
+    <Compile Include="Tlv\TlvMetaResponseData.cs" />
+    <Compile Include="Tlv\TlvPassword.cs" />
+    <Compile Include="Tlv\TlvScreenName.cs" />
+    <Compile Include="Tlv\TlvAuthFaild.cs" />
+    <Compile Include="Tlv\TlvClientIdleTime.cs" />
+    <Compile Include="Tlv\TlvDcInfo.cs" />
+    <Compile Include="Tlv\TlvErrorSubCode.cs" />
+    <Compile Include="Tlv\TlvExternalIpAddress.cs" />
+    <Compile Include="Tlv\TlvMemberSince.cs" />
+    <Compile Include="Tlv\MetaResponseDescriptor.cs" />
+    <Compile Include="Tlv\TlvSignOnTime.cs" />
+    <Compile Include="Tlv\TlvUserClass.cs" />
+    <Compile Include="Tlv\TlvUserIconIdAndHash.cs" />
+    <Compile Include="Tlv\TlvUserStatus.cs" />
+    <Compile Include="Tlv\UserClass.cs" />
+    <Compile Include="Tlv\UserInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Jcq.Core.Contracts\Jcq.Core.Contracts.csproj">
+      <Project>{5314E942-5051-44D1-B8CC-7CD785F1AD63}</Project>
+      <Name>Jcq.Core.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Core\Jcq.Core.csproj">
+      <Project>{E5BB29C3-3E30-464D-B8C4-9500D9A334FB}</Project>
+      <Name>Jcq.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

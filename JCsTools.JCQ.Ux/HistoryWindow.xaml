@@ -1,0 +1,71 @@
+<!--
+    Copyright 2008 Jan Molnar <jan.molnar@abds.de>
+
+    This file is part of JCQ.
+
+    JCQ is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+
+    JCQ is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with JCQ. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<Window x:Class="HistoryWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:JCsTools.JCQ.ViewModel;assembly=JCsTools.JCQ.ViewModel"
+    Name="HistoryWindow"
+    Title="{Binding ViewModel.Contact.Name, ElementName=HistoryWindow}" Height="360" Width="637"
+    >
+    <Window.Resources>
+        <Style TargetType="{x:Type StatusBar}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#aaa" />
+        </Style>
+
+        <DataTemplate DataType="{x:Type vm:StatusChangedMessageViewModel}">
+            <Paragraph Foreground="{Binding Foreground}" Margin="0">
+                <Run vm:RunBinding.Text="{Binding DateCreated, Converter={StaticResource sfc}, ConverterParameter='\{0:t\}'}" />
+                ***
+                <Run vm:RunBinding.Text="{Binding Sender.Name}" /> changed status to
+                <Run vm:RunBinding.Text="{Binding Status.Name}" /> ***
+            </Paragraph>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:TextMessageViewModel}">
+            <Paragraph Margin="0">
+                <Run Foreground="{Binding Foreground}" vm:RunBinding.Text="{Binding DateCreated, Converter={StaticResource sfc}, ConverterParameter='\{0:t\}'}" />
+                <Run Foreground="{Binding Foreground}" Text=" ~ " />
+                <Run Foreground="{Binding Foreground}" vm:RunBinding.Text="{Binding Sender.Name}" />
+                <Run Foreground="{Binding Foreground}" Text=": " />
+                <Run vm:RunBinding.Text="{Binding Message}" />
+            </Paragraph>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:OfflineTextMessageViewModel}">
+            <Paragraph Margin="0">
+                <Run Foreground="{Binding Foreground}" vm:RunBinding.Text="{Binding DateCreated, Converter={StaticResource sfc}, ConverterParameter='\{0:t\}'}" />
+                <Run Foreground="{Binding Foreground}" Text=" ~ " />
+                <Run Foreground="{Binding Foreground}" vm:RunBinding.Text="{Binding Sender.Name}" />
+                <Run Foreground="{Binding Foreground}" Text=": " />
+                <Run vm:RunBinding.Text="{Binding Message}" />
+                <Run Foreground="Gray" Text="[Sent Offline" />
+                <Run Foreground="Gray" vm:RunBinding.Text="{Binding DateSent}" />
+                <Run Foreground="Gray" Text="]" />
+            </Paragraph>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid DataContext="{Binding ElementName=HistoryWindow}">
+        <RichTextBox Margin="8" Name="MessagesRichTextBox" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <FlowDocument vm:FlowDocumentBinding.Collection="{Binding ViewModel.Messages}" />
+        </RichTextBox>
+    </Grid>
+</Window>

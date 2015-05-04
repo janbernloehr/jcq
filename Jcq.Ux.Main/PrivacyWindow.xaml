@@ -1,0 +1,56 @@
+﻿<Window x:Class="JCsTools.JCQ.Ux.PrivacyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:JCsTools.JCQ.ViewModel;assembly=Jcq.Ux.ViewModel"
+        Title="PrivacyWindow" Height="300" Width="340" Name="wnd">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:ContactViewModel}">
+            <TextBlock>
+                <TextBlock Text="{Binding Name}" />
+                <TextBlock Text=" (" />
+                <TextBlock Text="{Binding Identifier}" />
+                <TextBlock Text=")" />
+            </TextBlock>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid DataContext="{Binding ElementName=wnd}" Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Visible list" />
+        <ListBox Margin="0,2,0,2" Grid.Row="1" IsSynchronizedWithCurrentItem="True"
+                 ItemsSource="{Binding ViewModel.VisibleContacts}" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="Add contact" /><TextBox Name="NewVisibleContact" Width="160" />
+            <Button Content="Add" Click="OnAddVisibleContactClick" />
+            <Button Content="Remove" Click="OnRemoveVisibleContactClick" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="3" Text="Invisible list" />
+        <ListBox Margin="0,2,0,2" Grid.Row="4" IsSynchronizedWithCurrentItem="True"
+                 ItemsSource="{Binding ViewModel.InvisibleContacts}" />
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
+            <TextBlock Text="Add contact" /><TextBox Name="NewInvisibleContact" Width="160" />
+            <Button Content="Add" Click="OnAddInvisibleContactClick" />
+            <Button Content="Remove" Click="OnRemoveInvisibleContactClick" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="6" Text="Ignore list" />
+        <ListBox Margin="0,2,0,2" Grid.Row="7" IsSynchronizedWithCurrentItem="True"
+                 ItemsSource="{Binding ViewModel.IgnoredContacts}" />
+        <StackPanel Grid.Row="8" Orientation="Horizontal">
+            <TextBlock Text="Add contact" /><TextBox Name="NewIgnoreContact" Width="160" />
+            <Button Content="Add" Click="OnAddIgnoreContactClick" />
+            <Button Content="Remove" Click="OnRemoveIgnoreContactClick" />
+        </StackPanel>
+    </Grid>
+</Window>

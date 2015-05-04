@@ -1,0 +1,253 @@
+<!--
+    Copyright 2008 Jan Molnar <jan.molnar@abds.de>
+
+    This file is part of JCQ.
+
+    JCQ is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+
+    JCQ is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with JCQ. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<Page x:Class="ContactsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:icq="clr-namespace:JCsTools.JCQ.IcqInterface;assembly=JCsTools.JCQ.IcqInterface"
+	xmlns:local="clr-namespace:JCsTools.JCQ.Ux"
+	xmlns:vm="clr-namespace:JCsTools.JCQ.ViewModel;assembly=JCsTools.JCQ.ViewModel"
+	WindowTitle="JCQ - Online"
+    Name="ContactsPage"
+    >
+    <Page.Resources>
+        <ContextMenu x:Key="ContactContextMenu" Opened="OnSubMenuOpened" />
+        
+        <ContextMenu x:Key="JcqContextMenu">
+            <MenuItem Header="{Binding Contact.Identifier}" />
+            <MenuItem Header="Status" ItemsSource="{Binding AvailableStatuses}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <EventSetter Event="Click" Handler="OnSetStatusClick" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem Header="Neuen Kontakt hinzufügen" Click="OnAddNewContactClick" />
+            <MenuItem Header="Verbindung trennen" Click="OnDisconnectClick" />
+        </ContextMenu>
+
+        <DataTemplate DataType="{x:Type icq:IcqStatusCode}">
+            <TextBlock Text="{Binding DisplayName}" />
+        </DataTemplate>
+
+        <Style x:Key="TreeViewItemFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z"/>
+        
+        <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Width="16" Height="16" Background="Transparent" Padding="5,5,5,5">
+                            <Path x:Name="ExpandPath" Fill="Transparent" Stroke="#FF989898" Data="{StaticResource TreeArrow}">
+                                <Path.RenderTransform>
+                                    <RotateTransform Angle="135" CenterX="3" CenterY="3"/>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Stroke" TargetName="ExpandPath" Value="#FF1BBBFA"/>
+                                <Setter Property="Fill" TargetName="ExpandPath" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="RenderTransform" TargetName="ExpandPath">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="180" CenterX="3" CenterY="3"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Fill" TargetName="ExpandPath" Value="#FF595959"/>
+                                <Setter Property="Stroke" TargetName="ExpandPath" Value="#FF262626"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="{x:Type TreeViewItem}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#aaa"/>
+            <!--<Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>-->
+            <Setter Property="Padding" Value="2,0,0,0"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
+            <Setter Property="ContextMenu" Value="{StaticResource ContactContextMenu}" />
+            
+            <EventSetter Event="MouseDoubleClick" Handler="OnContactDoubleClick" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyle}" ClickMode="Press" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Border SnapsToDevicePixels="true" x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Grid.Column="1">
+                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" x:Name="PART_Header" ContentSource="Header"/>
+                            </Border>
+                            <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="2" Margin="0"  Grid.Row="1"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="false">
+                                <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0070CE" Offset="0.004"/>
+                                            <GradientStop Color="#FF004660" Offset="1"/>
+                                            <GradientStop Color="#FF37A4FF" Offset="0"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true"/>
+                                    <Condition Property="IsSelectionActive" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0070CE" Offset="0.004"/>
+                                            <GradientStop Color="#FF004660" Offset="1"/>
+                                            <GradientStop Color="#FF37A4FF" Offset="0"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="#aaa"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="true"/>
+                                    <Condition Property="IsExpanded" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF249AFB" Offset="0.004"/>
+                                            <GradientStop Color="#FF004964" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="HasItems" Value="True">
+                    <Setter Property="IsExpanded" Value="True" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <HierarchicalDataTemplate DataType="{x:Type vm:GroupViewModel}" ItemsSource="{Binding Path=ContactsView}">
+            <TextBlock  Foreground="White" Text="{Binding Name}" />
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:ContactViewModel}">
+            <DockPanel>
+                <DockPanel.ToolTip>
+                    <ToolTip>
+                        <DockPanel>
+                            <Image DockPanel.Dock="Left" Source="{Binding ContactImage}" Width="{Binding ContactImage.Width}" Height="{Binding ContactImage.Height}" Visibility="{Binding ContactImageVisibility}" Margin="4"  />
+                            <TextBlock>
+                                <TextBlock  Text="{Binding Name}" />
+                                <TextBlock>
+                                    <TextBlock Text="{Binding Status.DisplayName}" Foreground="#888" />
+                                </TextBlock>
+                            </TextBlock>
+                        </DockPanel>
+                    </ToolTip>
+                </DockPanel.ToolTip>
+                <Rectangle Width="16" Height="16" Margin="0" DockPanel.Dock="Left" Fill="{Binding StatusBrush}" />
+                <!--<Image DockPanel.Dock="Left" Width="12" Height="12" Margin="2"  Source="{Binding Converter={StaticResource conv2}}" />-->
+                <TextBlock>
+                    <TextBlock  Text="{Binding Name}" />
+                    <TextBlock>
+                        <TextBlock Text="{Binding Status.DisplayName}" Foreground="#888" />
+                    </TextBlock>
+                </TextBlock>
+            </DockPanel>
+        </DataTemplate>
+
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <!--<RowDefinition Height="Auto" />-->
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Image Source="{Binding ViewModel.Identity.ImageUrl, ElementName=ContactsPage}" Margin="8" Width="48" Height="48" />
+            <TextBlock FontSize="16" Foreground="White" FontWeight="Bold" Text="{Binding ViewModel.Identity.Identifier, ElementName=ContactsPage}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Content="JCQ" DataContext="{Binding ViewModel, ElementName=ContactsPage}"
+             ContextMenu="{DynamicResource JcqContextMenu}" Margin="8,0,0,0" />
+        </StackPanel>
+
+        <TreeView Grid.Row="2" Margin="0,6,0,6" BorderBrush="{x:Null}" ItemsSource="{Binding ViewModel.MasterGroup.GroupsView, ElementName=ContactsPage}">
+            <TreeView.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF3B3B3B" Offset="0.009"/>
+                    <GradientStop Color="#FF101010" Offset="0.964"/>
+                    <GradientStop Color="#FF161616" Offset="0"/>
+                    <GradientStop Color="#FF000000" Offset="1"/>
+                </LinearGradientBrush>
+            </TreeView.Background>
+        </TreeView>
+
+        <!--<ComboBox Grid.Row="3" Margin="8,0,8,8" ItemsSource="{Binding ViewModel.AvailableStatuses, ElementName=ContactsPage}" SelectedIndex="0" SelectionChanged="OnStatusSelectionChanged" />-->
+    </Grid>
+
+</Page>

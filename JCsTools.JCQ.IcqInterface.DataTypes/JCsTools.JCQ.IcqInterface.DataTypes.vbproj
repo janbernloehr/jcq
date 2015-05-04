@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{319E5601-E003-42FE-BFE0-9304FF50AF61}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>JCsTools.JCQ.IcqInterface.DataTypes</RootNamespace>
+    <AssemblyName>JCsTools.JCQ.IcqInterface.DataTypes</AssemblyName>
+    <MyType>Windows</MyType>
+    <OptionStrict>On</OptionStrict>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>JCsTools.JCQ.IcqInterface.DataTypes.xml</DocumentationFile>
+    <NoWarn>42353,42354,42355</NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>JCsTools.JCQ.IcqInterface.DataTypes.xml</DocumentationFile>
+    <NoWarn>42353,42354,42355</NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ByteConverter.vb" />
+    <Compile Include="Flap.vb" />
+    <Compile Include="FlapRequestSignInCookie.vb" />
+    <Compile Include="Icq Meta Data\DeleteOfflineMessagesRequest.vb" />
+    <Compile Include="Icq Meta Data\EndOfOfflineMessagesResponse.vb" />
+    <Compile Include="Icq Meta Data\MetaInformationRequest.vb" />
+    <Compile Include="Icq Meta Data\MetaInformationResponse.vb" />
+    <Compile Include="Icq Meta Data\MetaRequest.vb" />
+    <Compile Include="Icq Meta Data\MetaResponse.vb" />
+    <Compile Include="Icq Meta Data\MetaSearchByUinResponse.vb" />
+    <Compile Include="Icq Meta Data\MetaShortUserInformationRequest.vb" />
+    <Compile Include="Icq Meta Data\MetaShortUserInformationResponse.vb" />
+    <Compile Include="Icq Meta Data\OfflineMessageRequest.vb" />
+    <Compile Include="Icq Meta Data\OfflineMessageResponse.vb" />
+    <Compile Include="Icq Meta Data\SearchByUinRequest.vb" />
+    <Compile Include="ISerializable.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SerializationContext.vb" />
+    <Compile Include="Snac Family 01\Snac0121.vb" />
+    <Compile Include="Snac Family 01\Snac0101.vb" />
+    <Compile Include="Snac Family 01\Snac0102.vb" />
+    <Compile Include="Snac Family 01\Snac0103.vb" />
+    <Compile Include="Snac Family 01\Snac0104.vb" />
+    <Compile Include="Snac Family 01\Snac0105.vb" />
+    <Compile Include="Snac Family 01\Snac0106.vb" />
+    <Compile Include="Snac Family 01\Snac0107.vb" />
+    <Compile Include="Snac Family 01\Snac0108.vb" />
+    <Compile Include="Snac Family 01\Snac0109.vb" />
+    <Compile Include="Snac Family 01\Snac010A.vb" />
+    <Compile Include="Snac Family 01\Snac010B.vb" />
+    <Compile Include="Snac Family 01\Snac010C.vb" />
+    <Compile Include="Snac Family 01\Snac010D.vb" />
+    <Compile Include="Snac Family 01\Snac010E.vb" />
+    <Compile Include="Snac Family 01\Snac010F.vb" />
+    <Compile Include="Snac Family 01\Snac0110.vb" />
+    <Compile Include="Snac Family 01\Snac0111.vb" />
+    <Compile Include="Snac Family 01\Snac0112.vb" />
+    <Compile Include="Snac Family 01\Snac0113.vb" />
+    <Compile Include="Snac Family 01\Snac0114.vb" />
+    <Compile Include="Snac Family 01\Snac0116.vb" />
+    <Compile Include="Snac Family 01\Snac0117.vb" />
+    <Compile Include="Snac Family 01\Snac0118.vb" />
+    <Compile Include="Snac Family 01\Snac011e.vb" />
+    <Compile Include="Snac Family 01\Snac011f.vb" />
+    <Compile Include="Snac Family 01\Snac0120.vb" />
+    <Compile Include="Snac Family 02\Snac0202.vb" />
+    <Compile Include="Snac Family 02\Snac0203.vb" />
+    <Compile Include="Snac Family 02\Snac0204.vb" />
+    <Compile Include="Snac Family 02\Snac0205.vb" />
+    <Compile Include="Snac Family 02\Snac0206.vb" />
+    <Compile Include="Snac Family 03\Snac0302.vb" />
+    <Compile Include="Snac Family 03\Snac0303.vb" />
+    <Compile Include="Snac Family 03\Snac030B.vb" />
+    <Compile Include="Snac Family 03\Snac030C.vb" />
+    <Compile Include="Snac Family 04\Snac0402.vb" />
+    <Compile Include="Snac Family 04\Snac0403.vb" />
+    <Compile Include="Snac Family 04\Snac0404.vb" />
+    <Compile Include="Snac Family 04\Snac0405.vb" />
+    <Compile Include="Snac Family 04\Snac0406.vb" />
+    <Compile Include="Snac Family 04\Snac0407.vb" />
+    <Compile Include="Snac Family 04\Snac040A.vb" />
+    <Compile Include="Snac Family 04\Snac040B.vb" />
+    <Compile Include="Snac Family 04\Snac040C.vb" />
+    <Compile Include="Snac Family 04\Snac0414.vb" />
+    <Compile Include="Snac Family 09\Snac0902.vb" />
+    <Compile Include="Snac Family 09\Snac0903.vb" />
+    <Compile Include="Snac Family 09\Snac0904.vb" />
+    <Compile Include="Snac Family 09\Snac0905.vb" />
+    <Compile Include="Snac Family 09\Snac0906.vb" />
+    <Compile Include="Snac Family 09\Snac0907.vb" />
+    <Compile Include="Snac Family 09\Snac0908.vb" />
+    <Compile Include="Snac Family 09\Snac0909.vb" />
+    <Compile Include="Snac Family 0B\Snac0B02.vb" />
+    <Compile Include="Snac Family 0B\Snac0B03.vb" />
+    <Compile Include="Snac Family 0B\Snac0B04.vb" />
+    <Compile Include="Snac Family 10\Snac1003.vb" />
+    <Compile Include="Snac Family 10\Snac1002.vb" />
+    <Compile Include="Snac Family 10\Snac1004.vb" />
+    <Compile Include="Snac Family 10\Snac1005.vb" />
+    <Compile Include="Snac Family 13\Snac1302.vb" />
+    <Compile Include="Snac Family 13\Snac1303.vb" />
+    <Compile Include="Snac Family 13\Snac1304.vb" />
+    <Compile Include="Snac Family 13\Snac1305.vb" />
+    <Compile Include="Snac Family 13\Snac1306.vb" />
+    <Compile Include="Snac Family 13\Snac1307.vb" />
+    <Compile Include="Snac Family 13\Snac1308.vb" />
+    <Compile Include="Snac Family 13\Snac1309.vb" />
+    <Compile Include="Snac Family 13\Snac130A.vb" />
+    <Compile Include="Snac Family 13\Snac130E.vb" />
+    <Compile Include="Snac Family 13\Snac130F.vb" />
+    <Compile Include="Snac Family 13\Snac1311.vb" />
+    <Compile Include="Snac Family 13\Snac1312.vb" />
+    <Compile Include="Snac Family 13\Snac1314.vb" />
+    <Compile Include="Snac Family 13\Snac1315.vb" />
+    <Compile Include="Snac Family 13\Snac1316.vb" />
+    <Compile Include="Snac Family 13\Snac1318.vb" />
+    <Compile Include="Snac Family 13\Snac1319.vb" />
+    <Compile Include="Snac Family 13\Snac131A.vb" />
+    <Compile Include="Snac Family 13\Snac131B.vb" />
+    <Compile Include="Snac Family 13\Snac131C.vb" />
+    <Compile Include="Snac Family 15\Snac1502.vb" />
+    <Compile Include="Snac Family 15\Snac1503.vb" />
+    <Compile Include="Snac.vb" />
+    <Compile Include="Tlv.vb" />
+    <Compile Include="Tlv\TlvAuthFaild.vb" />
+    <Compile Include="Tlv\TlvClientIdleTime.vb" />
+    <Compile Include="Tlv\TlvDcInfo.vb" />
+    <Compile Include="Tlv\TlvErrorSubCode.vb" />
+    <Compile Include="Tlv\TlvExternalIpAddress.vb" />
+    <Compile Include="Tlv\TlvMemberSince.vb" />
+    <Compile Include="Tlv\TlvMetaData.vb" />
+    <Compile Include="Tlv\TlvSignOnTime.vb" />
+    <Compile Include="Tlv\TlvUserClass.vb" />
+    <Compile Include="Tlv\TlvUserIconIdAndHash.vb" />
+    <Compile Include="Tlv\TlvUserStatus.vb" />
+    <Compile Include="Tlv\UserInfo.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JCsTools.Core.Interfaces\JCsTools.Core.Interfaces.vbproj">
+      <Project>{43510DBA-2485-4DC9-8B61-64D5361FB789}</Project>
+      <Name>JCsTools.Core.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JCsTools.Core\JCsTools.Core.vbproj">
+      <Project>{DD5A21DD-D93D-436A-8C98-2C8F033F1020}</Project>
+      <Name>JCsTools.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="license.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

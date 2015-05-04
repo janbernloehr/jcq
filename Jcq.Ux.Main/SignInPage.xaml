@@ -1,0 +1,141 @@
+<!--
+    Copyright 2008 Jan Molnar <jan.molnar@abds.de>
+
+    This file is part of JCQ.
+
+    JCQ is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+
+    JCQ is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with JCQ. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:identity="clr-namespace:JCsTools.IdentityManager;assembly=Jcq.IdentityManager"
+    x:Class="JCsTools.JCQ.Ux.SignInPage"
+    WindowTitle="JCQ - Welcome"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignHeight="436.96" d:DesignWidth="441.6">
+    <Page.Resources>
+        <DataTemplate DataType="{x:Type identity:Identity}">
+            <DockPanel>
+                <Image DockPanel.Dock="Left" Source="{Binding Path=ImageUrl}" Margin="4" Width="48" Height="48" />
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding Path=Identifier}" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Path=Description}" Foreground="#ccc" />
+                </StackPanel>
+            </DockPanel>
+        </DataTemplate>
+
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="Foreground" Value="#bbb" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border SnapsToDevicePixels="true" x:Name="Bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0070CE" Offset="0.004" />
+                                            <GradientStop Color="#FF004660" Offset="1" />
+                                            <GradientStop Color="#FF37A4FF" Offset="0" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF249AFB" Offset="0.004" />
+                                            <GradientStop Color="#FF004964" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true" />
+                                    <Condition Property="Selector.IsSelectionActive" Value="false" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0070CE" Offset="0.004" />
+                                            <GradientStop Color="#FF004660" Offset="1" />
+                                            <GradientStop Color="#FF37A4FF" Offset="0" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="#bbb" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground"
+                                        Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <EventSetter Event="MouseDoubleClick" Handler="OnIdentityDoubleClick" />
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="0,20,0,20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+
+        <TextBlock Text="Please select your identity to sign in" Foreground="White" Margin="6" />
+
+        <ListView Grid.Row="1" IsSynchronizedWithCurrentItem="True" Padding="0" Margin="0,0,0,6"
+                  ItemsSource="{Binding Path=ViewModel.Identities, ElementName=SignInPage}" BorderBrush="{x:Null}"
+                  Foreground="#FFE7E7E7">
+            <ListView.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF3B3B3B" Offset="0.009" />
+                    <GradientStop Color="#FF101010" Offset="0.964" />
+                    <GradientStop Color="#FF161616" Offset="0" />
+                    <GradientStop Color="#FF000000" Offset="1" />
+                </LinearGradientBrush>
+            </ListView.Background>
+        </ListView>
+
+        <DockPanel LastChildFill="False" Grid.Row="2">
+            <Button Content="Add New" Height="23" Width="80" DockPanel.Dock="Left" Margin="6,0,0,0"
+                    Click="OnAddNewClick" />
+            <Button Content="Edit" Height="23" Width="80" DockPanel.Dock="Left" Margin="6,0,0,0" Click="OnEditClick" />
+            <Button Content="SignIn" Height="23" Width="80" DockPanel.Dock="Right" Margin="0,0,6,0"
+                    Click="OnSignInClick" />
+        </DockPanel>
+    </Grid>
+</Page>

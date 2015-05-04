@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2F8FA080-7FB1-4F65-8ADE-380F08DA430B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JCsTools.JCQ.IcqInterface.Interfaces</RootNamespace>
+    <AssemblyName>Jcq.IcqProtocol.Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DisconnectedEventArgs.cs" />
+    <Compile Include="IAvatarService.cs" />
+    <Compile Include="IConnector.cs" />
+    <Compile Include="IContact.cs" />
+    <Compile Include="IContactListInfo.cs" />
+    <Compile Include="IContext.cs" />
+    <Compile Include="IContextObject.cs" />
+    <Compile Include="IContextService.cs" />
+    <Compile Include="IDataWarehouseService.cs" />
+    <Compile Include="IGroup.cs" />
+    <Compile Include="IMessage.cs" />
+    <Compile Include="IMessageService.cs" />
+    <Compile Include="INotificationService.cs" />
+    <Compile Include="IntervallReceivedEventArgs.cs" />
+    <Compile Include="IOfflineMessageService.cs" />
+    <Compile Include="IPasswordCredential.cs" />
+    <Compile Include="IPrivacyService.cs" />
+    <Compile Include="ISearchService.cs" />
+    <Compile Include="IStatusCode.cs" />
+    <Compile Include="IStorageItem.cs" />
+    <Compile Include="IStorageService.cs" />
+    <Compile Include="IUsageReportService.cs" />
+    <Compile Include="IUserInformationService.cs" />
+    <Compile Include="MessageEventArgs.cs" />
+    <Compile Include="NotificationType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchResultEventArgs.cs" />
+    <Compile Include="SignInFailedEventArgs.cs" />
+    <Compile Include="StatusChangedEventArgs.cs" />
+    <Compile Include="TypingNotificationEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Jcq.Core.Contracts\Jcq.Core.Contracts.csproj">
+      <Project>{5314e942-5051-44d1-b8cc-7cd785f1ad63}</Project>
+      <Name>Jcq.Core.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Core\Jcq.Core.csproj">
+      <Project>{e5bb29c3-3e30-464d-b8c4-9500d9a334fb}</Project>
+      <Name>Jcq.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

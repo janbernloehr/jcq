@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A0D66E73-9822-4123-A6FA-8D34D120ED7B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Jcq.Ux.Main</RootNamespace>
+    <AssemblyName>Jcq.Ux.Main</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="ChatWindow.xaml.cs">
+      <DependentUpon>ChatWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Code\WindowStyle.cs" />
+    <Compile Include="ContactInformationWindow.xaml.cs">
+      <DependentUpon>ContactInformationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContactsPage.xaml.cs">
+      <DependentUpon>ContactsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreateIdentityPage.xaml.cs">
+      <DependentUpon>CreateIdentityPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditIdentityPage.xaml.cs">
+      <DependentUpon>EditIdentityPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExceptionWindow.xaml.cs">
+      <DependentUpon>ExceptionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HistoryWindow.xaml.cs">
+      <DependentUpon>HistoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs" />
+    <Compile Include="MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceWindow.xaml.cs">
+      <DependentUpon>PerformanceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PrivacyWindow.xaml.cs">
+      <DependentUpon>PrivacyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SearchWindow.xaml.cs">
+      <DependentUpon>SearchWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ContactContextMenuService.cs" />
+    <Compile Include="Services\ContactHistory.cs" />
+    <Compile Include="Services\ContactHistoryFormatter.cs" />
+    <Compile Include="Services\ContactHistoryService.cs" />
+    <Compile Include="Services\ContactViewModelService.cs" />
+    <Compile Include="Services\MessageFormattingService.cs" />
+    <Compile Include="Services\NavigationService.cs" />
+    <Compile Include="Services\OfflineTextMessageViewModelFormatter.cs" />
+    <Compile Include="Services\StatusService.cs" />
+    <Compile Include="Services\TextMessageViewModelFormatter.cs" />
+    <Compile Include="SigningInPage.xaml.cs">
+      <DependentUpon>SigningInPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SignInPage.xaml.cs">
+      <DependentUpon>SignInPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StatusToImageConverter.cs" />
+    <Compile Include="Theme\WindowStateToVisibilityConverter.cs" />
+    <Compile Include="Theme\WindowTheme.xaml.cs">
+      <DependentUpon>WindowTheme.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TransferWindow.xaml.cs">
+      <DependentUpon>TransferWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>WindowSettings.settings</DependentUpon>
+    </Compile>
+    <Page Include="ChatWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ContactInformationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ContactsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CreateIdentityPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\StringFormatConverter.cs" />
+    <Page Include="EditIdentityPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ExceptionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="HistoryWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MessageWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PerformanceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PrivacyWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SearchWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SigningInPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SignInPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\Simple Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\WindowTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TransferWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="WindowSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>WindowSettings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Jcq.Core.Contracts\Jcq.Core.Contracts.csproj">
+      <Project>{5314e942-5051-44d1-b8cc-7cd785f1ad63}</Project>
+      <Name>Jcq.Core.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Core\Jcq.Core.csproj">
+      <Project>{e5bb29c3-3e30-464d-b8c4-9500d9a334fb}</Project>
+      <Name>Jcq.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.IcqProtocol.Contracts\Jcq.IcqProtocol.Contracts.csproj">
+      <Project>{2f8fa080-7fb1-4f65-8ade-380f08da430b}</Project>
+      <Name>Jcq.IcqProtocol.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.IcqProtocol.DataTypes\Jcq.IcqProtocol.DataTypes.csproj">
+      <Project>{bf8ae423-4549-45b9-83e3-ad7b27b72a82}</Project>
+      <Name>Jcq.IcqProtocol.DataTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.IcqProtocol\Jcq.IcqProtocol.csproj">
+      <Project>{cae5a7d7-4e6d-4ccb-8f15-97cd47e82ef7}</Project>
+      <Name>Jcq.IcqProtocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.IdentityManager\Jcq.IdentityManager.csproj">
+      <Project>{35b6186a-a870-4e76-9f7c-8311d7692d1a}</Project>
+      <Name>Jcq.IdentityManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Ux.ViewModel\Jcq.Ux.ViewModel.csproj">
+      <Project>{4335a6fe-d9b4-484f-ab85-1af1f0236e4a}</Project>
+      <Name>Jcq.Ux.ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Wpf.CommonExtenders\Jcq.Wpf.CommonExtenders.csproj">
+      <Project>{484e3015-1e2a-4a88-8b9a-dbe4007b29e5}</Project>
+      <Name>Jcq.Wpf.CommonExtenders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Xml.Formatter\Jcq.Xml.Formatter.csproj">
+      <Project>{6da666d9-a101-4416-b16d-8b9d91820a52}</Project>
+      <Name>Jcq.Xml.Formatter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

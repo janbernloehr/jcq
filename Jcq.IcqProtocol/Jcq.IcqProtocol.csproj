@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CAE5A7D7-4E6D-4CCB-8F15-97CD47E82EF7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JCsTools.JCQ.IcqInterface</RootNamespace>
+    <AssemblyName>Jcq.IcqProtocol</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseStorageItem.cs" />
+    <Compile Include="ContactKeyedNotifiyingCollectionFormatter.cs" />
+    <Compile Include="ContactListInfo.cs" />
+    <Compile Include="ContactListInfoFormatter.cs" />
+    <Compile Include="ContextService.cs" />
+    <Compile Include="FormatTarget.cs" />
+    <Compile Include="IAvatarServiceAction.cs" />
+    <Compile Include="IcqConnector.cs" />
+    <Compile Include="IcqContact.cs" />
+    <Compile Include="IcqContext.cs" />
+    <Compile Include="IcqDataWarehouse.cs" />
+    <Compile Include="IcqException.cs" />
+    <Compile Include="IcqGroup.cs" />
+    <Compile Include="IcqIconService.cs" />
+    <Compile Include="IcqMessage.cs" />
+    <Compile Include="IcqMessageService.cs" />
+    <Compile Include="IcqNotificationService.cs" />
+    <Compile Include="IcqPrivacyService.cs" />
+    <Compile Include="IcqSearchService.cs" />
+    <Compile Include="IcqStatusCode.cs" />
+    <Compile Include="IcqStatusCodes.cs" />
+    <Compile Include="IcqStorageService.cs" />
+    <Compile Include="IcqUsageReportService.cs" />
+    <Compile Include="IcqUserInformationService.cs" />
+    <Compile Include="Internal\BaseConnector.cs" />
+    <Compile Include="Internal\ConnectedEventArgs.cs" />
+    <Compile Include="Internal\DataReceivedEventArgs.cs" />
+    <Compile Include="Internal\DisconnectEventArgs.cs" />
+    <Compile Include="Internal\IIcqDataTranferService.cs" />
+    <Compile Include="Internal\FlapDataPair.cs" />
+    <Compile Include="Internal\FlapTransportEventArgs.cs" />
+    <Compile Include="Internal\HashtableItemFixUp.cs" />
+    <Compile Include="Internal\ITcpContext.cs" />
+    <Compile Include="Internal\BaseStorageItemFormatter.cs" />
+    <Compile Include="Internal\ReceiveInfo.cs" />
+    <Compile Include="Internal\TcpContext.cs" />
+    <Compile Include="IcqOfflineMessage.cs" />
+    <Compile Include="PasswordCredential.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestAuthenticationCookieState.cs" />
+    <Compile Include="RequestAuthenticationCookieTask.cs" />
+    <Compile Include="RequestAvatarAction.cs" />
+    <Compile Include="ShortUserInformationRequestManager.cs" />
+    <Compile Include="ShortUserInformationTransportEventArgs.cs" />
+    <Compile Include="SSITransactions\AddContactToIgnoreListTransaction.cs" />
+    <Compile Include="SSITransactions\AddContactToInvisibleListTransaction.cs" />
+    <Compile Include="SSITransactions\AddContactToVisibleListTransaction.cs" />
+    <Compile Include="SSITransactions\AddContactTransaction.cs" />
+    <Compile Include="SSITransactions\BaseSSITransaction.cs" />
+    <Compile Include="SSITransactions\ISSITransaction.cs" />
+    <Compile Include="SSITransactions\RemoveContactFromIgnoreListTransaction.cs" />
+    <Compile Include="SSITransactions\RemoveContactFromInvisibleListTransaction.cs" />
+    <Compile Include="SSITransactions\RemoveContactFromVisibleListTransaction.cs" />
+    <Compile Include="SSITransactions\RemoveContactTransaction.cs" />
+    <Compile Include="UploadAvatarAction.cs" />
+    <Compile Include="UploadIconRequest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Jcq.Core.Contracts\Jcq.Core.Contracts.csproj">
+      <Project>{5314e942-5051-44d1-b8cc-7cd785f1ad63}</Project>
+      <Name>Jcq.Core.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Core\Jcq.Core.csproj">
+      <Project>{e5bb29c3-3e30-464d-b8c4-9500d9a334fb}</Project>
+      <Name>Jcq.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.IcqProtocol.Contracts\Jcq.IcqProtocol.Contracts.csproj">
+      <Project>{2f8fa080-7fb1-4f65-8ade-380f08da430b}</Project>
+      <Name>Jcq.IcqProtocol.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.IcqProtocol.DataTypes\Jcq.IcqProtocol.DataTypes.csproj">
+      <Project>{bf8ae423-4549-45b9-83e3-ad7b27b72a82}</Project>
+      <Name>Jcq.IcqProtocol.DataTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jcq.Xml.Formatter\Jcq.Xml.Formatter.csproj">
+      <Project>{6da666d9-a101-4416-b16d-8b9d91820a52}</Project>
+      <Name>Jcq.Xml.Formatter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
