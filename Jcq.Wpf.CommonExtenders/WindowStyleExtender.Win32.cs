@@ -27,33 +27,27 @@ namespace JCsTools.Wpf.Extenders
     public partial class WindowResizeExtender
     {
         // This Partial Class contains all API related code.
-        private IntPtr _Handle;
-        private WindowInteropHelper _InteropHelper;
-        private HwndSource _Source;
+        private IntPtr _handle;
+        private WindowInteropHelper _interopHelper;
+        private HwndSource _source;
 
-        protected void // ERROR: Handles clauses are not supported in C#
-            WindowSourceInitialized(object sender, EventArgs e)
+        protected void WindowSourceInitialized(object sender, EventArgs e)
         {
-            Window wnd;
-
-            wnd = (Window) sender;
+            var wnd = (Window) sender;
 
             // Create a helper object to gain access to the Win32 handle
-            _InteropHelper = new WindowInteropHelper(wnd);
+            _interopHelper = new WindowInteropHelper(wnd);
 
-            _Handle = _InteropHelper.Handle;
-            _Source = HwndSource.FromHwnd(_Handle);
+            _handle = _interopHelper.Handle;
+            _source = HwndSource.FromHwnd(_handle);
 
             // Add a hook to process window messages
-            _Source.AddHook(WndProc);
+            _source.AddHook(WndProc);
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            WindowMessage wmsg;
-
-            //TODO: process window messages here
-            wmsg = (WindowMessage) msg;
+            var wmsg = (WindowMessage) msg;
 
             switch (wmsg)
             {
@@ -66,7 +60,7 @@ namespace JCsTools.Wpf.Extenders
                     Point minSize;
                     Point workArea;
 
-                    trans = _Source.CompositionTarget.TransformToDevice;
+                    trans = _source.CompositionTarget.TransformToDevice;
 
                     Marshal.PtrToStructure(lParam, minmax);
 
@@ -76,18 +70,18 @@ namespace JCsTools.Wpf.Extenders
                     minmax.ptMaxSize.x = (int) workArea.X;
                     minmax.ptMaxSize.y = (int) workArea.Y;
 
-                    maxSize = trans.Transform(new Point(_Window.MaxWidth, _Window.MaxHeight));
+                    maxSize = trans.Transform(new Point(_window.MaxWidth, _window.MaxHeight));
 
-                    if (_Window.MaxWidth < double.PositiveInfinity)
+                    if (_window.MaxWidth < double.PositiveInfinity)
                         minmax.ptMaxTrackSize.x = (int) maxSize.X;
-                    if (_Window.MaxHeight < double.PositiveInfinity)
+                    if (_window.MaxHeight < double.PositiveInfinity)
                         minmax.ptMaxTrackSize.y = (int) maxSize.Y;
 
-                    minSize = trans.Transform(new Point(_Window.MinWidth, _Window.MinHeight));
+                    minSize = trans.Transform(new Point(_window.MinWidth, _window.MinHeight));
 
-                    if (_Window.MinWidth > 0)
+                    if (_window.MinWidth > 0)
                         minmax.ptMinTrackSize.x = (int) minSize.X;
-                    if (_Window.MinHeight > 0)
+                    if (_window.MinHeight > 0)
                         minmax.ptMinTrackSize.y = (int) minSize.Y;
 
                     Marshal.StructureToPtr(minmax, lParam, true);
@@ -110,13 +104,10 @@ namespace JCsTools.Wpf.Extenders
             return IntPtr.Zero;
         }
 
-        private bool WmValidateSize(int sizeMode, Win32Rect rectangle)
+        private static bool WmValidateSize(int sizeMode, Win32Rect rectangle)
         {
-            int cx;
-            int cy;
-
-            cx = rectangle.right - rectangle.left;
-            cy = rectangle.bottom - rectangle.top;
+            var cx = rectangle.right - rectangle.left;
+            var cy = rectangle.bottom - rectangle.top;
 
             if (cx > SystemParameters.WorkArea.Width)
                 rectangle.right = (int) (rectangle.left + SystemParameters.WorkArea.Width);

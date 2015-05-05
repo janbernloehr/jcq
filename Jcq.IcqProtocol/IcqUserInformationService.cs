@@ -29,9 +29,10 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqUserInformationService : ContextService, IUserInformationService
     {
-        private static readonly Dictionary<long, ShortUserInformationRequestManager> _PendingRequests;
+        private static readonly Dictionary<long, ShortUserInformationRequestManager> PendingRequests = new Dictionary<long, ShortUserInformationRequestManager>();
 
-        public IcqUserInformationService(IContext context) : base(context)
+        public IcqUserInformationService(IContext context)
+            : base(context)
         {
             var connector = context.GetService<IConnector>() as IcqConnector;
 
@@ -50,9 +51,8 @@ namespace JCsTools.JCQ.IcqInterface
         }
 
         public void RequestShortUserInfo(IContact contact, bool force)
-        {
+        { 
             var icqContact = contact as IcqContact;
-            ShortUserInformationRequestManager manager;
 
             if (icqContact == null)
                 return;
@@ -60,12 +60,12 @@ namespace JCsTools.JCQ.IcqInterface
             if (!force & icqContact.LastShortUserInfoRequest > DateTime.MinValue)
                 return;
 
-            manager = new ShortUserInformationRequestManager(Context, icqContact);
+            var manager = new ShortUserInformationRequestManager(Context, icqContact);
             manager.Execute();
 
-            lock (_PendingRequests)
+            lock (PendingRequests)
             {
-                _PendingRequests.Add(manager.RequestId, manager);
+                PendingRequests.Add(manager.RequestId, manager);
             }
 
             Kernel.Logger.Log("IcqUserInformationService", TraceEventType.Error,
@@ -272,12 +272,12 @@ namespace JCsTools.JCQ.IcqInterface
                                 new ShortUserInformationTransportEventArgs(dataIn.RequestId, resp));
                         }
 
-                        lock (_PendingRequests)
+                        lock (PendingRequests)
                         {
-                            if (_PendingRequests.ContainsKey(dataIn.RequestId))
+                            if (PendingRequests.ContainsKey(dataIn.RequestId))
                             {
-                                _PendingRequests[dataIn.RequestId].ProcessResponse(resp);
-                                _PendingRequests.Remove(dataIn.RequestId);
+                                PendingRequests[dataIn.RequestId].ProcessResponse(resp);
+                                PendingRequests.Remove(dataIn.RequestId);
                             }
                             else
                             {

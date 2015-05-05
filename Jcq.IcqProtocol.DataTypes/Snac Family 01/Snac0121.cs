@@ -72,7 +72,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             index += Notification.TotalSize;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override int CalculateDataSize()

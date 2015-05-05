@@ -54,7 +54,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             NotificationType = (NotificationType) ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

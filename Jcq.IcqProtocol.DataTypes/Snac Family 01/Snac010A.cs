@@ -82,7 +82,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 _RateClasses.Add(rc);
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

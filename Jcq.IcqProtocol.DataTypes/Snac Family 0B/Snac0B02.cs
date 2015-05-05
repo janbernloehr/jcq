@@ -48,7 +48,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 }

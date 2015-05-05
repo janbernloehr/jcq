@@ -58,7 +58,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 _FamilyNameVersionPairs.Add(new FamilyVersionPair(number, version));
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override int CalculateDataSize()

@@ -31,6 +31,8 @@ namespace JCsTools.JCQ.Ux
 
             ViewModel.PropertyChanged += OnViewModelPropertyChanged;
 
+            DataContext = ViewModel;
+
             InitializeComponent();
 
             App.DefaultWindowStyle.Attach(this);

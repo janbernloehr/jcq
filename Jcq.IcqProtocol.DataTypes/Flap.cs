@@ -104,7 +104,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                         if (x == null)
                             throw new NotImplementedException(string.Format("Snac {0} is not implemented.",
                                 SnacDescriptor.GetKey(descriptor)));
-                        index += x.SnacTotalSize;
+                        index += x.TotalSize;
 
                         _DataItems.Add(x);
 

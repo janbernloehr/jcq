@@ -121,8 +121,8 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 // if these tlvs are present the authentication succeeded and everything is okay :)
 
-                dynamic bosServerTlv = (TlvBosServerAddress) tlvsByTypeNumer[0x5];
-                dynamic authCookieTlv = (TlvAuthorizationCookie) tlvsByTypeNumer[0x6];
+                var bosServerTlv = (TlvBosServerAddress) tlvsByTypeNumer[0x5];
+                var authCookieTlv = (TlvAuthorizationCookie) tlvsByTypeNumer[0x6];
 
                 State.BosServerAddress = bosServerTlv.BosServerAddress;
                 State.AuthCookie = authCookieTlv.AuthorizationCookie;
@@ -134,10 +134,10 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 // if this tlv is present the authentication has failed.
 
-                dynamic authFailedTlv = (TlvAuthFailed) tlvsByTypeNumer[0x8];
+                var authFailedTlv = (TlvAuthFailed) tlvsByTypeNumer[0x8];
 
                 Kernel.Logger.Log("IcqConnector", TraceEventType.Error, "Connection to server failed. ErrorSubCode: {0}",
-                    authFailedTlv.ErrorSubCode.ToString);
+                    authFailedTlv.ErrorSubCode);
 
                 State.AuthenticationSucceeded = false;
                 State.AuthenticationError = authFailedTlv.ErrorSubCode;

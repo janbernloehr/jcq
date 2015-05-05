@@ -72,7 +72,7 @@ namespace Jcq.Xml.Formatter.Tests
         public void SerializeStructuredObjectTest()
         {
             var parent = new XmlSerializer();
-            dynamic graph = new Person
+            var graph = new Person
             {
                 FirstName = Environment.UserName,
                 Age = Environment.TickCount,

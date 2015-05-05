@@ -31,6 +31,8 @@ namespace JCsTools.JCQ.Ux
         {
             ViewModel = new ContactsPageViewModel();
 
+            DataContext = ViewModel;
+
             InitializeComponent();
         }
 

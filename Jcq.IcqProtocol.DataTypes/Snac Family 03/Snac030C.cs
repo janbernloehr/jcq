@@ -57,7 +57,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 index += info.Deserialize(index, data);
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             ScreenName = ByteConverter.ToStringFromByteIndex(index, data);
             index += 1 + ScreenName.Length;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

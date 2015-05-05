@@ -40,7 +40,9 @@ namespace JCsTools.JCQ.Ux
 
         void INavigationService.NavigateToSignInPage()
         {
+            Application.Current.Dispatcher.Invoke(() => { 
             Application.Current.MainWindow.Content = new SignInPage();
+            });
         }
 
         void INavigationService.NavigateToEditIdentityPage(IIdentity identity)

@@ -304,11 +304,8 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                     if (_sendBuffer.Count == 0)
                         return;
 
-                    // ERROR: Not supported in C#: ReDimStatement
-
-
-                    _sendBuffer.CopyTo(dataToSend);
-                    _sendBuffer.Clear();
+                    dataToSend = _sendBuffer.ToArray();
+_sendBuffer.Clear();
 
                     _sendTimer.Change(Timeout.Infinite, Timeout.Infinite);
                     _sendTimerRunning = false;

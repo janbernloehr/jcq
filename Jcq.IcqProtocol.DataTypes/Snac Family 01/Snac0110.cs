@@ -56,7 +56,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 UserInfos.Add(info);
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

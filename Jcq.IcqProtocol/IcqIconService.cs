@@ -379,7 +379,7 @@ namespace JCsTools.JCQ.IcqInterface
                 if (_UploadIconRequest.RequestId != dataIn.RequestId)
                     return;
 
-                dynamic code = dataIn.ActionResultCodes.FirstOrDefault();
+                var code = dataIn.ActionResultCodes.FirstOrDefault();
 
                 if (code == SSIActionResultCode.Success)
                 {
@@ -399,9 +399,7 @@ namespace JCsTools.JCQ.IcqInterface
 
         private SSIBuddyIcon GetSSIBudyIcon(UploadIconRequest request)
         {
-            var icon = default(SSIBuddyIcon);
-
-            icon = new SSIBuddyIcon();
+            var icon = new SSIBuddyIcon();
             icon.ItemId = _IconId;
             icon.BuddyIcon.IconHash.AddRange(request.IconMd5);
 

@@ -22,11 +22,11 @@ namespace JCsTools.Core
 {
     public abstract class BasicAsyncTask : BaseTask
     {
-        private readonly ManualResetEvent _WaitCompleted;
+        private readonly ManualResetEvent _waitCompleted;
 
-        public BasicAsyncTask()
+        protected BasicAsyncTask()
         {
-            _WaitCompleted = new ManualResetEvent(false);
+            _waitCompleted = new ManualResetEvent(false);
         }
 
         public override bool IsAsync
@@ -38,14 +38,14 @@ namespace JCsTools.Core
         {
             base.SetCompleted();
 
-            _WaitCompleted.Set();
+            _waitCompleted.Set();
         }
 
         protected abstract override void PerformOperation();
 
         public override void WaitCompleted()
         {
-            _WaitCompleted.WaitOne(Timeout.Infinite, true);
+            _waitCompleted.WaitOne(Timeout.Infinite, true);
 
             if (Exception != null)
                 throw Exception;

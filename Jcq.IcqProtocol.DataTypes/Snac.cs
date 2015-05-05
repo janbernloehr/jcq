@@ -25,7 +25,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
     public abstract class Snac : ISerializable
     {
         public const int SizeFixPart = 10;
-        private static long snacRequestId;
+        private static long _snacRequestId;
 
         protected Snac(int serviceId, int subtypeId)
         {
@@ -38,19 +38,10 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public int Flags { get; set; }
         public long RequestId { get; set; }
 
-        public int SnacDataSize
-        {
-            get { return DataSize; }
-        }
-
-        public int SnacTotalSize
-        {
-            get { return SizeFixPart + SnacDataSize; }
-        }
-
         public int TotalSize
         {
-            get { return SizeFixPart + SnacDataSize; }
+            get { return SizeFixPart + DataSize; }
+            protected set { DataSize = value - SizeFixPart; }
         }
 
         public int DataSize { get; private set; }
@@ -74,13 +65,11 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public virtual List<byte> Serialize()
         {
-            List<byte> data;
-
             DataSize = CalculateDataSize();
 
-            data = new List<byte>(SizeFixPart + DataSize);
+            var data = new List<byte>(SizeFixPart + DataSize);
 
-            RequestId = Interlocked.Increment(ref snacRequestId);
+            RequestId = Interlocked.Increment(ref _snacRequestId);
 
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(ServiceId)));
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(SubtypeId)));
@@ -93,11 +82,6 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public static string GetKey(Snac snac)
         {
             return string.Format("{0:X2},{1:X2}", snac.SubtypeId == 1 ? 1 : snac.ServiceId, snac.SubtypeId);
-        }
-
-        protected void SetTotalSize(int value)
-        {
-            DataSize = value - SizeFixPart;
         }
     }
 }

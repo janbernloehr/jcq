@@ -26,7 +26,8 @@
     WindowTitle="JCQ - Welcome"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignHeight="436.96" d:DesignWidth="441.6">
+    xmlns:viewModel="clr-namespace:JCsTools.JCQ.ViewModel;assembly=Jcq.Ux.ViewModel"
+    mc:Ignorable="d" d:DesignHeight="436.96" d:DesignWidth="441.6" d:DataContext="{d:DesignInstance viewModel:SignInPageViewModel}">
     <Page.Resources>
         <DataTemplate DataType="{x:Type identity:Identity}">
             <DockPanel>
@@ -118,7 +119,7 @@
         <TextBlock Text="Please select your identity to sign in" Foreground="White" Margin="6" />
 
         <ListView Grid.Row="1" IsSynchronizedWithCurrentItem="True" Padding="0" Margin="0,0,0,6"
-                  ItemsSource="{Binding Path=ViewModel.Identities, ElementName=SignInPage}" BorderBrush="{x:Null}"
+                  ItemsSource="{Binding Path=Identities}" BorderBrush="{x:Null}"
                   Foreground="#FFE7E7E7">
             <ListView.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

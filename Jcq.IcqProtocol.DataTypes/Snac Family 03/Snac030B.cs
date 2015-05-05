@@ -60,7 +60,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 _UserInfos.Add(info);
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 }

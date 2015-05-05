@@ -96,7 +96,7 @@ namespace Jcq.IdentityManager.Test
         [TestMethod]
         public void LoadTest()
         {
-            dynamic xdocument = new XDocument(new XDeclaration("1.0", null, "yes"), "",
+            var xdocument = new XDocument(new XDeclaration("1.0", null, "yes"), "",
                 new XElement("IdentityData",
                     new XElement("Identities", new XElement("Id", "b93e1c5f-b92d-4f89-82a1-2b9e1b2428d0"),
                         new XElement("Identifier", "123456"), new XElement("ImageUrl", "D:\\Pictures\\pony_small.jpg"),

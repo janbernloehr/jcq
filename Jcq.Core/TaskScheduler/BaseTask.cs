@@ -24,7 +24,7 @@ namespace JCsTools.Core
 {
     public abstract class BaseTask : ITask
     {
-        public BaseTask()
+        protected BaseTask()
         {
             Id = Guid.NewGuid();
         }

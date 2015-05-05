@@ -51,7 +51,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             ServiceFamilyId = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 }

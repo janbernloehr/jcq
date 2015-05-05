@@ -38,7 +38,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             IdleTime = TimeSpan.FromSeconds(ByteConverter.ToUInt32(data.GetRange(index, 4)));
             index += 4;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

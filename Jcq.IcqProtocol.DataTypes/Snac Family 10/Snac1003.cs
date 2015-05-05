@@ -66,7 +66,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             _IconHash.AddRange(data.GetRange(index, hashLength));
             index += hashLength;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 }

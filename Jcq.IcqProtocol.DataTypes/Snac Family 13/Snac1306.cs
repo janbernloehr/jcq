@@ -163,7 +163,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             LastChange = ByteConverter.ToDateTimeFromUInt32FileStamp(data.GetRange(index, 4));
             index += 4;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 

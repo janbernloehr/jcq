@@ -28,7 +28,7 @@ namespace JCsTools.Wpf.Extenders
     /// <remarks>To use this functionality your application needs FullTrust privileges.</remarks>
     public partial class WindowResizeExtender
     {
-        private Window _Window;
+        private Window _window;
 
         internal WindowResizeExtender()
         {
@@ -42,12 +42,16 @@ namespace JCsTools.Wpf.Extenders
         /// <remarks></remarks>
         public Window Window
         {
-            get { return _Window; }
+            get { return _window; }
             set
             {
-                _Window = value;
-                _Window.WindowStyle = WindowStyle.None;
-                _Window.ResizeMode = ResizeMode.NoResize;
+                if (_window != null)
+                    _window.SourceInitialized -= WindowSourceInitialized;
+
+                _window = value;
+                _window.WindowStyle = WindowStyle.None;
+                _window.ResizeMode = ResizeMode.NoResize;
+                _window.SourceInitialized += WindowSourceInitialized;
             }
         }
 
@@ -58,12 +62,11 @@ namespace JCsTools.Wpf.Extenders
         /// <remarks></remarks>
         public void DragSize(SizingAction sizingAction)
         {
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
-            {
-                Win32Methods.SendMessage(_Handle, (uint) WindowMessage.WM_SYSCOMMAND,
-                    new IntPtr((int) SysCommand.SC_SIZE + (int) sizingAction), IntPtr.Zero);
-                Win32Methods.SendMessage(_Handle, 514, IntPtr.Zero, IntPtr.Zero);
-            }
+            if (Mouse.LeftButton != MouseButtonState.Pressed) return;
+
+            Win32Methods.SendMessage(_handle, (uint) WindowMessage.WM_SYSCOMMAND,
+                new IntPtr((int) SysCommand.SC_SIZE + (int) sizingAction), IntPtr.Zero);
+            Win32Methods.SendMessage(_handle, 514, IntPtr.Zero, IntPtr.Zero);
         }
     }
 

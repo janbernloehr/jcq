@@ -31,6 +31,8 @@ namespace JCsTools.JCQ.Ux
         {
             ViewModel = new SignInPageViewModel();
 
+            DataContext = ViewModel;
+
             InitializeComponent();
         }
 

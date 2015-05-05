@@ -236,19 +236,19 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <Image Source="{Binding ViewModel.Identity.ImageUrl, ElementName=ContactsPage}" Margin="8" Width="48"
+            <Image Source="{Binding Identity.ImageUrl}" Margin="8" Width="48"
                    Height="48" />
             <TextBlock FontSize="16" Foreground="White" FontWeight="Bold"
-                       Text="{Binding ViewModel.Identity.Identifier, ElementName=ContactsPage}" />
+                       Text="{Binding Identity.Identifier}" />
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Content="JCQ" DataContext="{Binding ViewModel, ElementName=ContactsPage}"
+            <Button Content="JCQ" 
                     ContextMenu="{DynamicResource JcqContextMenu}" Margin="8,0,0,0" />
         </StackPanel>
 
         <TreeView Grid.Row="2" Margin="0,6,0,6" BorderBrush="{x:Null}"
-                  ItemsSource="{Binding ViewModel.MasterGroup.GroupsView, ElementName=ContactsPage}">
+                  ItemsSource="{Binding MasterGroup.GroupsView}">
             <TreeView.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF3B3B3B" Offset="0.009" />

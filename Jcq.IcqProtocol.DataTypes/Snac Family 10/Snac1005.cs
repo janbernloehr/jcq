@@ -83,7 +83,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             _IconData.AddRange(data.GetRange(index, iconLength));
             index += iconLength;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

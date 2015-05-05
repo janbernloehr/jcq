@@ -32,6 +32,8 @@ namespace JCsTools.JCQ.Ux
         {
             ViewModel = new SearchWindowViewModel();
 
+            DataContext = ViewModel;
+
             // This call is required by the Windows Form Designer.
             InitializeComponent();
 

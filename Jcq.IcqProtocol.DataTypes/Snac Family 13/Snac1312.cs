@@ -37,7 +37,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             var index = SizeFixPart;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 }

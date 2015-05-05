@@ -133,7 +133,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 MaxItemId = Math.Max(desc.ItemId, MaxItemId);
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

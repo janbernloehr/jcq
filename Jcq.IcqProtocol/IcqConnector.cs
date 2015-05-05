@@ -26,16 +26,17 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 using JCsTools.JCQ.IcqInterface.Internal;
 
-/// <summary>
-/// Provides the state for an authentication cookie request.
-/// </summary>
-/// <remarks></remarks>
+
 
 namespace JCsTools.JCQ.IcqInterface
 {
+    /// <summary>
+    /// Provides the state for an authentication cookie request.
+    /// </summary>
+    /// <remarks></remarks>
     public class IcqConnector : BaseConnector, IConnector
     {
-        private bool isSigningIn;
+        private bool _isSigningIn;
 
         public IcqConnector(IContext context) : base(context)
         {
@@ -45,32 +46,28 @@ namespace JCsTools.JCQ.IcqInterface
             RegisterSnacHandler<Snac0118>(0x1, 0x18, AnalyseSnac0118);
 
             RegisterSnacHandler<Snac1306>(0x13, 0x6, AnalyseSnac1306);
+
+            InternalDisconnected += BaseInternalDisconnected;
         }
 
         public event EventHandler SignInCompleted;
         public event EventHandler<SignInFailedEventArgs> SignInFailed;
         public event EventHandler<DisconnectedEventArgs> Disconnected;
 
-        void IConnector.SignIn(ICredential credential)
+        public void SignIn(ICredential credential)
         {
-            IPasswordCredential password;
-
-            IPEndPoint serverEndpoint;
-
-            RequestAuthenticationCookieTask requestAuthCookieTask;
-
-            password = credential as IPasswordCredential;
+            var password = credential as IPasswordCredential;
             if (password == null)
                 throw new ArgumentException("Credential musst be of Type IPasswordCredential", "credential");
 
             try
             {
-                isSigningIn = true;
+                _isSigningIn = true;
 
                 // Connect to the icq server and get a bos server address and and authentication cookie.
                 InnerConnect();
 
-                requestAuthCookieTask = new RequestAuthenticationCookieTask(this, password);
+                var requestAuthCookieTask = new RequestAuthenticationCookieTask(this, password);
 
                 requestAuthCookieTask.Run();
 
@@ -86,14 +83,14 @@ namespace JCsTools.JCQ.IcqInterface
                     // The client needs to be informed that the sign in failed.
 
                     OnSignInFailed(requestAuthCookieTask.State.AuthenticationError.ToString());
-                    isSigningIn = false;
+                    _isSigningIn = false;
                     return;
                 }
 
                 // if the authentication attempt was successfull we can connect to the bos server
                 // and send the just received authentication cookie to begin the sign in procedure.
 
-                serverEndpoint = ConvertServerAddressToEndPoint(requestAuthCookieTask.State.BosServerAddress);
+                var serverEndpoint = ConvertServerAddressToEndPoint(requestAuthCookieTask.State.BosServerAddress);
 
                 InnerConnect(serverEndpoint);
 
@@ -101,13 +98,13 @@ namespace JCsTools.JCQ.IcqInterface
             }
             catch
             {
-                isSigningIn = false;
+                _isSigningIn = false;
 
                 throw;
             }
         }
 
-        void IConnector.SignOut()
+        public void SignOut()
         {
             // TODO: Implement proper Sign out.
             throw new NotImplementedException();
@@ -120,16 +117,14 @@ namespace JCsTools.JCQ.IcqInterface
         /// <remarks></remarks>
         private void SendAuthenticationCookie(List<byte> authenticationCookie)
         {
-            FlapSendSignInCookie flapSendCookie;
+            var flapSendCookie = new FlapSendSignInCookie();
 
-            flapSendCookie = new FlapSendSignInCookie();
             flapSendCookie.AuthorizationCookie.AuthorizationCookie.AddRange(authenticationCookie);
 
             Send(flapSendCookie);
         }
 
-        private void // ERROR: Handles clauses are not supported in C#
-            BaseInternalDisconnected(object sender, DisconnectEventArgs e)
+        private void BaseInternalDisconnected(object sender, DisconnectEventArgs e)
         {
             //TODO: Provide disconnect messages
             OnDisconnected("Server closed connection.", e.IsExpected);
@@ -163,7 +158,7 @@ namespace JCsTools.JCQ.IcqInterface
         {
             try
             {
-                if (isSigningIn)
+                if (_isSigningIn)
                     OnSignInFailed(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode,
                         dataIn.SubError.ErrorSubCode));
 
@@ -177,12 +172,9 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void AnalyseSnac0103(Snac0103 dataIn)
         {
-            List<int> requiredVersions;
-            List<int> notSupported;
-
             try
             {
-                requiredVersions = new List<int>(new[]
+                var requiredVersions = new List<int>(new[]
                 {
                     0x1,
                     0x2,
@@ -192,7 +184,8 @@ namespace JCsTools.JCQ.IcqInterface
                     0x13,
                     0x15
                 });
-                notSupported = new List<int>();
+
+                var notSupported = new List<int>();
 
                 foreach (var x in requiredVersions)
                 {
@@ -294,11 +287,9 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void AnalyseSnac1306(Snac1306 dataIn)
         {
-            Snac1307 dataOut;
-
             try
             {
-                dataOut = new Snac1307();
+                var dataOut = new Snac1307();
 
                 Send(dataOut);
 

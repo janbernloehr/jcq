@@ -48,7 +48,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             Uin = ByteConverter.ToStringFromByteIndex(index, data);
             index += 1 + Uin.Length;
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
     }
 }

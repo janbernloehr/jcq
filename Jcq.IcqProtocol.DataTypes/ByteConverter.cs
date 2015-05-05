@@ -71,10 +71,9 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static byte[] GetBytes(Guid value)
         {
-            var bGuidNet = new Byte[15];
-            var bGuidIcq = new Byte[15];
+            var bGuidIcq = new Byte[16];
 
-            bGuidNet = value.ToByteArray();
+            var bGuidNet = value.ToByteArray();
 
             bGuidIcq[0] = bGuidNet[3];
             bGuidIcq[1] = bGuidNet[2];
@@ -240,7 +239,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public static Guid ToGuid(IEnumerable<byte> value)
         {
             var bytes = new List<byte>(value);
-            var bGuid = new byte[15];
+            var bGuid = new byte[16];
 
             bGuid[3] = bytes[0];
             bGuid[2] = bytes[1];

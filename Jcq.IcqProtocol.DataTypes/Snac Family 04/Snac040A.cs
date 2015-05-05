@@ -58,7 +58,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 _MissedMessageInfos.Add(info);
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override List<byte> Serialize()

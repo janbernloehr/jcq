@@ -38,7 +38,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            SetTotalSize(SizeFixPart);
+            TotalSize = SizeFixPart;
         }
 
         public override List<byte> Serialize()

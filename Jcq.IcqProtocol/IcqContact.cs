@@ -27,7 +27,7 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqContact : BaseStorageItem, IContact, IComparable, IComparable<IcqContact>
     {
-        public IcqContact()
+        public IcqContact() : base()
         {
         }
 
@@ -76,9 +76,14 @@ namespace JCsTools.JCQ.IcqInterface
             }
         }
 
-        public DateTime LastShortUserInfoRequest
+        public DateTime? LastShortUserInfoRequest
         {
-            get { return (DateTime) Attributes["LastShortUserInfoRequest"]; }
+            get
+            {
+                var request = Attributes["LastShortUserInfoRequest"];
+
+                return (DateTime?)request;
+            }
             set { Attributes["LastShortUserInfoRequest"] = value; }
         }
 

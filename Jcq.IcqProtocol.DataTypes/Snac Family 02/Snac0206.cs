@@ -185,7 +185,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 index += desc.TotalSize;
             }
 
-            SetTotalSize(index);
+            TotalSize = index;
         }
 
         public override int CalculateDataSize()

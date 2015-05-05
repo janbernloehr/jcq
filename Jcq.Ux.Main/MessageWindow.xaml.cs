@@ -37,6 +37,8 @@ namespace JCsTools.JCQ.Ux
             ViewModel.ContactHistoryWindowRequested += OnContactHistoryWindowRequested;
             ViewModel.DocumentScrollRequired += OnDocumentScrollRequired;
 
+            DataContext = ViewModel;
+
             InitializeComponent();
 
             App.DefaultWindowStyle.Attach(this);
