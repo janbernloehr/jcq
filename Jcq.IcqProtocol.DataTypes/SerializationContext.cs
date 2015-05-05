@@ -28,7 +28,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             string typeName;
             Type snacType;
 
-            typeName = string.Format("{1}.Snac{0}", SnacDescriptor.GetKey(desc).Replace(",", ""), _AssemblyName);
+            typeName = string.Format("{1}.Snac{0}, {2}", SnacDescriptor.GetKey(desc).Replace(",", ""), _SnacNamespace, _AssemblyName);
             snacType = Type.GetType(typeName, false, true);
 
             return snacType;
@@ -53,6 +53,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         }
 
         private static readonly Type _ContextType = typeof (SerializationContext);
-        private static readonly string _AssemblyName = _ContextType.Assembly.GetName().Name;
+        private static readonly string _AssemblyName = "Jcq.IcqProtocol.DataTypes";
+        private static readonly string _SnacNamespace = "JCsTools.JCQ.IcqInterface.DataTypes";
     }
 }
