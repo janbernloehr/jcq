@@ -63,8 +63,11 @@ namespace JCsTools.JCQ.Ux
             {
                 var svConnect = (IcqConnector) ApplicationService.Current.Context.GetService<IConnector>();
 
-                bytesSent = svConnect.TcpContext.BytesSent;
-                bytesReceived = svConnect.TcpContext.BytesReceived;
+                if (svConnect.TcpContext != null)
+                {
+                    bytesSent = svConnect.TcpContext.BytesSent;
+                    bytesReceived = svConnect.TcpContext.BytesReceived;    
+                }
             }
 
             MemoryUsage.Text = string.Format("{0:0.0}MB", memoryLoad/1024/1024);

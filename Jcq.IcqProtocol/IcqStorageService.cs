@@ -417,6 +417,8 @@ namespace JCsTools.JCQ.IcqInterface
                 {
                     ContactListActivated(this, EventArgs.Empty);
                 }
+
+                Kernel.Logger.Log("IcqStorageService", TraceEventType.Verbose, "Contact list activated.");
             }
             catch (Exception ex)
             {

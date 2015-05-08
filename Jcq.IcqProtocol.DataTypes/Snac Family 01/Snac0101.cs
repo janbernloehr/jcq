@@ -22,7 +22,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
     public class Snac0101 : Snac
     {
-        private readonly TlvErrorSubCode _SubError = new TlvErrorSubCode();
+        private readonly TlvErrorSubCode _subError = new TlvErrorSubCode();
 
         public Snac0101() : base(0x1, 0x1)
         {
@@ -32,17 +32,15 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public TlvErrorSubCode SubError
         {
-            get { return _SubError; }
+            get { return _subError; }
         }
 
         public override List<byte> Serialize()
         {
-            List<byte> data;
-
-            data = base.Serialize();
+            var data = base.Serialize();
 
             data.AddRange(ByteConverter.GetBytes((uint) ErrorCode));
-            data.AddRange(_SubError.Serialize());
+            data.AddRange(_subError.Serialize());
 
             return data;
         }
@@ -62,7 +60,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
                 if (desc.TypeId == 0x8)
                 {
-                    _SubError.Deserialize(data.GetRange(index, desc.TotalSize));
+                    _subError.Deserialize(data.GetRange(index, desc.TotalSize));
                 }
 
                 index += desc.TotalSize;

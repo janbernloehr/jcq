@@ -23,16 +23,19 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 {
     public class ConnectedEventArgs : EventArgs
     {
-        private readonly IPEndPoint _EndPoint;
+        private readonly IPEndPoint _endPoint;
 
         public ConnectedEventArgs(IPEndPoint endPoint)
         {
-            _EndPoint = endPoint;
+            _endPoint = endPoint;
         }
 
+        /// <summary>
+        /// Gets the IPEndPoint to which the connection was established.
+        /// </summary>
         public IPEndPoint EndPoint
         {
-            get { return _EndPoint; }
+            get { return _endPoint; }
         }
     }
 }

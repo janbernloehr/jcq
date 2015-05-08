@@ -23,16 +23,16 @@ namespace Jcq.IcqProtocol.Internal
 {
     public class FlapTransportEventArgs : EventArgs
     {
-        private readonly Flap _Flap;
+        private readonly Flap _flap;
 
         public FlapTransportEventArgs(Flap f)
         {
-            _Flap = f;
+            _flap = f;
         }
 
         public Flap Flap
         {
-            get { return _Flap; }
+            get { return _flap; }
         }
     }
 }

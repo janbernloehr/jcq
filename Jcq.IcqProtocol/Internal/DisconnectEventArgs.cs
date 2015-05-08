@@ -22,16 +22,19 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 {
     public class DisconnectEventArgs : EventArgs
     {
-        private readonly bool _IsExpected;
+        private readonly bool _isExpected;
 
         public DisconnectEventArgs(bool expected)
         {
-            _IsExpected = expected;
+            _isExpected = expected;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the disconnection event was expected.
+        /// </summary>
         public bool IsExpected
         {
-            get { return _IsExpected; }
+            get { return _isExpected; }
         }
     }
 }

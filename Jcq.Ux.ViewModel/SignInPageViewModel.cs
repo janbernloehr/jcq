@@ -20,6 +20,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
@@ -50,7 +51,7 @@ namespace JCsTools.JCQ.ViewModel
 
         public ICollectionView Identities { get; private set; }
 
-        public void SignIn(IIdentity identity)
+        public async Task SignIn(IIdentity identity)
         {
             ApplicationService.Current.CreateContext(identity);
 
@@ -59,11 +60,22 @@ namespace JCsTools.JCQ.ViewModel
             svConnect.SignInCompleted += OnSignInCompleted;
             svConnect.SignInFailed += OnSignInFailed;
 
-            var task = new SignInTask();
-            task.Credential = new PasswordCredential(identity.GetAttribute(IdentityAttributes.PasswordAttribute));
-            Kernel.TaskScheduler.RunAsync(task);
+            //var task = new SignInTask();
+            //task.Credential = new PasswordCredential(identity.GetAttribute(IdentityAttributes.PasswordAttribute));
+            //Kernel.TaskScheduler.RunAsync(task);
+
+            var credentail = new PasswordCredential(identity.GetAttribute(IdentityAttributes.PasswordAttribute));
+
+            var svSignIn = ApplicationService.Current.Context.GetService<IConnector>();
+
+            svSignIn.SignInFailed += OnSignInFailed;
+            svSignIn.SignInCompleted += OnSignInCompleted;
+
+            var signInTask = svSignIn.SignInAsync(credentail);
 
             NavigateToSigningInPage();
+
+            await signInTask;
         }
 
         private void OnDisconnected(object sender, DisconnectedEventArgs e)

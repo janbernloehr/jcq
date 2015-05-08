@@ -38,21 +38,21 @@ namespace JCsTools.JCQ.Ux
 
         public SignInPageViewModel ViewModel { get; private set; }
 
-        private void OnIdentityDoubleClick(object sender, RoutedEventArgs e)
+        private async void OnIdentityDoubleClick(object sender, RoutedEventArgs e)
         {
-            IIdentity identity;
-
             try
             {
-                identity = (IIdentity) ViewModel.Identities.CurrentItem;
+                var identity = (IIdentity) ViewModel.Identities.CurrentItem;
 
                 // Check whether there is an identity selected.
                 if (identity == null)
                     return;
 
-                ViewModel.SignIn(identity);
+                var t = ViewModel.SignIn(identity);
 
                 App.ShowStatusWindows();
+
+                await t;
             }
             catch (Exception ex)
             {
@@ -60,21 +60,21 @@ namespace JCsTools.JCQ.Ux
             }
         }
 
-        private void OnSignInClick(object sender, RoutedEventArgs e)
+        private async void OnSignInClick(object sender, RoutedEventArgs e)
         {
-            IIdentity identity;
-
             try
             {
-                identity = (IIdentity) ViewModel.Identities.CurrentItem;
+                var identity = (IIdentity) ViewModel.Identities.CurrentItem;
 
                 // Check whether there is an identity selected.
                 if (identity == null)
                     return;
 
-                ViewModel.SignIn(identity);
+                var t = ViewModel.SignIn(identity);
 
                 App.ShowStatusWindows();
+
+                await t;
             }
             catch (Exception ex)
             {

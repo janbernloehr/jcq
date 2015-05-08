@@ -24,25 +24,25 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 {
     public class DataReceivedEventArgs : EventArgs
     {
-        private static int ticketCounter;
-        private readonly List<byte> _Data = new List<byte>();
-        private readonly int _Ticket;
+        private static int _ticketCounter;
+        private readonly List<byte> _data;
+        private readonly int _ticket;
 
-        public DataReceivedEventArgs(IEnumerable<byte> data)
+        public DataReceivedEventArgs(List<byte> data)
         {
-            _Data.AddRange(data);
+            _data = data;
 
-            _Ticket = Interlocked.Increment(ref ticketCounter);
+            _ticket = Interlocked.Increment(ref _ticketCounter);
         }
 
         public List<byte> Data
         {
-            get { return _Data; }
+            get { return _data; }
         }
 
         public int Ticket
         {
-            get { return _Ticket; }
+            get { return _ticket; }
         }
     }
 }

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Jcq.IcqProtocol.Internal;
 using JCsTools.JCQ.IcqInterface.DataTypes;
 
@@ -27,9 +28,11 @@ namespace JCsTools.JCQ.IcqInterface
     {
         event EventHandler<FlapTransportEventArgs> FlapReceived;
         event EventHandler<FlapTransportEventArgs> FlapSent;
-        void SendList(IEnumerable<Snac> snacs);
-        void Send(params Snac[] snacs);
-        void Send(Flap flap);
+
+        Task<int[]> SendList(IEnumerable<Snac> snacs);
+        Task<int[]> Send(params Snac[] snacs);
+        Task<int> Send(Flap flap);
+        
         void RegisterSnacHandler<T>(int serviceId, int subtypeId, Action<T> handler) where T : Snac;
     }
 }

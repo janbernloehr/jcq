@@ -17,6 +17,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 
 namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
@@ -26,6 +27,6 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
         event EventHandler<SignInFailedEventArgs> SignInFailed;
         event EventHandler<DisconnectedEventArgs> Disconnected;
         void SignOut();
-        void SignIn(ICredential credential);
+        Task<bool> SignInAsync(ICredential credential);
     }
 }

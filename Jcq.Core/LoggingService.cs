@@ -23,6 +23,16 @@ namespace JCsTools.Core
 {
     public class LoggingService : Service, ILoggingService
     {
+        private static readonly TraceSource JcqTraceSource;
+
+        static LoggingService()
+        {
+            JcqTraceSource = new TraceSource("jcq");
+            JcqTraceSource.Switch = new SourceSwitch("MySwitch", "Verbose");
+
+
+        }
+
         int ILoggingService.DefaultEventId
         {
             get { return 100; }
@@ -37,12 +47,14 @@ namespace JCsTools.Core
         {
             //TODO: Logger
             //Logger.Write(message, category, DefaultPriority, DefaultEventId, severity);
+            JcqTraceSource.TraceInformation(message);
         }
 
         void ILoggingService.Log(string category, TraceEventType severity, string message, params object[] args)
         {
             //TODO: Logger
             //Logger.Write(string.Format(message, args), category, DefaultPriority, DefaultEventId, severity);
+            JcqTraceSource.TraceInformation(message, args);
         }
     }
 }

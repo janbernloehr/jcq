@@ -22,16 +22,16 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class PasswordCredential : IPasswordCredential
     {
-        private readonly string _Password;
+        private readonly string _password;
 
         public PasswordCredential(string pwd)
         {
-            _Password = pwd;
+            _password = pwd;
         }
 
         string IPasswordCredential.Password
         {
-            get { return _Password; }
+            get { return _password; }
         }
     }
 }

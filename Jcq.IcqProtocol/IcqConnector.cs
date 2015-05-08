@@ -19,8 +19,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using JCsTools.Core;
 using JCsTools.JCQ.IcqInterface.DataTypes;
 using JCsTools.JCQ.IcqInterface.Interfaces;
@@ -37,8 +39,11 @@ namespace JCsTools.JCQ.IcqInterface
     public class IcqConnector : BaseConnector, IConnector
     {
         private bool _isSigningIn;
+        private TaskCompletionSource<bool> _signInTaskCompletionSource;
+        private SemaphoreSlim _contactListActivated;
 
-        public IcqConnector(IContext context) : base(context)
+        public IcqConnector(IContext context)
+            : base(context)
         {
             RegisterSnacHandler<Snac0101>(0x1, 0x1, AnalyseSnac0101);
             RegisterSnacHandler<Snac0103>(0x1, 0x3, AnalyseSnac0103);
@@ -54,53 +59,107 @@ namespace JCsTools.JCQ.IcqInterface
         public event EventHandler<SignInFailedEventArgs> SignInFailed;
         public event EventHandler<DisconnectedEventArgs> Disconnected;
 
-        public void SignIn(ICredential credential)
+        //public void SignIn(ICredential credential)
+        //{
+        //    var password = credential as IPasswordCredential;
+        //    if (password == null)
+        //        throw new ArgumentException("Credential musst be of Type IPasswordCredential", "credential");
+
+        //    try
+        //    {
+        //        _isSigningIn = true;
+
+        //        // Connect to the icq server and get a bos server address and and authentication cookie.
+        //        InnerConnect();
+
+        //        var requestAuthCookieTask = new RequestAuthenticationCookieTask(this, password);
+
+        //        requestAuthCookieTask.Run();
+
+        //        // When the task is run, we can exspect a disconnect ...
+        //        TcpContext.SetCloseExpected();
+
+        //        requestAuthCookieTask.WaitCompleted();
+
+        //        if (!requestAuthCookieTask.State.AuthenticationSucceeded)
+        //        {
+        //            // The authentication attempt was not successfull. There are many reasons for this
+        //            // to occur for example wrong password, to many connections etc.
+        //            // The client needs to be informed that the sign in failed.
+
+        //            OnSignInFailed(requestAuthCookieTask.State.AuthenticationError.ToString());
+        //            _isSigningIn = false;
+        //            return;
+        //        }
+
+        //        // if the authentication attempt was successfull we can connect to the bos server
+        //        // and send the just received authentication cookie to begin the sign in procedure.
+
+        //        var serverEndpoint = ConvertServerAddressToEndPoint(requestAuthCookieTask.State.BosServerAddress);
+
+        //        InnerConnect(serverEndpoint);
+
+        //        SendAuthenticationCookie(requestAuthCookieTask.State.AuthCookie);
+        //    }
+        //    catch
+        //    {
+        //        _isSigningIn = false;
+
+        //        throw;
+        //    }
+        //}
+
+        public async Task<bool> SignInAsync(ICredential credential)
         {
             var password = credential as IPasswordCredential;
+
             if (password == null)
-                throw new ArgumentException("Credential musst be of Type IPasswordCredential", "credential");
+                throw new ArgumentException(@"Credential musst be of Type IPasswordCredential", "credential");
 
             try
             {
                 _isSigningIn = true;
+                _signInTaskCompletionSource = new TaskCompletionSource<bool>();
+                _contactListActivated = new SemaphoreSlim(0, 1);
 
                 // Connect to the icq server and get a bos server address and and authentication cookie.
                 InnerConnect();
 
-                var requestAuthCookieTask = new RequestAuthenticationCookieTask(this, password);
+                var authenticationCookieUnitOfWork = new RequestAuthenticationCookieUnitOfWork(this);
 
-                requestAuthCookieTask.Run();
+                var authenticationCookieTask = authenticationCookieUnitOfWork.SendRequest(password);
 
                 // When the task is run, we can exspect a disconnect ...
                 TcpContext.SetCloseExpected();
 
-                requestAuthCookieTask.WaitCompleted();
+                var authenticationCookieState = await authenticationCookieTask;
 
-                if (!requestAuthCookieTask.State.AuthenticationSucceeded)
+                if (!authenticationCookieState.AuthenticationSucceeded)
                 {
                     // The authentication attempt was not successfull. There are many reasons for this
-                    // to occur for example wrong password, to many connections etc.
+                    // to occur for example wrong password, too many connections etc.
                     // The client needs to be informed that the sign in failed.
 
-                    OnSignInFailed(requestAuthCookieTask.State.AuthenticationError.ToString());
-                    _isSigningIn = false;
-                    return;
+                    OnSignInFailed(authenticationCookieState.AuthenticationError.ToString());
+                    return false;
                 }
 
                 // if the authentication attempt was successfull we can connect to the bos server
                 // and send the just received authentication cookie to begin the sign in procedure.
 
-                var serverEndpoint = ConvertServerAddressToEndPoint(requestAuthCookieTask.State.BosServerAddress);
+                var serverEndpoint = ConvertServerAddressToEndPoint(authenticationCookieState.BosServerAddress);
 
                 InnerConnect(serverEndpoint);
 
-                SendAuthenticationCookie(requestAuthCookieTask.State.AuthCookie);
+                Context.GetService<IStorageService>().ContactListActivated += (s, e) => _contactListActivated.Release();
+
+                await SendAuthenticationCookie(authenticationCookieState.AuthCookie);
+
+                return await _signInTaskCompletionSource.Task;
             }
-            catch
+            finally
             {
                 _isSigningIn = false;
-
-                throw;
             }
         }
 
@@ -115,13 +174,13 @@ namespace JCsTools.JCQ.IcqInterface
         ///     The server replies with SnacXXX and initiates the sign in procedure.
         /// </summary>
         /// <remarks></remarks>
-        private void SendAuthenticationCookie(List<byte> authenticationCookie)
+        private Task<int> SendAuthenticationCookie(List<byte> authenticationCookie)
         {
             var flapSendCookie = new FlapSendSignInCookie();
 
             flapSendCookie.AuthorizationCookie.AuthorizationCookie.AddRange(authenticationCookie);
 
-            Send(flapSendCookie);
+            return Send(flapSendCookie);
         }
 
         private void BaseInternalDisconnected(object sender, DisconnectEventArgs e)
@@ -156,22 +215,28 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void AnalyseSnac0101(Snac0101 dataIn)
         {
+            if (!_isSigningIn)
+                return;
+
             try
             {
-                if (_isSigningIn)
-                    OnSignInFailed(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode,
-                        dataIn.SubError.ErrorSubCode));
+                OnSignInFailed(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode,
+                    dataIn.SubError.ErrorSubCode));
 
                 throw new IcqException(dataIn.ServiceId, dataIn.ErrorCode, dataIn.SubError.ErrorSubCode);
             }
             catch (Exception ex)
             {
+                _signInTaskCompletionSource.SetException(ex);
                 Kernel.Exceptions.PublishException(ex);
             }
         }
 
         private void AnalyseSnac0103(Snac0103 dataIn)
         {
+            if (!_isSigningIn)
+                return;
+
             try
             {
                 var requiredVersions = new List<int>(new[]
@@ -185,15 +250,7 @@ namespace JCsTools.JCQ.IcqInterface
                     0x15
                 });
 
-                var notSupported = new List<int>();
-
-                foreach (var x in requiredVersions)
-                {
-                    if (!dataIn.ServerSupportedFamilyIds.Contains(x))
-                    {
-                        notSupported.Add(x);
-                    }
-                }
+                var notSupported = requiredVersions.Where(x => !dataIn.ServerSupportedFamilyIds.Contains(x)).ToList();
 
                 if (notSupported.Count == 0)
                 {
@@ -219,12 +276,16 @@ namespace JCsTools.JCQ.IcqInterface
             }
             catch (Exception ex)
             {
+                _signInTaskCompletionSource.SetException(ex);
                 Kernel.Exceptions.PublishException(ex);
             }
         }
 
         private void AnalyseSnac0118(Snac0118 dataIn)
         {
+            if (!_isSigningIn)
+                return;
+
             try
             {
                 var dataOut = new Snac0106();
@@ -233,30 +294,27 @@ namespace JCsTools.JCQ.IcqInterface
             }
             catch (Exception ex)
             {
+                _signInTaskCompletionSource.SetException(ex);
                 Kernel.Exceptions.PublishException(ex);
             }
         }
 
         private void AnalyseSnac0107(Snac0107 dataIn)
         {
-            List<int> serverRateGroupIds;
-            Snac0108 dataOut;
-            Snac dataContactListCheckout;
+            if (!_isSigningIn)
+                return;
 
             try
             {
-                serverRateGroupIds = new List<int>();
+                var serverRateGroupIds = dataIn.RateGroups.Select(x => x.GroupId).ToList();
 
-                foreach (var x in dataIn.RateGroups)
-                {
-                    serverRateGroupIds.Add(x.GroupId);
-                }
-
-                dataOut = new Snac0108();
+                var dataOut = new Snac0108();
 
                 dataOut.RateGroupIds.AddRange(serverRateGroupIds);
 
                 var svStorage = Context.GetService<IStorageService>();
+
+                Snac dataContactListCheckout;
 
                 if (svStorage.Info != null)
                 {
@@ -281,36 +339,49 @@ namespace JCsTools.JCQ.IcqInterface
             }
             catch (Exception ex)
             {
+                _signInTaskCompletionSource.SetException(ex);
                 Kernel.Exceptions.PublishException(ex);
             }
         }
 
         private void AnalyseSnac1306(Snac1306 dataIn)
         {
+            if (!_isSigningIn)
+                return;
+
             try
             {
                 var dataOut = new Snac1307();
 
                 Send(dataOut);
 
-                CompleteInitialization();
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await CompleteInitialization();
+                    }
+                    catch (Exception iex)
+                    {
+                        _signInTaskCompletionSource.SetException(iex);
+                    }
+                });
             }
             catch (Exception ex)
             {
+                _signInTaskCompletionSource.SetException(ex);
                 Kernel.Exceptions.PublishException(ex);
             }
         }
 
-        private void CompleteInitialization()
+        private async Task CompleteInitialization()
         {
-            Snac0204 snacUserInfo;
-
             // In the following the client capabilities are propageted to the server. This is
             // used to show other clients which features of the Icq/Aim network this client
             // supports.
             // At the moment only the icq flag to show that this client is an icq client.
             // When more features are made available more flags have to be set.
-            snacUserInfo = new Snac0204();
+            var snacUserInfo = new Snac0204();
             snacUserInfo.Capabilities.Capabilites.Add(IcqClientCapabilities.IcqFlag);
 
             // The following sets up the message channels the client understands.
@@ -318,58 +389,52 @@ namespace JCsTools.JCQ.IcqInterface
             // Channel 2: Rich text messages and other communications
             // Channel 4: obsolete
 
-            Snac0402 confChannel01;
+            var confChannel01 = new Snac0402
+            {
+                Channel = 1,
+                MessageFlags = 0xb,
+                MaxMessageSnacSize = 0x1f40,
+                MaxSenderWarningLevel = 0x3e7,
+                MaxReceiverWarningLevel = 0x3e7,
+                MinimumMessageInterval = 0
+            };
 
-            confChannel01 = new Snac0402();
-            confChannel01.Channel = 1;
-            confChannel01.MessageFlags = 0xb;
-            confChannel01.MaxMessageSnacSize = 0x1f40;
-            confChannel01.MaxSenderWarningLevel = 0x3e7;
-            confChannel01.MaxReceiverWarningLevel = 0x3e7;
-            confChannel01.MinimumMessageInterval = 0;
+            var confChannel02 = new Snac0402
+            {
+                Channel = 2,
+                MessageFlags = 0x3,
+                MaxMessageSnacSize = 0x1f40,
+                MaxSenderWarningLevel = 0x3e7,
+                MaxReceiverWarningLevel = 0x3e7,
+                MinimumMessageInterval = 0
+            };
 
-            Snac0402 confChannel02;
-
-            confChannel02 = new Snac0402();
-            confChannel02.Channel = 2;
-            confChannel02.MessageFlags = 0x3;
-            confChannel02.MaxMessageSnacSize = 0x1f40;
-            confChannel02.MaxSenderWarningLevel = 0x3e7;
-            confChannel02.MaxReceiverWarningLevel = 0x3e7;
-            confChannel02.MinimumMessageInterval = 0;
-
-            Snac0402 confChannel04;
-
-            confChannel04 = new Snac0402();
-            confChannel04.Channel = 4;
-            confChannel04.MessageFlags = 0x3;
-            confChannel04.MaxMessageSnacSize = 0x1f40;
-            confChannel04.MaxSenderWarningLevel = 0x3e7;
-            confChannel04.MaxReceiverWarningLevel = 0x3e7;
-            confChannel04.MinimumMessageInterval = 0;
+            var confChannel04 = new Snac0402
+            {
+                Channel = 4,
+                MessageFlags = 0x3,
+                MaxMessageSnacSize = 0x1f40,
+                MaxSenderWarningLevel = 0x3e7,
+                MaxReceiverWarningLevel = 0x3e7,
+                MinimumMessageInterval = 0
+            };
 
             // Set up "DirectConnection" configuration of the client. This is a
             // peer to peer communication to allow file transfers etc.
             // At the moment it is set to not supported.
 
-            Snac011e extendedStatusRequest;
-
-            extendedStatusRequest = new Snac011e();
+            var extendedStatusRequest = new Snac011e();
             extendedStatusRequest.DCInfo.DcProtocolVersion = 8;
             extendedStatusRequest.DCInfo.DcByte = DcType.DirectConnectionDisabledAuthRequired;
 
             // The user is not idle so set the idle time to zero.
 
-            Snac0111 setIdleTime;
-
-            setIdleTime = new Snac0111();
-            setIdleTime.IdleTime = TimeSpan.FromSeconds(0);
+            var setIdleTime = new Snac0111 { IdleTime = TimeSpan.FromSeconds(0) };
 
             // This is used to tell the server the understood services.
             // Since this is an Icq Client only icq services are listed.
 
-            Snac0102 supportedServices;
-            supportedServices = new Snac0102();
+            var supportedServices = new Snac0102();
             supportedServices.Families.Add(new FamilyIdToolPair(0x1, 0x4, 0x110, 0x8e4));
             supportedServices.Families.Add(new FamilyIdToolPair(0x13, 0x4, 0x110, 0x8e4));
             supportedServices.Families.Add(new FamilyIdToolPair(0x2, 0x1, 0x110, 0x8e4));
@@ -381,39 +446,34 @@ namespace JCsTools.JCQ.IcqInterface
             supportedServices.Families.Add(new FamilyIdToolPair(0xa, 0x1, 0x110, 0x8e4));
             supportedServices.Families.Add(new FamilyIdToolPair(0xb, 0x1, 0x110, 0x8e4));
 
-            Send(snacUserInfo, confChannel01, confChannel02, confChannel04, extendedStatusRequest, setIdleTime,
+            await Send(snacUserInfo, confChannel01, confChannel02, confChannel04, extendedStatusRequest, setIdleTime,
                 supportedServices);
 
+            //TODO: Is this still true?
             // It is required to run the completion asynchronous. otherwise this call would block the analyzation of
             // data in the analyzation pipe.
-            ThreadPool.QueueUserWorkItem(AsyncCompleteSignIn);
-        }
-
-        private void AsyncCompleteSignIn(object state)
-        {
-            IStorageService svStorage;
-            EventWaitHandle waitForContactList;
+            //ThreadPool.QueueUserWorkItem(AsyncCompleteSignIn);
 
             // now we have to wait for the IcqStorage service to finish contact list analyzation
             // the easiest way to do so is blocking the current thread until the ContactListActivated
             // event is fired.
 
-            svStorage = Context.GetService<IStorageService>();
-            waitForContactList = new ManualResetEvent(false);
-
-            // That's why I love linq :)
-            svStorage.ContactListActivated += (object sender, EventArgs e) => waitForContactList.Set();
-
-            if (!waitForContactList.WaitOne(TimeSpan.FromSeconds(10), true))
+            if (!await _contactListActivated.WaitAsync(TimeSpan.FromSeconds(10)))
             {
                 OnSignInFailed("Timeout while waiting for server response.");
+
+                _signInTaskCompletionSource.SetResult(false);
             }
             else
             {
                 Context.GetService<IUserInformationService>().RequestShortUserInfo(Context.Identity);
 
                 OnSignInCompleted();
+
+                _signInTaskCompletionSource.SetResult(true);
             }
+
+
         }
     }
 }

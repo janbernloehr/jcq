@@ -22,29 +22,29 @@ using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.ViewModel
 {
-    public class SignInTask : BasicAsyncTask
-    {
-        public IPasswordCredential Credential { get; set; }
+    //public class SignInTask : BasicAsyncTask
+    //{
+    //    public IPasswordCredential Credential { get; set; }
 
-        private void OnSignInFailed(object sender, SignInFailedEventArgs e)
-        {
-            SetException(new ApplicationException(e.Message));
-            SetCompleted();
-        }
+    //    private void OnSignInFailed(object sender, SignInFailedEventArgs e)
+    //    {
+    //        SetException(new ApplicationException(e.Message));
+    //        SetCompleted();
+    //    }
 
-        private void OnSignInCompleted(object sender, EventArgs e)
-        {
-            SetCompleted();
-        }
+    //    private void OnSignInCompleted(object sender, EventArgs e)
+    //    {
+    //        SetCompleted();
+    //    }
 
-        protected override void PerformOperation()
-        {
-            var svSignIn = ApplicationService.Current.Context.GetService<IConnector>();
+    //    protected override void PerformOperation()
+    //    {
+    //        var svSignIn = ApplicationService.Current.Context.GetService<IConnector>();
 
-            svSignIn.SignIn(Credential);
+    //        svSignIn.SignIn(Credential);
 
-            svSignIn.SignInFailed += OnSignInFailed;
-            svSignIn.SignInCompleted += OnSignInCompleted;
-        }
-    }
+    //        svSignIn.SignInFailed += OnSignInFailed;
+    //        svSignIn.SignInCompleted += OnSignInCompleted;
+    //    }
+    //}
 }

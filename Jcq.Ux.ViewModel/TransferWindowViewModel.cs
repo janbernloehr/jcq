@@ -96,7 +96,7 @@ namespace JCsTools.JCQ.ViewModel
             {
                 var infos = e.Flap.DataItems.Select(x => x.ToString()).ToList();
 
-                Message += string.Format("{0}: >> Seq: {1} Channel: {2} Items: {3}",
+                Message += string.Format("{0}: >> Seq: {1} Channel: {2} Items: {3}\n",
                     DateTime.Now.ToLongTimeString(), e.Flap.DatagramSequenceNumber, e.Flap.Channel,
                     string.Join(", ", infos.ToArray()));
             }

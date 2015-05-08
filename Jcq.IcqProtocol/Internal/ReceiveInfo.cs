@@ -20,17 +20,17 @@ using System.Net.Sockets;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    internal class ReceiveInfo
-    {
-        public const int BUFFERSIZE = 2048;
-        internal byte[] buffer;
+    //internal class ReceiveInfo
+    //{
+    //    public const int BUFFERSIZE = 2048;
+    //    internal byte[] buffer;
 
-        public ReceiveInfo(NetworkStream stream)
-        {
-            buffer = new byte[BUFFERSIZE];
-            Stream = stream;
-        }
+    //    public ReceiveInfo(NetworkStream stream)
+    //    {
+    //        buffer = new byte[BUFFERSIZE];
+    //        Stream = stream;
+    //    }
 
-        public NetworkStream Stream { get; private set; }
-    }
+    //    public NetworkStream Stream { get; private set; }
+    //}
 }
