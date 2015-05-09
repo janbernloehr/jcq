@@ -64,15 +64,16 @@
     <Compile Include="Contracts\StatusChangedMessageViewModel.cs" />
     <Compile Include="Contracts\TextMessageViewModel.cs" />
     <Compile Include="CountDownTimer.cs" />
-    <Compile Include="CreateIdentityViewModel.cs" />
+    <Compile Include="CreateIcqIdentityViewModel.cs" />
     <Compile Include="DataTemplateSelector.cs" />
-    <Compile Include="EditIdentityViewModel.cs" />
+    <Compile Include="EditIcqIdentityViewModel.cs" />
     <Compile Include="ExceptionWindowViewModel.cs" />
     <Compile Include="FlowDocumentBinding.cs" />
     <Compile Include="GroupViewModel.cs" />
     <Compile Include="GroupViewModelCache.cs" />
     <Compile Include="GroupViewModelCollectionBinding.cs" />
     <Compile Include="HistoryWindowViewModel.cs" />
+    <Compile Include="IcqIdentity.cs" />
     <Compile Include="IdentityAttributes.cs" />
     <Compile Include="IdentityImageOriginalFilePathAttribute.cs" />
     <Compile Include="IdentityPasswordAttribute.cs" />
@@ -85,9 +86,9 @@
     <Compile Include="RunBinding.cs" />
     <Compile Include="SearchWindowViewModel.cs" />
     <Compile Include="SignInPageViewModel.cs" />
-    <Compile Include="Tasks\RequestShortUserInfoTask.cs" />
+    <Compile Include="Tasks\RequestShortUserInfoUnitOfWork.cs" />
     <Compile Include="Tasks\SignInTask.cs" />
-    <Compile Include="Tasks\UploadAvatarActivity.cs" />
+    <Compile Include="Tasks\UploadAvatarUnitOfWork.cs" />
     <Compile Include="TextChangedAction.cs" />
     <Compile Include="TransferWindowViewModel.cs" />
   </ItemGroup>

@@ -20,14 +20,14 @@ using JCsTools.IdentityManager;
 
 namespace JCsTools.JCQ.ViewModel
 {
-    /// <summary>
-    ///     Identity Attribute representing the Identity's UIN.
-    /// </summary>
-    public class IdentityUinAttribute : IIdentityAttribute<string>
-    {
-        public string AttributeName
-        {
-            get { return "Uin"; }
-        }
-    }
+    ///// <summary>
+    /////     Identity Attribute representing the Identity's UIN.
+    ///// </summary>
+    //public class IdentityUinAttribute : IIdentityAttribute<string>
+    //{
+    //    public string AttributeName
+    //    {
+    //        get { return "Uin"; }
+    //    }
+    //}
 }

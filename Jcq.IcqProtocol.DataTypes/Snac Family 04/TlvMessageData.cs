@@ -17,6 +17,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Text;
 
 namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
@@ -94,7 +95,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             index += 4;
 
-            MessageText = ByteConverter.ToString(data.GetRange(index, length - 4));
+            //MessageText = ByteConverter.ToString(data.GetRange(index, length - 4));
+            MessageText = Encoding.BigEndianUnicode.GetString(data.GetRange(index, length - 4).ToArray());
 
             index += length - 4;
         }

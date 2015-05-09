@@ -20,18 +20,18 @@ using System;
 
 namespace JCsTools.Core
 {
-    public abstract class BasicSyncTask : BaseTask
-    {
-        public override bool IsAsync
-        {
-            get { return false; }
-        }
+    //public abstract class BasicSyncTask : BaseTask
+    //{
+    //    public override bool IsAsync
+    //    {
+    //        get { return false; }
+    //    }
 
-        protected abstract override void PerformOperation();
+    //    protected abstract override void PerformOperation();
 
-        public override void WaitCompleted()
-        {
-            throw new NotImplementedException("You cannot wait for a synchronous task.");
-        }
-    }
+    //    public override void WaitCompleted()
+    //    {
+    //        throw new NotImplementedException("You cannot wait for a synchronous task.");
+    //    }
+    //}
 }

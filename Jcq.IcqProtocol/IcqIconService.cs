@@ -72,6 +72,8 @@ namespace JCsTools.JCQ.IcqInterface
 
         public void UploadIcon(byte[] avatar)
         {
+            return;
+
             var newIcon = default(Snac1308);
             var editIcon = default(Snac1309);
 

@@ -19,6 +19,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using Jcq.Ux.ViewModel;
 using JCsTools.Core;
 using JCsTools.IdentityManager;
 using JCsTools.JCQ.ViewModel;
@@ -42,7 +43,7 @@ namespace JCsTools.JCQ.Ux
         {
             try
             {
-                var identity = (IIdentity) ViewModel.Identities.CurrentItem;
+                var identity = (IcqIdentity) ViewModel.Identities.CurrentItem;
 
                 // Check whether there is an identity selected.
                 if (identity == null)
@@ -64,7 +65,7 @@ namespace JCsTools.JCQ.Ux
         {
             try
             {
-                var identity = (IIdentity) ViewModel.Identities.CurrentItem;
+                var identity = (IcqIdentity) ViewModel.Identities.CurrentItem;
 
                 // Check whether there is an identity selected.
                 if (identity == null)
@@ -96,11 +97,9 @@ namespace JCsTools.JCQ.Ux
 
         private void OnEditClick(object sender, RoutedEventArgs e)
         {
-            IIdentity identity;
-
             try
             {
-                identity = (IIdentity) ViewModel.Identities.CurrentItem;
+                var identity = (IcqIdentity) ViewModel.Identities.CurrentItem;
 
                 // Check whether there is an identity selected.
                 if (identity == null)

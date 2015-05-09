@@ -49,10 +49,10 @@ namespace JCsTools.JCQ.ViewModel
 
         public IContact Model { get; private set; }
 
-        public Hashtable Attributes
-        {
-            get { return Model.Attributes; }
-        }
+        //public Hashtable Attributes
+        //{
+        //    get { return Model.Attributes; }
+        //}
 
         public string Identifier
         {

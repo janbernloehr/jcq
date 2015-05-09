@@ -27,7 +27,7 @@ namespace JCsTools.JCQ.Ux
     {
         public CreateIdentityPage()
         {
-            ViewModel = new CreateIdentityViewModel();
+            ViewModel = new CreateIcqIdentityViewModel();
 
             // This call is required by the Windows Form Designer.
             InitializeComponent();
@@ -35,7 +35,7 @@ namespace JCsTools.JCQ.Ux
             // Add any initialization after the InitializeComponent() call.
         }
 
-        public CreateIdentityViewModel ViewModel { get; private set; }
+        public CreateIcqIdentityViewModel ViewModel { get; private set; }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {

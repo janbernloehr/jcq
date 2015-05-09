@@ -30,152 +30,152 @@ using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    /// <summary>
-    ///     This task requests an authentication cookie for a username and a password.
-    /// </summary>
-    public class RequestAuthenticationCookieTask : BasicAsyncTask, ITaskWithState<RequestAuthenticationCookieState>
-    {
-        private readonly IcqConnector _connector;
-        private readonly IPasswordCredential _passwordCredential;
-        private readonly RequestAuthenticationCookieState _state;
+    ///// <summary>
+    /////     This task requests an authentication cookie for a username and a password.
+    ///// </summary>
+    //public class RequestAuthenticationCookieTask : BasicAsyncTask, ITaskWithState<RequestAuthenticationCookieState>
+    //{
+    //    private readonly IcqConnector _connector;
+    //    private readonly IPasswordCredential _passwordCredential;
+    //    private readonly RequestAuthenticationCookieState _state;
 
-        public RequestAuthenticationCookieTask(IcqConnector owner, IPasswordCredential credential)
-        {
-            _connector = owner;
-            _state = new RequestAuthenticationCookieState();
-            _passwordCredential = credential;
+    //    public RequestAuthenticationCookieTask(IcqConnector owner, IPasswordCredential credential)
+    //    {
+    //        _connector = owner;
+    //        _state = new RequestAuthenticationCookieState();
+    //        _passwordCredential = credential;
 
-            Connector.FlapReceived += OnFlapReceived;
-        }
+    //        Connector.FlapReceived += OnFlapReceived;
+    //    }
 
-        /// <summary>
-        ///     Gets the connector used to process this task.
-        /// </summary>
-        public IcqConnector Connector
-        {
-            get { return _connector; }
-        }
+    //    /// <summary>
+    //    ///     Gets the connector used to process this task.
+    //    /// </summary>
+    //    public IcqConnector Connector
+    //    {
+    //        get { return _connector; }
+    //    }
 
-        /// <summary>
-        ///     Gets the password credential used to request the authentication cookie.
-        /// </summary>
-        public IPasswordCredential PasswordCredential
-        {
-            get { return _passwordCredential; }
-        }
+    //    /// <summary>
+    //    ///     Gets the password credential used to request the authentication cookie.
+    //    /// </summary>
+    //    public IPasswordCredential PasswordCredential
+    //    {
+    //        get { return _passwordCredential; }
+    //    }
 
-        /// <summary>
-        ///     Gets the current state of the task.
-        /// </summary>
-        public RequestAuthenticationCookieState State
-        {
-            get { return _state; }
-        }
+    //    /// <summary>
+    //    ///     Gets the current state of the task.
+    //    /// </summary>
+    //    public RequestAuthenticationCookieState State
+    //    {
+    //        get { return _state; }
+    //    }
 
-        protected override void SetCompleted()
-        {
-            // When the task is completed we don't have to listen for new
-            // flaps anymore.
-            Connector.FlapReceived -= OnFlapReceived;
+    //    protected override void SetCompleted()
+    //    {
+    //        // When the task is completed we don't have to listen for new
+    //        // flaps anymore.
+    //        Connector.FlapReceived -= OnFlapReceived;
 
-            base.SetCompleted();
-        }
+    //        base.SetCompleted();
+    //    }
 
-        protected override void PerformOperation()
-        {
-            // The only required operation is sending the cookie request
-            SendAuthenticationCookieRequest(PasswordCredential.Password);
-        }
+    //    protected override void PerformOperation()
+    //    {
+    //        // The only required operation is sending the cookie request
+    //        SendAuthenticationCookieRequest(PasswordCredential.Password);
+    //    }
 
-        /// <summary>
-        ///     Filters FalpReceived events and passes the appropiate data to analyzation methods.
-        /// </summary>
-        private void OnFlapReceived(object sender, FlapTransportEventArgs e)
-        {
-            var flap = e.Flap;
+    //    /// <summary>
+    //    ///     Filters FalpReceived events and passes the appropiate data to analyzation methods.
+    //    /// </summary>
+    //    private void OnFlapReceived(object sender, FlapTransportEventArgs e)
+    //    {
+    //        var flap = e.Flap;
 
-            try
-            {
-                // we can ignore flaps other than connection closed negotiations
-                if (flap.Channel != FlapChannel.CloseConnectionNegotiation)
-                    return;
+    //        try
+    //        {
+    //            // we can ignore flaps other than connection closed negotiations
+    //            if (flap.Channel != FlapChannel.CloseConnectionNegotiation)
+    //                return;
 
-                AnalyzeConnectionClosedFlap(flap);
-            }
-            catch (Exception ex)
-            {
-                Kernel.Exceptions.PublishException(ex);
-            }
-        }
+    //            AnalyzeConnectionClosedFlap(flap);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Kernel.Exceptions.PublishException(ex);
+    //        }
+    //    }
 
-        /// <summary>
-        ///     Analyzes connection closed negotiation flaps.
-        /// </summary>
-        private void AnalyzeConnectionClosedFlap(Flap flap)
-        {
-            // we are only interested in tlvs and their type number.
-            var tlvsByTypeNumer =
-                (from x in flap.DataItems where x is Tlv select (Tlv)x).ToDictionary(tlv => tlv.TypeNumber);
+    //    /// <summary>
+    //    ///     Analyzes connection closed negotiation flaps.
+    //    /// </summary>
+    //    private void AnalyzeConnectionClosedFlap(Flap flap)
+    //    {
+    //        // we are only interested in tlvs and their type number.
+    //        var tlvsByTypeNumer =
+    //            (from x in flap.DataItems where x is Tlv select (Tlv)x).ToDictionary(tlv => tlv.TypeNumber);
 
-            if (tlvsByTypeNumer.ContainsKey(0x5) & tlvsByTypeNumer.ContainsKey(0x6))
-            {
-                // if these tlvs are present the authentication succeeded and everything is okay :)
+    //        if (tlvsByTypeNumer.ContainsKey(0x5) & tlvsByTypeNumer.ContainsKey(0x6))
+    //        {
+    //            // if these tlvs are present the authentication succeeded and everything is okay :)
 
-                var bosServerTlv = (TlvBosServerAddress)tlvsByTypeNumer[0x5];
-                var authCookieTlv = (TlvAuthorizationCookie)tlvsByTypeNumer[0x6];
+    //            var bosServerTlv = (TlvBosServerAddress)tlvsByTypeNumer[0x5];
+    //            var authCookieTlv = (TlvAuthorizationCookie)tlvsByTypeNumer[0x6];
 
-                State.BosServerAddress = bosServerTlv.BosServerAddress;
-                State.AuthCookie = authCookieTlv.AuthorizationCookie;
-                State.AuthenticationSucceeded = true;
+    //            State.BosServerAddress = bosServerTlv.BosServerAddress;
+    //            State.AuthCookie = authCookieTlv.AuthorizationCookie;
+    //            State.AuthenticationSucceeded = true;
 
-                SetCompleted();
-            }
-            else if (tlvsByTypeNumer.ContainsKey(0x8))
-            {
-                // if this tlv is present the authentication has failed.
+    //            SetCompleted();
+    //        }
+    //        else if (tlvsByTypeNumer.ContainsKey(0x8))
+    //        {
+    //            // if this tlv is present the authentication has failed.
 
-                var authFailedTlv = (TlvAuthFailed)tlvsByTypeNumer[0x8];
+    //            var authFailedTlv = (TlvAuthFailed)tlvsByTypeNumer[0x8];
 
-                Kernel.Logger.Log("IcqConnector", TraceEventType.Error, "Connection to server failed. ErrorSubCode: {0}",
-                    authFailedTlv.ErrorSubCode);
+    //            Kernel.Logger.Log("IcqConnector", TraceEventType.Error, "Connection to server failed. ErrorSubCode: {0}",
+    //                authFailedTlv.ErrorSubCode);
 
-                State.AuthenticationSucceeded = false;
-                State.AuthenticationError = authFailedTlv.ErrorSubCode;
+    //            State.AuthenticationSucceeded = false;
+    //            State.AuthenticationError = authFailedTlv.ErrorSubCode;
 
-                SetCompleted();
-            }
-            else
-            {
-                // in all other cases something went wrong ...
-                State.AuthenticationSucceeded = false;
+    //            SetCompleted();
+    //        }
+    //        else
+    //        {
+    //            // in all other cases something went wrong ...
+    //            State.AuthenticationSucceeded = false;
 
-                SetCompleted();
-            }
-        }
+    //            SetCompleted();
+    //        }
+    //    }
 
-        /// <summary>
-        ///     Sends an authentication cookie request to the server.
-        /// </summary>
-        private void SendAuthenticationCookieRequest(string password)
-        {
-            var flapRequestCookie = new FlapRequestSignInCookie();
+    //    /// <summary>
+    //    ///     Sends an authentication cookie request to the server.
+    //    /// </summary>
+    //    private void SendAuthenticationCookieRequest(string password)
+    //    {
+    //        var flapRequestCookie = new FlapRequestSignInCookie();
 
-            // TODO: Supply correct client information.
-            flapRequestCookie.ScreenName.Uin = Connector.Context.Identity.Identifier;
-            flapRequestCookie.Password.Password = password;
-            flapRequestCookie.ClientIdString.ClientIdString = "SomeClientSoftware";
-            flapRequestCookie.ClientId.ClientId = 8123;
-            flapRequestCookie.ClientMajorVersion.ClientMajorVersion = 3;
-            flapRequestCookie.ClientMinorVersion.ClientMinorVersion = 9;
-            flapRequestCookie.ClientLesserVersion.ClientLesserVersion = 7;
-            flapRequestCookie.ClientBuildNumber.ClientBuildNumber = 8;
-            flapRequestCookie.ClientDistributionNumber.ClientDistributionNumber = 1;
-            flapRequestCookie.ClientLanguage.ClientLanguage = "en";
-            flapRequestCookie.ClientCountry.ClientCountry = "us";
+    //        // TODO: Supply correct client information.
+    //        flapRequestCookie.ScreenName.Uin = Connector.Context.Identity.Identifier;
+    //        flapRequestCookie.Password.Password = password;
+    //        flapRequestCookie.ClientIdString.ClientIdString = "SomeClientSoftware";
+    //        flapRequestCookie.ClientId.ClientId = 8123;
+    //        flapRequestCookie.ClientMajorVersion.ClientMajorVersion = 3;
+    //        flapRequestCookie.ClientMinorVersion.ClientMinorVersion = 9;
+    //        flapRequestCookie.ClientLesserVersion.ClientLesserVersion = 7;
+    //        flapRequestCookie.ClientBuildNumber.ClientBuildNumber = 8;
+    //        flapRequestCookie.ClientDistributionNumber.ClientDistributionNumber = 1;
+    //        flapRequestCookie.ClientLanguage.ClientLanguage = "en";
+    //        flapRequestCookie.ClientCountry.ClientCountry = "us";
 
-            Connector.Send(flapRequestCookie);
-        }
-    }
+    //        Connector.Send(flapRequestCookie);
+    //    }
+    //}
 
     public class RequestAuthenticationCookieUnitOfWork
     {

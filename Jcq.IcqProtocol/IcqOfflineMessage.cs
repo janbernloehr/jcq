@@ -26,13 +26,9 @@ namespace JCsTools.JCQ.IcqInterface
         public IcqOfflineMessage(IContact sender, IContact recipient, string text, DateTime dateSent)
             : base(sender, recipient, text)
         {
-            Attributes["OfflineSentDate"] = dateSent;
+            OfflineSentDate = dateSent;
         }
-
-        public DateTime OfflineSentDate
-        {
-            get { return (DateTime) Attributes["OfflineSentDate"]; }
-            set { Attributes["OfflineSentDate"] = value; }
-        }
+         
+        public DateTime OfflineSentDate { get; set; }
     }
 }

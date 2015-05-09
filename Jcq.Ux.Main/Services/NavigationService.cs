@@ -17,6 +17,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Windows;
+using Jcq.Ux.ViewModel;
 using JCsTools.Core;
 using JCsTools.IdentityManager;
 using JCsTools.JCQ.ViewModel;
@@ -45,9 +46,9 @@ namespace JCsTools.JCQ.Ux
             });
         }
 
-        void INavigationService.NavigateToEditIdentityPage(IIdentity identity)
+        void INavigationService.NavigateToEditIdentityPage(IcqIdentity identity)
         {
-            Application.Current.MainWindow.Content = new EditIdentityPage(identity);
+            Application.Current.MainWindow.Content = new EditIcqIdentityPage(identity);
         }
 
         void INavigationService.NavigateToSigningInPage()

@@ -24,31 +24,36 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqGroup : BaseStorageItem, IGroup
     {
-        private readonly NotifyingCollection<IContact> _Contacts;
-        private readonly NotifyingCollection<IGroup> _Groups;
+        private readonly NotifyingCollection<IContact> _contacts;
+        private readonly NotifyingCollection<IGroup> _groups;
+        private int _groupId;
 
         public IcqGroup(string id, int groupId) : base(id, id)
         {
-            _Contacts = new NotifyingCollection<IContact>();
-            _Groups = new NotifyingCollection<IGroup>();
+            _contacts = new NotifyingCollection<IContact>();
+            _groups = new NotifyingCollection<IGroup>();
 
-            Attributes["GroupId"] = groupId;
+            _groupId = groupId;
         }
 
         public int GroupId
         {
-            get { return (int) Attributes["GroupId"]; }
-            set { Attributes["GroupId"] = value; }
+            get { return _groupId; }
+            set
+            {
+                _groupId = value;
+                OnPropertyChanged();
+            }
         }
 
         INotifyingCollection<IContact> IGroup.Contacts
         {
-            get { return _Contacts; }
+            get { return _contacts; }
         }
 
         INotifyingCollection<IGroup> IGroup.Groups
         {
-            get { return _Groups; }
+            get { return _groups; }
         }
     }
 }

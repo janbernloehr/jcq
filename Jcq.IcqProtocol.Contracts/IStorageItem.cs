@@ -25,6 +25,6 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
     {
         string Identifier { get; set; }
         string Name { get; set; }
-        Hashtable Attributes { get; }
+        //Hashtable Attributes { get; }
     }
 }

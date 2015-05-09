@@ -23,7 +23,7 @@ namespace JCsTools.IdentityManager
 {
     public class Identity : IIdentity
     {
-        private readonly Dictionary<string, object> values = new Dictionary<string, object>();
+        //private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
 
         public Identity(string id)
         {
@@ -34,46 +34,46 @@ namespace JCsTools.IdentityManager
         public string Description { get; set; }
         public string ImageUrl { get; set; }
 
-        public T GetAttribute<T>(IIdentityAttribute<T> key)
-        {
-            return (T) GetAttribute(key.AttributeName);
-        }
+        //public T GetAttribute<T>(IIdentityAttribute<T> key)
+        //{
+        //    return (T) GetAttribute(key.AttributeName);
+        //}
 
-        public string[] GetAttributeNames()
-        {
-            return values.Keys.ToArray();
-        }
+        //public string[] GetAttributeNames()
+        //{
+        //    return _values.Keys.ToArray();
+        //}
 
-        public void SetAttribute<T>(IIdentityAttribute<T> key, T value)
-        {
-            SetAttribute(key.AttributeName, value);
-        }
+        //public void SetAttribute<T>(IIdentityAttribute<T> key, T value)
+        //{
+        //    SetAttribute(key.AttributeName, value);
+        //}
 
-        public void SetAttribute(string key, object value)
-        {
-            if (values.ContainsKey(key))
-            {
-                values[key] = value;
-            }
-            else
-            {
-                values.Add(key, value);
-            }
-        }
+        //public void SetAttribute(string key, object value)
+        //{
+        //    if (_values.ContainsKey(key))
+        //    {
+        //        _values[key] = value;
+        //    }
+        //    else
+        //    {
+        //        _values.Add(key, value);
+        //    }
+        //}
 
-        public object GetAttribute(string key)
-        {
-            return values[key];
-        }
+        //public object GetAttribute(string key)
+        //{
+        //    return _values[key];
+        //}
 
-        public bool HasAttribute(string key)
-        {
-            return values.ContainsKey(key);
-        }
+        //public bool HasAttribute(string key)
+        //{
+        //    return _values.ContainsKey(key);
+        //}
 
-        public bool HasAttribute<T>(IIdentityAttribute<T> key)
-        {
-            return HasAttribute(key.AttributeName);
-        }
+        //public bool HasAttribute<T>(IIdentityAttribute<T> key)
+        //{
+        //    return HasAttribute(key.AttributeName);
+        //}
     }
 }

@@ -18,27 +18,28 @@
 
 namespace JCsTools.JCQ.ViewModel
 {
-    public sealed class IdentityAttributes
-    {
-        private static readonly IdentityUinAttribute _UinAttribute = new IdentityUinAttribute();
-        private static readonly IdentityPasswordAttribute _PasswordAttribute = new IdentityPasswordAttribute();
+//{
+//    public sealed class IdentityAttributes
+//    {
+//        private static readonly IdentityUinAttribute _UinAttribute = new IdentityUinAttribute();
+//        private static readonly IdentityPasswordAttribute _PasswordAttribute = new IdentityPasswordAttribute();
 
-        private static readonly IdentityImageOriginalFilePathAttribute _ImageOriginalFilePathAttribute =
-            new IdentityImageOriginalFilePathAttribute();
+//        private static readonly IdentityImageOriginalFilePathAttribute _ImageOriginalFilePathAttribute =
+//            new IdentityImageOriginalFilePathAttribute();
 
-        public static IdentityUinAttribute UinAttribute
-        {
-            get { return _UinAttribute; }
-        }
+//        public static IdentityUinAttribute UinAttribute
+//        {
+//            get { return _UinAttribute; }
+//        }
 
-        public static IdentityPasswordAttribute PasswordAttribute
-        {
-            get { return _PasswordAttribute; }
-        }
+//        public static IdentityPasswordAttribute PasswordAttribute
+//        {
+//            get { return _PasswordAttribute; }
+//        }
 
-        public static IdentityImageOriginalFilePathAttribute ImageOriginalFilePathAttribute
-        {
-            get { return _ImageOriginalFilePathAttribute; }
-        }
-    }
+//        public static IdentityImageOriginalFilePathAttribute ImageOriginalFilePathAttribute
+//        {
+//            get { return _ImageOriginalFilePathAttribute; }
+//        }
+//    }
 }

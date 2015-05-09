@@ -18,12 +18,12 @@
 
 namespace JCsTools.IdentityManager
 {
-    public interface IIdentityAttribute
-    {
-        string AttributeName { get; }
-    }
+    //public interface IIdentityAttribute
+    //{
+    //    string AttributeName { get; }
+    //}
 
-    public interface IIdentityAttribute<T> : IIdentityAttribute
-    {
-    }
+    //public interface IIdentityAttribute<T> : IIdentityAttribute
+    //{
+    //}
 }

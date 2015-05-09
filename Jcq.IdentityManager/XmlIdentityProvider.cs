@@ -23,129 +23,129 @@ using System.Linq;
 
 namespace JCsTools.IdentityManager
 {
-    public class XmlIdentityProvider : IdentityProvider
-    {
-        private readonly FileInfo _xmlFile;
+    //public class XmlIdentityProvider : IdentityProvider
+    //{
+    //    private readonly FileInfo _xmlFile;
 
-        public XmlIdentityProvider(FileInfo xmlFile)
-        {
-            _xmlFile = xmlFile;
-        }
+    //    public XmlIdentityProvider(FileInfo xmlFile)
+    //    {
+    //        _xmlFile = xmlFile;
+    //    }
 
-        private DataSet CreateDataSet()
-        {
-            var ds = default(DataSet);
-            var dtIdentities = default(DataTable);
-            var dtAttributes = default(DataTable);
+    //    private DataSet CreateDataSet()
+    //    {
+    //        var ds = default(DataSet);
+    //        var dtIdentities = default(DataTable);
+    //        var dtAttributes = default(DataTable);
 
-            ds = new DataSet("IdentityData");
-            dtIdentities = ds.Tables.Add("Identities");
-            dtIdentities.Columns.Add("Id", typeof (string));
-            dtIdentities.Columns.Add("Identifier", typeof (string));
-            dtIdentities.Columns.Add("ImageUrl", typeof (string));
-            dtIdentities.Columns.Add("Description", typeof (string));
+    //        ds = new DataSet("IdentityData");
+    //        dtIdentities = ds.Tables.Add("Identities");
+    //        dtIdentities.Columns.Add("Id", typeof (string));
+    //        dtIdentities.Columns.Add("Identifier", typeof (string));
+    //        dtIdentities.Columns.Add("ImageUrl", typeof (string));
+    //        dtIdentities.Columns.Add("Description", typeof (string));
 
-            dtAttributes = ds.Tables.Add("Attributes");
-            dtAttributes.Columns.Add("Id", typeof (string));
-            dtAttributes.Columns.Add("IdentityId", typeof (string));
-            dtAttributes.Columns.Add("Key", typeof (string));
-            dtAttributes.Columns.Add("Value", typeof (object));
+    //        dtAttributes = ds.Tables.Add("Attributes");
+    //        dtAttributes.Columns.Add("Id", typeof (string));
+    //        dtAttributes.Columns.Add("IdentityId", typeof (string));
+    //        dtAttributes.Columns.Add("Key", typeof (string));
+    //        dtAttributes.Columns.Add("Value", typeof (object));
 
-            return ds;
-        }
+    //        return ds;
+    //    }
 
-        public void Load()
-        {
-            // if no file exists, exit :)
-            if (!_xmlFile.Exists)
-                return;
+    //    public void Load()
+    //    {
+    //        // if no file exists, exit :)
+    //        if (!_xmlFile.Exists)
+    //            return;
 
-            var ds = default(DataSet);
+    //        var ds = default(DataSet);
 
-            // create the dataset schema
-            ds = CreateDataSet();
+    //        // create the dataset schema
+    //        ds = CreateDataSet();
 
-            // read the data
-            ds.ReadXml(_xmlFile.FullName);
+    //        // read the data
+    //        ds.ReadXml(_xmlFile.FullName);
 
-            // query identities
-            var qTypedIdentities = from x in ds.Tables["Identities"].AsEnumerable()
-                select new
-                {
-                    Id = x.Field<string>("ID"),
-                    Identifier = x.Field<string>("Identifier"),
-                    Description = x.Field<string>("Description"),
-                    ImageUrl = x.Field<string>("ImageUrl")
-                };
+    //        // query identities
+    //        var qTypedIdentities = from x in ds.Tables["Identities"].AsEnumerable()
+    //            select new
+    //            {
+    //                Id = x.Field<string>("ID"),
+    //                Identifier = x.Field<string>("Identifier"),
+    //                Description = x.Field<string>("Description"),
+    //                ImageUrl = x.Field<string>("ImageUrl")
+    //            };
 
-            // query attributes
-            var qTypedAttributes = from x in ds.Tables["Attributes"].AsEnumerable()
-                select new
-                {
-                    IdentityId = x.Field<string>("IdentityId"),
-                    Key = x.Field<string>("Key"),
-                    Value = x.Field<object>("Value")
-                };
+    //        // query attributes
+    //        var qTypedAttributes = from x in ds.Tables["Attributes"].AsEnumerable()
+    //            select new
+    //            {
+    //                IdentityId = x.Field<string>("IdentityId"),
+    //                Key = x.Field<string>("Key"),
+    //                Value = x.Field<object>("Value")
+    //            };
 
-            var qGroupedAttributes = from x in qTypedAttributes group x by x.IdentityId into g select g;
+    //        var qGroupedAttributes = from x in qTypedAttributes group x by x.IdentityId into g select g;
 
 
-            // add attributes to identities
-            foreach (var attributeGroup in qGroupedAttributes)
-            {
-                var ag = attributeGroup;
+    //        // add attributes to identities
+    //        foreach (var attributeGroup in qGroupedAttributes)
+    //        {
+    //            var ag = attributeGroup;
 
-                var data = (from x in qTypedIdentities
-                    where x.Id == ag.Key
-                    select x).
-                    FirstOrDefault();
+    //            var data = (from x in qTypedIdentities
+    //                where x.Id == ag.Key
+    //                select x).
+    //                FirstOrDefault();
 
-                var identity = new Identity(data.Identifier) {Description = data.Description, ImageUrl = data.ImageUrl};
+    //            var identity = new Identity(data.Identifier) {Description = data.Description, ImageUrl = data.ImageUrl};
 
-                foreach (var a in attributeGroup)
-                {
-                    identity.SetAttribute(a.Key, a.Value);
-                }
+    //            foreach (var a in attributeGroup)
+    //            {
+    //                //identity.SetAttribute(a.Key, a.Value);
+    //            }
 
-                _Identities.Add(identity);
-            }
-        }
+    //            _Identities.Add(identity);
+    //        }
+    //    }
 
-        public void Save()
-        {
-            var ds = default(DataSet);
+    //    public void Save()
+    //    {
+    //        var ds = default(DataSet);
 
-            if (!_xmlFile.Directory.Exists)
-                _xmlFile.Directory.Create();
+    //        if (!_xmlFile.Directory.Exists)
+    //            _xmlFile.Directory.Create();
 
-            // create the dataset schema
-            ds = CreateDataSet();
+    //        // create the dataset schema
+    //        ds = CreateDataSet();
 
-            foreach (var id in _Identities)
-            {
-                var row = ds.Tables["Identities"].NewRow();
+    //        foreach (var id in _Identities)
+    //        {
+    //            var row = ds.Tables["Identities"].NewRow();
 
-                row["Id"] = Guid.NewGuid().ToString();
-                row["Identifier"] = id.Identifier;
-                row["ImageUrl"] = id.ImageUrl;
-                row["Description"] = id.Description;
+    //            row["Id"] = Guid.NewGuid().ToString();
+    //            row["Identifier"] = id.Identifier;
+    //            row["ImageUrl"] = id.ImageUrl;
+    //            row["Description"] = id.Description;
 
-                ds.Tables["Identities"].Rows.Add(row);
+    //            ds.Tables["Identities"].Rows.Add(row);
 
-                foreach (var attributeName in id.GetAttributeNames())
-                {
-                    var ra = ds.Tables["Attributes"].NewRow();
+    //            //foreach (var attributeName in id.GetAttributeNames())
+    //            //{
+    //            //    var ra = ds.Tables["Attributes"].NewRow();
 
-                    ra["Id"] = Guid.NewGuid().ToString();
-                    ra["IdentityId"] = row["Id"];
-                    ra["Key"] = attributeName;
-                    ra["Value"] = id.GetAttribute(attributeName);
+    //            //    ra["Id"] = Guid.NewGuid().ToString();
+    //            //    ra["IdentityId"] = row["Id"];
+    //            //    ra["Key"] = attributeName;
+    //            //    ra["Value"] = id.GetAttribute(attributeName);
 
-                    ds.Tables["Attributes"].Rows.Add(ra);
-                }
-            }
+    //            //    ds.Tables["Attributes"].Rows.Add(ra);
+    //            //}
+    //        }
 
-            ds.WriteXml(_xmlFile.FullName);
-        }
-    }
+    //        ds.WriteXml(_xmlFile.FullName);
+    //    }
+    //}
 }

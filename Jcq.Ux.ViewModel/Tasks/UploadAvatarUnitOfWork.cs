@@ -23,9 +23,9 @@ using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.ViewModel
 {
-    public class UploadAvatarActivity : BasicSyncTask
+    public static class UploadAvatarUnitOfWork
     {
-        protected override void PerformOperation()
+        public static void Execute()
         {
             var imageFile = new FileInfo(ApplicationService.Current.Identity.ImageUrl);
 

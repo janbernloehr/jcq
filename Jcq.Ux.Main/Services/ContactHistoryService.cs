@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -26,6 +27,7 @@ using JCsTools.JCQ.IcqInterface;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 using JCsTools.JCQ.ViewModel;
 using JCsTools.Xml.Formatter;
+using Newtonsoft.Json;
 
 namespace JCsTools.JCQ.Ux
 {
@@ -48,7 +50,7 @@ namespace JCsTools.JCQ.Ux
 
         void IContactHistoryService.AppendMessage(ContactViewModel contact, MessageViewModel message)
         {
-            ContactHistory history = null;
+            ContactHistory history;
 
             if (!_Cache.TryGetValue(contact, out history))
             {
@@ -61,97 +63,90 @@ namespace JCsTools.JCQ.Ux
 
         List<MessageViewModel> IContactHistoryService.GetHistory(ContactViewModel contact)
         {
-            ContactHistory history = null;
+            ContactHistory history;
 
-            if (_Cache.TryGetValue(contact, out history))
-            {
-                return history.Messages;
-            }
-            return new List<MessageViewModel>();
+            return _Cache.TryGetValue(contact, out history) ? history.Messages : new List<MessageViewModel>();
         }
 
         List<MessageViewModel> IContactHistoryService.GetHistory(ContactViewModel contact, int maxItems)
         {
-            ContactHistory history = null;
-            List<MessageViewModel> messages;
+            ContactHistory history;
 
-            if (_Cache.TryGetValue(contact, out history))
-            {
-                messages = history.Messages;
+            if (!_Cache.TryGetValue(contact, out history)) return new List<MessageViewModel>();
 
-                if (messages.Count > maxItems)
-                {
-                    return messages.Skip(messages.Count - maxItems).ToList();
-                }
-                return messages;
-            }
-            return new List<MessageViewModel>();
+            var messages = history.Messages;
+
+            return messages.Count > maxItems ? messages.Skip(messages.Count - maxItems).ToList() : messages;
         }
 
         void IContactHistoryService.Load()
         {
-            XmlSerializer serializer;
+            //XmlSerializer serializer;
 
             Debug.WriteLine(string.Format("Loading history: {0}", StorageLocation.FullName), "Ux");
 
             if (!StorageLocation.Exists)
                 return;
 
-            serializer = new XmlSerializer();
-            serializer.RegisterReferenceFormatter(typeof (ContactHistory), new ContactHistoryFormatter(serializer));
-            serializer.RegisterReferenceFormatter(typeof (TextMessageViewModel),
-                new TextMessageViewModelFormatter(serializer));
-            serializer.RegisterReferenceFormatter(typeof (OfflineTextMessageViewModel),
-                new OfflineTextMessageViewModelFormatter(serializer));
+            //serializer = new XmlSerializer();
+            //serializer.RegisterReferenceFormatter(typeof (ContactHistory), new ContactHistoryFormatter(serializer));
+            //serializer.RegisterReferenceFormatter(typeof (TextMessageViewModel),
+            //    new TextMessageViewModelFormatter(serializer));
+            //serializer.RegisterReferenceFormatter(typeof (OfflineTextMessageViewModel),
+            //    new OfflineTextMessageViewModelFormatter(serializer));
 
-            foreach (var historyFile in StorageLocation.GetFiles("*.xml"))
+            foreach (var historyFile in StorageLocation.GetFiles("*.json"))
             {
-                string identifier;
-                ContactViewModel contact;
+                var identifier = Path.GetFileNameWithoutExtension(historyFile.Name);
 
-                identifier = historyFile.Name.Substring(0, historyFile.Name.IndexOf("."));
-                contact =
-                    ContactViewModelCache.GetViewModel(
-                        ApplicationService.Current.Context.GetService<IStorageService>()
-                            .GetContactByIdentifier(identifier));
+                // IcqStorageService always returns an IcqContact for any identifier. (If not existing it is created)
 
-                using (var reader = new XmlTextReader(historyFile.FullName))
+                var contact = ContactViewModelCache.GetViewModel(
+                    ApplicationService.Current.Context.GetService<IStorageService>()
+                        .GetContactByIdentifier(identifier));
+
+                using (var reader = new StreamReader(historyFile.FullName))
                 {
-                    ContactHistory history;
+                    var json = reader.ReadToEnd();
 
-                    history = (ContactHistory) serializer.Deserialize(reader);
+                    var history = JsonConvert.DeserializeObject<ContactHistory>(json);
 
                     _Cache.Add(contact, history);
                 }
             }
         }
 
-        void IContactHistoryService.Save()
+        public void Save()
         {
-            FileInfo fiHistoryFile;
-            XmlSerializer serializer;
+            //XmlSerializer serializer;
 
             Debug.WriteLine(string.Format("Saving history: {0}", StorageLocation.FullName), "Ux");
 
             if (!StorageLocation.Exists)
                 StorageLocation.Create();
 
-            serializer = new XmlSerializer();
-            serializer.RegisterReferenceFormatter(typeof (ContactHistory), new ContactHistoryFormatter(serializer));
-            serializer.RegisterReferenceFormatter(typeof (TextMessageViewModel),
-                new TextMessageViewModelFormatter(serializer));
-            serializer.RegisterReferenceFormatter(typeof (OfflineTextMessageViewModel),
-                new OfflineTextMessageViewModelFormatter(serializer));
+            //serializer = new XmlSerializer();
+            //serializer.RegisterReferenceFormatter(typeof (ContactHistory), new ContactHistoryFormatter(serializer));
+            //serializer.RegisterReferenceFormatter(typeof (TextMessageViewModel),
+            //    new TextMessageViewModelFormatter(serializer));
+            //serializer.RegisterReferenceFormatter(typeof (OfflineTextMessageViewModel),
+            //    new OfflineTextMessageViewModelFormatter(serializer));
 
             foreach (var pair in _Cache)
             {
-                fiHistoryFile =
-                    new FileInfo(Path.Combine(StorageLocation.FullName, string.Format("{0}.xml", pair.Key.Identifier)));
+                var fiHistoryFile = new FileInfo(Path.Combine(StorageLocation.FullName, string.Format("{0}.json", pair.Key.Identifier)));
 
-                using (var writer = new XmlTextWriter(fiHistoryFile.FullName, Encoding.UTF8))
+                using (var writer = new StreamWriter(fiHistoryFile.FullName))
                 {
-                    serializer.Serialize(pair.Value, writer);
+                    var json = JsonConvert.SerializeObject(pair.Value);
+
+                    writer.Write(json);
                 }
+
+                //using (var writer = new XmlTextWriter(fiHistoryFile.FullName, Encoding.UTF8))
+                //{
+                //    serializer.Serialize(pair.Value, writer);
+                //}
             }
         }
     }

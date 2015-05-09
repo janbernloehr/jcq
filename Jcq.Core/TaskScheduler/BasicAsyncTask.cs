@@ -20,35 +20,35 @@ using System.Threading;
 
 namespace JCsTools.Core
 {
-    public abstract class BasicAsyncTask : BaseTask
-    {
-        private readonly ManualResetEvent _waitCompleted;
+    //public abstract class BasicAsyncTask : BaseTask
+    //{
+    //    private readonly ManualResetEvent _waitCompleted;
 
-        protected BasicAsyncTask()
-        {
-            _waitCompleted = new ManualResetEvent(false);
-        }
+    //    protected BasicAsyncTask()
+    //    {
+    //        _waitCompleted = new ManualResetEvent(false);
+    //    }
 
-        public override bool IsAsync
-        {
-            get { return true; }
-        }
+    //    public override bool IsAsync
+    //    {
+    //        get { return true; }
+    //    }
 
-        protected override void SetCompleted()
-        {
-            base.SetCompleted();
+    //    protected override void SetCompleted()
+    //    {
+    //        base.SetCompleted();
 
-            _waitCompleted.Set();
-        }
+    //        _waitCompleted.Set();
+    //    }
 
-        protected abstract override void PerformOperation();
+    //    protected abstract override void PerformOperation();
 
-        public override void WaitCompleted()
-        {
-            _waitCompleted.WaitOne(Timeout.Infinite, true);
+    //    public override void WaitCompleted()
+    //    {
+    //        _waitCompleted.WaitOne(Timeout.Infinite, true);
 
-            if (Exception != null)
-                throw Exception;
-        }
-    }
+    //        if (Exception != null)
+    //            throw Exception;
+    //    }
+    //}
 }

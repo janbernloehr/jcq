@@ -16,26 +16,25 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using JCsTools.Core;
+using System.Threading;
+using System.Threading.Tasks;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.ViewModel
 {
-    public class RequestShortUserInfoTask : BasicAsyncTask
+    public class RequestShortUserInfoUnitOfWork
     {
-        protected override void PerformOperation()
+        public static Task Execute()
         {
             var svShortUserInfo = ApplicationService.Current.Context.GetService<IUserInformationService>();
 
+            var sem = new SemaphoreSlim(0, 1);
+
             svShortUserInfo.RequestShortUserInfoForAllUsers();
 
-            svShortUserInfo.RequestShortUserInfoForAllUsersCompleted += OnRequestShortUserInfoForAllUsersCompleted;
-        }
+            svShortUserInfo.RequestShortUserInfoForAllUsersCompleted += (s, e) => sem.Release();
 
-        private void OnRequestShortUserInfoForAllUsersCompleted(object sender, EventArgs e)
-        {
-            SetCompleted();
+            return sem.WaitAsync();
         }
     }
 }

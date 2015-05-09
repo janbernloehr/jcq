@@ -22,7 +22,7 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
     public interface IMessage
     {
-        Hashtable Attributes { get; }
+        //Hashtable Attributes { get; }
         IContact Sender { get; set; }
         IContact Recipient { get; set; }
         string Text { get; set; }

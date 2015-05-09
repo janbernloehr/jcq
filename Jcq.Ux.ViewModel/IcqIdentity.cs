@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IdentityImageOriginalFilePathAttribute.cs" company="Jan-Cornelius Molnar">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IcqIdentity.cs" company="Jan-Cornelius Molnar">
 // Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
 // 
 // This file is part of JCQ.
@@ -18,16 +18,17 @@
 
 using JCsTools.IdentityManager;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    ///// <summary>
-    /////     Identity Attribute representing the Identity's avatar origin.
-    ///// </summary>
-    //public class IdentityImageOriginalFilePathAttribute : IIdentityAttribute<string>
-    //{
-    //    public string AttributeName
-    //    {
-    //        get { return "ImageOriginalFilePath"; }
-    //    }
-    //}
+    public class IcqIdentity : Identity
+    {
+        public IcqIdentity(string id)
+            : base(id)
+        {
+        }
+
+        public string IcqPassword { get; set; }
+        public string IcqUin { get; set; }
+        public string ImageOriginalFilePathAttribute { get; set; }
+    }
 }

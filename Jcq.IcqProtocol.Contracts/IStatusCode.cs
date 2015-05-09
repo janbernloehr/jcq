@@ -24,6 +24,6 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
     public interface IStatusCode : IComparable
     {
         string DisplayName { get; }
-        Hashtable Attributes { get; }
+        //Hashtable Attributes { get; }
     }
 }

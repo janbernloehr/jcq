@@ -26,6 +26,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
     {
         private static readonly DateTime _unixfsd = new DateTime(1970, 1, 1, 0, 0, 0);
         private static readonly Encoding _icqenc = Encoding.GetEncoding(28599);
+        //private static readonly Encoding _icqenc = Encoding.BigEndianUnicode;
 
         public static byte[] GetBytes(UInt16 value)
         {
@@ -357,7 +358,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static string ToString(List<byte> bytes)
         {
-            return _icqenc.GetString(bytes.ToArray());
+           return _icqenc.GetString(bytes.ToArray());
+            //return Encoding.BigEndianUnicode.GetString(bytes.ToArray());
         }
     }
 }

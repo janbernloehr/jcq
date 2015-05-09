@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
+using Jcq.Ux.ViewModel;
 using JCsTools.Core;
 using JCsTools.IdentityManager;
 using JCsTools.JCQ.IcqInterface;
@@ -51,7 +52,7 @@ namespace JCsTools.JCQ.ViewModel
 
         public ICollectionView Identities { get; private set; }
 
-        public async Task SignIn(IIdentity identity)
+        public async Task SignIn(IcqIdentity identity)
         {
             ApplicationService.Current.CreateContext(identity);
 
@@ -60,18 +61,9 @@ namespace JCsTools.JCQ.ViewModel
             svConnect.SignInCompleted += OnSignInCompleted;
             svConnect.SignInFailed += OnSignInFailed;
 
-            //var task = new SignInTask();
-            //task.Credential = new PasswordCredential(identity.GetAttribute(IdentityAttributes.PasswordAttribute));
-            //Kernel.TaskScheduler.RunAsync(task);
+            var credentail = new PasswordCredential(identity.IcqPassword);
 
-            var credentail = new PasswordCredential(identity.GetAttribute(IdentityAttributes.PasswordAttribute));
-
-            var svSignIn = ApplicationService.Current.Context.GetService<IConnector>();
-
-            svSignIn.SignInFailed += OnSignInFailed;
-            svSignIn.SignInCompleted += OnSignInCompleted;
-
-            var signInTask = svSignIn.SignInAsync(credentail);
+            var signInTask = svConnect.SignInAsync(credentail);
 
             NavigateToSigningInPage();
 
@@ -80,7 +72,7 @@ namespace JCsTools.JCQ.ViewModel
 
         private void OnDisconnected(object sender, DisconnectedEventArgs e)
         {
-            MessageBox.Show(string.Format("Connection lost; Message: {0}; Expected: {1}", e.Message, e.IsExpected));
+            MessageBox.Show(string.Format("Connection lost. Message: {0}. Expected: {1}", e.Message, e.IsExpected));
         }
 
         private void OnSignInCompleted(object sender, EventArgs e)
@@ -97,9 +89,11 @@ namespace JCsTools.JCQ.ViewModel
 
                 ApplicationService.Current.Context.GetService<IOfflineMessageService>().RequestOfflineMessages();
 
-                Kernel.TaskScheduler.RunAsync(new UploadAvatarActivity());
+                //Task.Run(() => UploadAvatarUnitOfWork.Execute());
+                //Kernel.TaskScheduler.RunAsync(new UploadAvatarActivity());
 
-                Kernel.TaskScheduler.RunAsync(new RequestShortUserInfoTask());
+                //Task.Run(() => RequestShortUserInfoUnitOfWork.Execute());
+                //Kernel.TaskScheduler.RunAsync(new RequestShortUserInfoTask());
             }
             catch (Exception ex)
             {
@@ -154,7 +148,7 @@ namespace JCsTools.JCQ.ViewModel
             Kernel.Services.GetService<INavigationService>().NavigateToSignInPage();
         }
 
-        public void NavigateToEditIdentityPage(IIdentity identity)
+        public void NavigateToEditIdentityPage(IcqIdentity identity)
         {
             Kernel.Services.GetService<INavigationService>().NavigateToEditIdentityPage(identity);
         }

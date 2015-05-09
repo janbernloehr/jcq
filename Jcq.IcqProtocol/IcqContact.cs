@@ -19,60 +19,77 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using JCsTools.Core;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class IcqContact : BaseStorageItem, IContact, IComparable, IComparable<IcqContact>
+    public class IcqContact : BaseStorageItem, IContact, IComparable, IComparable<IcqContact>, INotifyPropertyChanged
     {
-        public IcqContact() : base()
+        private bool _AuthorizationRequired;
+        private int _DenyRecordItemId;
+        private string _EmailAddress;
+        private string _FirstName;
+        private ContactGender _Gender;
+        private List<byte> _IconData;
+        private List<byte> _IconHash;
+        private int _IgnoreRecordItemId;
+        private int _ItemId;
+        private string _LastName;
+        private DateTime? _LastShortUserInfoRequest;
+        private DateTime _MemberSince;
+        private int _PermitRecordItemId;
+        private DateTime _SignOnTime;
+        private IStatusCode _Status;
+
+        public IcqContact()
         {
         }
 
         public IcqContact(string id, string name) : base(id, name)
         {
-            Attributes["Status"] = IcqStatusCodes.Offline;
+            Status = IcqStatusCodes.Offline;
         }
 
         public int ItemId
         {
-            get { return (int) Attributes["ItemId"]; }
+            get { return _ItemId; }
             set
             {
-                Attributes["ItemId"] = value;
-                OnPropertyChanged("ItemId");
+                _ItemId = value;
+                OnPropertyChanged();
             }
         }
 
         public int DenyRecordItemId
         {
-            get { return (int) Attributes["DenyRecordItemId"]; }
+            get { return _DenyRecordItemId; }
             set
             {
-                Attributes["DenyRecordItemId"] = value;
-                OnPropertyChanged("DenyRecordItemId");
+                _DenyRecordItemId = value;
+                OnPropertyChanged();
             }
         }
 
         public int PermitRecordItemId
         {
-            get { return (int) Attributes["PermitRecordItemId"]; }
+            get { return _PermitRecordItemId; }
             set
             {
-                Attributes["PermitRecordItemId"] = value;
-                OnPropertyChanged("PermitRecordItemId");
+                _PermitRecordItemId = value;
+                OnPropertyChanged();
             }
         }
 
         public int IgnoreRecordItemId
         {
-            get { return (int) Attributes["IgnoreRecordItemId"]; }
+            get { return _IgnoreRecordItemId; }
             set
             {
-                Attributes["IgnoreRecordItemId"] = value;
-                OnPropertyChanged("IgnoreRecordItemId");
+                _IgnoreRecordItemId = value;
+                OnPropertyChanged();
             }
         }
 
@@ -80,11 +97,11 @@ namespace JCsTools.JCQ.IcqInterface
         {
             get
             {
-                var request = Attributes["LastShortUserInfoRequest"];
+                var request = _LastShortUserInfoRequest;
 
-                return (DateTime?)request;
+                return request;
             }
-            set { Attributes["LastShortUserInfoRequest"] = value; }
+            set { _LastShortUserInfoRequest = value; }
         }
 
         int IComparable.CompareTo(object obj)
@@ -113,51 +130,51 @@ namespace JCsTools.JCQ.IcqInterface
 
         public DateTime MemberSince
         {
-            get { return (DateTime) Attributes["MemberSince"]; }
+            get { return _MemberSince; }
             set
             {
-                Attributes["MemberSince"] = value;
-                OnPropertyChanged("MemberSince");
+                _MemberSince = value;
+                OnPropertyChanged();
             }
         }
 
         public DateTime SignOnTime
         {
-            get { return (DateTime) Attributes["SignOnTime"]; }
+            get { return _SignOnTime; }
             set
             {
-                Attributes["SignOnTime"] = value;
-                OnPropertyChanged("SignOnTime");
+                _SignOnTime = value;
+                OnPropertyChanged();
             }
         }
 
         public string FirstName
         {
-            get { return (string) Attributes["FirstName"]; }
+            get { return _FirstName; }
             set
             {
-                Attributes["FirstName"] = value;
-                OnPropertyChanged("FirstName");
+                _FirstName = value;
+                OnPropertyChanged();
             }
         }
 
         public string LastName
         {
-            get { return (string) Attributes["LastName"]; }
+            get { return _LastName; }
             set
             {
-                Attributes["LastName"] = value;
-                OnPropertyChanged("LastName");
+                _LastName = value;
+                OnPropertyChanged();
             }
         }
 
         public string EmailAddress
         {
-            get { return (string) Attributes["EmailAddress"]; }
+            get { return _EmailAddress; }
             set
             {
-                Attributes["EmailAddress"] = value;
-                OnPropertyChanged("EmailAddress");
+                _EmailAddress = value;
+                OnPropertyChanged();
             }
         }
 
@@ -165,32 +182,22 @@ namespace JCsTools.JCQ.IcqInterface
         {
             get
             {
-                var value = (byte) Attributes["Gender"];
-
-                switch (value)
-                {
-                    case 1:
-                        return ContactGender.Male;
-                    case 2:
-                        return ContactGender.Female;
-                    default:
-                        return ContactGender.Unknown;
-                }
+               return _Gender;
             }
             set
             {
-                Attributes["Gender"] = value;
-                OnPropertyChanged("Gender");
+                _Gender = value;
+                OnPropertyChanged();
             }
         }
 
         public bool AuthorizationRequired
         {
-            get { return (bool) Attributes["AuthorizationRequired"]; }
+            get { return _AuthorizationRequired; }
             set
             {
-                Attributes["AuthorizationRequired"] = value;
-                OnPropertyChanged("AuthorizationRequired");
+                _AuthorizationRequired = value;
+                OnPropertyChanged();
             }
         }
 
@@ -198,49 +205,47 @@ namespace JCsTools.JCQ.IcqInterface
         {
             get
             {
-                if (Attributes["IconHash"] == null)
+                if (_IconHash == null)
                     return null;
 
-                return (List<byte>) Attributes["IconHash"];
+                return _IconHash;
             }
+            private set { _IconHash = value; }
         }
 
         public List<byte> IconData
         {
             get
             {
-                if (Attributes["IconData"] == null)
+                if (_IconData == null)
                     return null;
 
-                return (List<byte>) Attributes["IconData"];
+                return _IconData;
             }
+            private set { _IconData = value; }
         }
 
         public IGroup Group { get; private set; }
 
         public IStatusCode Status
         {
-            get { return (IStatusCode) Attributes["Status"]; }
+            get { return _Status; }
             set
             {
-                if (!ReferenceEquals(Status, value))
-                {
-                    Attributes["Status"] = value;
-                    OnPropertyChanged("Status");
-                }
+                if (Status == value) return;
+                _Status = value;
+                OnPropertyChanged();
             }
         }
 
         public void SetIconHash(List<byte> value)
         {
-            List<byte> oldValue;
-
-            oldValue = IconHash;
+            var oldValue = IconHash;
 
             if (IconData != null && CompareLists(oldValue, value))
                 return;
 
-            Attributes["IconHash"] = value;
+            _IconHash = value;
 
             Kernel.Logger.Log("IcqContact", TraceEventType.Information, "Received new icon hash for {0}", Identifier);
 
@@ -252,14 +257,12 @@ namespace JCsTools.JCQ.IcqInterface
 
         public void SetIconData(List<byte> value)
         {
-            List<byte> oldValue;
-
-            oldValue = IconData;
+            var oldValue = IconData;
 
             if (CompareLists(oldValue, value))
                 return;
 
-            Attributes["IconData"] = value;
+            _IconData = value;
 
             Kernel.Logger.Log("IcqContact", TraceEventType.Information, "Received new icon data for {0}", Identifier);
 

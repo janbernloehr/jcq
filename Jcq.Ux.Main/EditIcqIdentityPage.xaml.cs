@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EditIdentityPage.xaml.cs" company="Jan-Cornelius Molnar">
+// <copyright file="EditIcqIdentityPage.xaml.cs" company="Jan-Cornelius Molnar">
 // Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
 // 
 // This file is part of JCQ.
@@ -18,30 +18,30 @@
 
 using System;
 using System.Windows;
+using Jcq.Ux.ViewModel;
 using JCsTools.Core;
 using JCsTools.IdentityManager;
 using JCsTools.JCQ.ViewModel;
 
 namespace JCsTools.JCQ.Ux
 {
-    public partial class EditIdentityPage
+    public partial class EditIcqIdentityPage
     {
-        public EditIdentityPage(IIdentity identity)
+        public EditIcqIdentityPage(IcqIdentity identity)
         {
-            ViewModel = new EditIdentityViewModel(identity);
+            ViewModel = new EditIcqIdentityViewModel(identity);
 
-            // This call is required by the Windows Form Designer.
             InitializeComponent();
 
             DisplayData();
         }
 
-        public EditIdentityViewModel ViewModel { get; private set; }
+        public EditIcqIdentityViewModel ViewModel { get; private set; }
 
         private void DisplayData()
         {
             txtName.Text = ViewModel.Identity.Identifier;
-            txtUin.Text = ViewModel.Identity.GetAttribute(IdentityAttributes.UinAttribute);
+            txtUin.Text = ViewModel.Identity.IcqUin;
         }
 
         private void OnCancelClick(object sender, RoutedEventArgs e)
@@ -58,15 +58,11 @@ namespace JCsTools.JCQ.Ux
 
         private void OnUpdateClick(object sender, RoutedEventArgs e)
         {
-            string fullname;
-            string uin;
-            string password;
-
             try
             {
-                fullname = txtName.Text;
-                uin = txtUin.Text;
-                password = txtPassword.Password;
+                var fullname = txtName.Text;
+                var uin = txtUin.Text;
+                var password = txtPassword.Password;
 
                 ViewModel.UpdateIdentity(fullname, uin, password);
                 ViewModel.NavigateToSignInPage();

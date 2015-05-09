@@ -16,47 +16,27 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqMessage : IMessage
     {
-        private readonly Hashtable _Attributes = new Hashtable();
-
         public IcqMessage()
         {
         }
 
         public IcqMessage(IContact sender, IContact recipient, string text)
         {
-            _Attributes["Sender"] = sender;
-            _Attributes["Recipient"] = recipient;
-            _Attributes["Text"] = text;
+            Sender = sender;
+            Recipient = recipient;
+            Text = text;
         }
 
-        public Hashtable Attributes
-        {
-            get { return _Attributes; }
-        }
+        public IContact Sender { get; set; }
 
-        public IContact Sender
-        {
-            get { return (IContact) _Attributes["Sender"]; }
-            set { _Attributes["Sender"] = value; }
-        }
+        public IContact Recipient { get; set; }
 
-        public IContact Recipient
-        {
-            get { return (IContact) _Attributes["Recipient"]; }
-            set { _Attributes["Recipient"] = value; }
-        }
-
-        public string Text
-        {
-            get { return (string) _Attributes["Text"]; }
-            set { _Attributes["Text"] = value; }
-        }
+        public string Text { get; set; }
     }
 }

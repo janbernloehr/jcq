@@ -86,85 +86,85 @@ namespace Jcq.IdentityManager.Test
             Assert.AreEqual(expected, actual);
         }
 
-        /// <summary>
-        ///     A test for SetAttribute
-        /// </summary>
-        [TestMethod]
-        public void GetSetAttributeTest()
-        {
-            var id = Guid.NewGuid().ToString();
-            IIdentity target = new Identity(id);
+        ///// <summary>
+        /////     A test for SetAttribute
+        ///// </summary>
+        //[TestMethod]
+        //public void GetSetAttributeTest()
+        //{
+        //    var id = Guid.NewGuid().ToString();
+        //    IIdentity target = new Identity(id);
 
-            var key = Guid.NewGuid().ToString();
-            var value = new object();
-            object actual = null;
+        //    var key = Guid.NewGuid().ToString();
+        //    var value = new object();
+        //    object actual = null;
 
-            target.SetAttribute(key, value);
+        //    target.SetAttribute(key, value);
 
-            actual = target.GetAttribute(key);
+        //    actual = target.GetAttribute(key);
 
-            Assert.AreEqual(value, actual);
-        }
+        //    Assert.AreEqual(value, actual);
+        //}
 
-        /// <summary>
-        ///     A test for SetAttribute
-        /// </summary>
-        [TestMethod]
-        public void GetSetAttributeGenericTest()
-        {
-            var id = Guid.NewGuid().ToString();
-            IIdentity target = new Identity(id);
+        ///// <summary>
+        /////     A test for SetAttribute
+        ///// </summary>
+        //[TestMethod]
+        //public void GetSetAttributeGenericTest()
+        //{
+        //    var id = Guid.NewGuid().ToString();
+        //    IIdentity target = new Identity(id);
 
-            var attribute = new TestAttribute();
-            var value = Guid.NewGuid().ToString();
-            string actual = null;
+        //    var attribute = new TestAttribute();
+        //    var value = Guid.NewGuid().ToString();
+        //    string actual = null;
 
-            target.SetAttribute(attribute, value);
+        //    target.SetAttribute(attribute, value);
 
-            actual = target.GetAttribute(attribute);
+        //    actual = target.GetAttribute(attribute);
 
-            Assert.AreEqual(value, actual);
-        }
+        //    Assert.AreEqual(value, actual);
+        //}
 
-        /// <summary>
-        ///     A test for GetAttributeNames
-        /// </summary>
-        [TestMethod]
-        public void GetAttributeNamesTest()
-        {
-            var id = Guid.NewGuid().ToString();
-            IIdentity target = new Identity(id);
+        ///// <summary>
+        /////     A test for GetAttributeNames
+        ///// </summary>
+        //[TestMethod]
+        //public void GetAttributeNamesTest()
+        //{
+        //    var id = Guid.NewGuid().ToString();
+        //    IIdentity target = new Identity(id);
 
-            var expected = default(List<string>);
+        //    var expected = default(List<string>);
 
-            expected = new List<string>();
+        //    expected = new List<string>();
 
-            for (var i = 1; i <= 5; i++)
-            {
-                string attributeName = null;
-                attributeName = Guid.NewGuid().ToString();
-                target.SetAttribute(attributeName, new object());
-                expected.Add(attributeName);
-            }
+        //    for (var i = 1; i <= 5; i++)
+        //    {
+        //        string attributeName = null;
+        //        attributeName = Guid.NewGuid().ToString();
+        //        target.SetAttribute(attributeName, new object());
+        //        expected.Add(attributeName);
+        //    }
 
-            var actual = default(List<string>);
+        //    var actual = default(List<string>);
 
-            actual = target.GetAttributeNames().ToList();
-            Assert.AreEqual(expected.Count, actual.Count, "The array lenghts do not match.");
+        //    actual = target.GetAttributeNames().ToList();
+        //    Assert.AreEqual(expected.Count, actual.Count, "The array lenghts do not match.");
 
-            foreach (var item in expected)
-            {
-                Assert.IsTrue(actual.Contains(item), "Item not found in actual list.");
-            }
-        }
+        //    foreach (var item in expected)
+        //    {
+        //        Assert.IsTrue(actual.Contains(item), "Item not found in actual list.");
+        //    }
+        //}
 
-        public class TestAttribute : IIdentityAttribute<string>
-        {
-            public string AttributeName
-            {
-                get { return "TestAttribute"; }
-            }
-        }
+        //public class TestAttribute : IIdentityAttribute<string>
+        //{
+        //    public string AttributeName
+        //    {
+        //        get { return "TestAttribute"; }
+        //    }
+        //}
 
         #region "Additional test attributes"
 

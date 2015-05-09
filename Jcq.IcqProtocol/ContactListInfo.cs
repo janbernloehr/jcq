@@ -23,23 +23,14 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class ContactListInfo : IContactListInfo
     {
-        private readonly DateTime _DateChanged;
-        private readonly int _ItemCount;
-
         public ContactListInfo(int itemCount, DateTime dateChanged)
         {
-            _ItemCount = itemCount;
-            _DateChanged = dateChanged;
+            ItemCount = itemCount;
+            DateChanged = dateChanged;
         }
 
-        public DateTime DateChanged
-        {
-            get { return _DateChanged; }
-        }
+        public DateTime DateChanged { get; private set; }
 
-        public int ItemCount
-        {
-            get { return _ItemCount; }
-        }
+        public int ItemCount { get; private set; }
     }
 }

@@ -16,6 +16,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Jcq.Ux.ViewModel;
 using JCsTools.Core.Interfaces;
 using JCsTools.IdentityManager;
 
@@ -25,7 +26,7 @@ namespace JCsTools.JCQ.ViewModel
     {
         void NavigateToSignInPage();
         void NavigateToCreateIdentityPage();
-        void NavigateToEditIdentityPage(IIdentity identity);
+        void NavigateToEditIdentityPage(IcqIdentity identity);
         void NavigateToContactsPage();
         void NavigateToSigningInPage();
     }

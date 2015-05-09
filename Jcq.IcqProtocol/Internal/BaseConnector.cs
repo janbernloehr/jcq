@@ -37,14 +37,14 @@ namespace JCsTools.JCQ.IcqInterface.Internal
     {
         private readonly Dictionary<string, List<Delegate>> _snacHandlers;
         private int _flapSequenceNumber;
-        private readonly BufferBlock<FlapDataPair> _sendBuffer;
+        private BufferBlock<FlapDataPair> _sendBuffer;
 
         public BaseConnector(IContext context)
             : base(context)
         {
             _snacHandlers = new Dictionary<string, List<Delegate>>();
 
-            _sendBuffer = new BufferBlock<FlapDataPair>();
+            //_sendBuffer = new BufferBlock<FlapDataPair>();
         }
 
         public bool IsConnected
@@ -96,8 +96,12 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
             OnInternalConnected(EventArgs.Empty);
 
-             Task.Run(() => AnalyzeData());
-            Task.Run(() => SendData());
+            _sendBuffer = new BufferBlock<FlapDataPair>();
+
+            Task.Run(() => AnalyzeData(TcpContext));
+            Task.Run(() => SendData(TcpContext, _sendBuffer));
+
+            Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose, "{0} connected to {1}", TcpContext.Id, endpoint);
         }
 
         protected virtual void InnerDisconnect()
@@ -106,6 +110,12 @@ namespace JCsTools.JCQ.IcqInterface.Internal
             {
                 TcpContext.Disconnected -= OnTcpContextDisconnected;
                 TcpContext.Disconnect();
+            }
+
+            if (_sendBuffer != null)
+            {
+                _sendBuffer.Complete();
+                _sendBuffer = null;
             }
         }
 
@@ -142,7 +152,12 @@ namespace JCsTools.JCQ.IcqInterface.Internal
         {
             try
             {
-                //_sendBuffer.Complete();
+                if (_sendBuffer != null)
+                {
+                    _sendBuffer.Complete();
+                    _sendBuffer = null;
+                }
+                TcpContext.Disconnected -= OnTcpContextDisconnected;
                 OnInternalDisconnected(e);
             }
             catch (Exception ex)
@@ -182,7 +197,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         private readonly List<byte> _analyzeBuffer = new List<byte>();
 
-        private async Task AnalyzeData()
+        private async Task AnalyzeData(ITcpContext context)
         {
             // buffer bytes for analysis. if more bytes are needed to decode
             // the received data we wait for another cycle.
@@ -192,11 +207,11 @@ namespace JCsTools.JCQ.IcqInterface.Internal
             try
             {
 
-                while (IsConnected)
+                while (context.ConnectionState == TcpConnectionState.Connected)
                 {
                     // This call will return on its own Thread Pool Thread to
                     // process the data.
-                    var data = await TcpContext.ReceivedDataBuffer.ReceiveAsync();
+                    var data = await context.ReceivedDataBuffer.ReceiveAsync();
 
                     // add data to the buffer.
                     _analyzeBuffer.AddRange(data);
@@ -213,13 +228,13 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                         {
                             // there is more data needed to deserialize the flap. wait for another cycle...
                             Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
-                                "{3}@{0}: caching {1}, {2} required.", iloop, _analyzeBuffer.Count - index, desc.TotalSize, id);
+                                "{3}@{4}/{0}: caching {1}, {2} required.", iloop, _analyzeBuffer.Count - index, desc.TotalSize, id, context.Id);
 
                             break;
                         }
 
                         Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
-                            "{2}@{0}: queuing {1} bytes for analysis", iloop, desc.TotalSize, id);
+                            "{2}@{3}/{0}: queuing {1} bytes for analysis", iloop, desc.TotalSize, id, context.Id);
 
                         ProcessFlap(_analyzeBuffer.GetRange(index, desc.TotalSize));
 
@@ -368,20 +383,22 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         #region  Data Sending
 
-        private async Task SendData()
+        private async Task SendData(ITcpContext context, BufferBlock<FlapDataPair> sendBuffer)
         {
+            var id = Guid.NewGuid().ToString();
+
             try
             {
-                while (IsConnected)
+                while (context.ConnectionState == TcpConnectionState.Connected)
                 {
-                    var dataItem = await _sendBuffer.ReceiveAsync();
+                    var dataItem = await sendBuffer.ReceiveAsync();
 
-                    Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose, "Send timer tick {0} items in buffer",
-                            _sendBuffer.Count);
+                    Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose, "{0}@{1} SendBuffer received data {2} items in buffer",
+                            id, context.Id,  _sendBuffer.Count);
 
                     try
                     {
-                        TcpContext.SendData(dataItem.Data);
+                        context.SendData(dataItem.Data);
 
                         if (FlapSent != null)
                         {
@@ -398,7 +415,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                         throw; // TODO: Evaluate this
                     }
 
-                    Thread.Sleep(100); // TODO: Implement proper throttling according to rate limits.
+                    Thread.Sleep(500); // TODO: Implement proper throttling according to rate limits.
                 }
             }
             catch (Exception ex)
@@ -493,8 +510,8 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         public Task<int> Send(Flap flap)
         {
-            if (!IsConnected)
-                throw new InvalidOperationException("Invalid try to send data. TcpContext is not connected.");
+            //if (!IsConnected)
+            //    throw new InvalidOperationException("Invalid try to send data. TcpContext is not connected.");
 
             flap.DatagramSequenceNumber = Interlocked.Increment(ref _flapSequenceNumber);
 
@@ -508,8 +525,8 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         public Task<int[]> SendList(IEnumerable<Snac> snacs)
         {
-            if (!IsConnected)
-                throw new InvalidOperationException("Invalid try to send data. TcpContext is not connected.");
+            //if (!IsConnected)
+            //    throw new InvalidOperationException("Invalid try to send data. TcpContext is not connected.");
 
             var dataItems = new List<Flap>();
 
@@ -528,4 +545,93 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         #endregion
     }
+
+    //public class TcpConnection
+    //{
+    //    public BufferBlock<FlapDataPair> SendBuffer { get; set; }
+
+    //    public TcpContextNet45 TcpContext { get; set; }
+
+    //    private TcpConnection()
+    //    {
+    //        TcpContext = new TcpContextNet45();
+    //        SendBuffer = new BufferBlock<FlapDataPair>();
+
+    //        TcpContext.Disconnected += OnTcpContextDisconnected;
+    //    }
+
+    //    private void OnTcpContextDisconnected(object sender, DisconnectEventArgs e)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public static TcpConnection Create(IPEndPoint endpoint)
+    //    {
+    //        var connection = new TcpConnection();
+
+    //        connection.TcpContext.Connect(endpoint);
+
+    //        Task.Run(() => AnalyzeData());
+    //        Task.Run(() => SendData());
+    //    }
+
+
+    //    private async Task AnalyzeData()
+    //    {
+    //        // buffer bytes for analysis. if more bytes are needed to decode
+    //        // the received data we wait for another cycle.
+
+    //        var id = Guid.NewGuid().ToString();
+
+    //        try
+    //        {
+
+    //            while (IsConnected)
+    //            {
+    //                // This call will return on its own Thread Pool Thread to
+    //                // process the data.
+    //                var data = await TcpContext.ReceivedDataBuffer.ReceiveAsync();
+
+    //                // add data to the buffer.
+    //                _analyzeBuffer.AddRange(data);
+
+    //                var index = 0;
+    //                var iloop = 0;
+
+    //                while (index + 6 <= _analyzeBuffer.Count)
+    //                {
+    //                    // decode the flap header
+    //                    var desc = FlapDescriptor.GetDescriptor(index, _analyzeBuffer);
+
+    //                    if (_analyzeBuffer.Count < index + desc.TotalSize)
+    //                    {
+    //                        // there is more data needed to deserialize the flap. wait for another cycle...
+    //                        Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
+    //                            "{3}@{0}: caching {1}, {2} required.", iloop, _analyzeBuffer.Count - index, desc.TotalSize, id);
+
+    //                        break;
+    //                    }
+
+    //                    Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
+    //                        "{2}@{0}: queuing {1} bytes for analysis", iloop, desc.TotalSize, id);
+
+    //                    ProcessFlap(_analyzeBuffer.GetRange(index, desc.TotalSize));
+
+    //                    index += desc.TotalSize;
+    //                    iloop += 1;
+    //                }
+
+    //                if (index > 0)
+    //                    _analyzeBuffer.RemoveRange(0, index);
+    //            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Kernel.Exceptions.PublishException(ex);
+    //        }
+
+    //    }
+
+
+    //}
 }

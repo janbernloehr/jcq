@@ -24,40 +24,29 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqStatusCode : IStatusCode
     {
-        private readonly Hashtable _Attributes = new Hashtable();
-        private readonly string _DisplayName;
-        private readonly int sortIndex;
+        //private readonly Hashtable _Attributes = new Hashtable();
+        private readonly int _sortIndex;
 
-        public IcqStatusCode(string name, UserStatus icqStatus, int sort)
+        public IcqStatusCode(string name, UserStatus status, int sortIndex)
         {
-            _DisplayName = name;
-            _Attributes["IcqUserStatus"] = icqStatus;
-            sortIndex = sort;
+            DisplayName = name;
+            UserStatus = status;
+            _sortIndex = sortIndex;
         }
 
-        public UserStatus IcqUserStatus
-        {
-            get { return (UserStatus) _Attributes["IcqUserStatus"]; }
-        }
+        public UserStatus UserStatus { get; private set; }
+        //public Hashtable Attributes
+        //{
+        //    get { return _Attributes; }
+        //}
 
-        public Hashtable Attributes
-        {
-            get { return _Attributes; }
-        }
-
-        public string DisplayName
-        {
-            get { return _DisplayName; }
-        }
+        public string DisplayName { get; private set; }
 
         public int CompareTo(object obj)
         {
             var x = obj as IcqStatusCode;
 
-            if (x != null)
-                return Comparer.Default.Compare(sortIndex, x.sortIndex);
-
-            return 0;
+            return x != null ? Comparer.Default.Compare(_sortIndex, x._sortIndex) : 0;
         }
 
         public override string ToString()

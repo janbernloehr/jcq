@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using JCsTools.Core;
 using JCsTools.JCQ.IcqInterface.DataTypes;
 using JCsTools.JCQ.IcqInterface.Interfaces;
@@ -26,7 +27,7 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqContext : Service, IContext
     {
-        private readonly IcqContact _Identity;
+        private readonly IcqContact _identity;
         //Private _Connector As IcqConnector
         //Public ReadOnly Property Connector() As IcqConnector
         //    Get
@@ -62,12 +63,12 @@ namespace JCsTools.JCQ.IcqInterface
         //    End Get
         //End Property
 
-        private readonly Dictionary<Type, IContextService> cachedBindings = new Dictionary<Type, IContextService>();
-        private readonly Dictionary<Type, IContextService> cachedInstances = new Dictionary<Type, IContextService>();
+        private readonly Dictionary<Type, IContextService> _cachedBindings = new Dictionary<Type, IContextService>();
+        private readonly Dictionary<Type, IContextService> _cachedInstances = new Dictionary<Type, IContextService>();
 
         public IcqContext(string uin)
         {
-            _Identity = new IcqContact(uin, uin);
+            _identity = new IcqContact(uin, uin);
 
             GetService<IConnector>();
 
@@ -80,40 +81,40 @@ namespace JCsTools.JCQ.IcqInterface
 
         public C GetService<C>() where C : IContextService
         {
-            if (cachedBindings.ContainsKey(typeof (C)))
-                return (C) cachedBindings[typeof (C)];
+            if (_cachedBindings.ContainsKey(typeof (C)))
+                return (C) _cachedBindings[typeof (C)];
 
             var type = Kernel.Mapper.GetImplementationType<C>();
 
-            if (!cachedInstances.ContainsKey(type))
+            if (!_cachedInstances.ContainsKey(type))
             {
-                cachedInstances.Add(type, (C) Activator.CreateInstance(type, this));
+                _cachedInstances.Add(type, (C) Activator.CreateInstance(type, this));
             }
 
-            cachedBindings.Add(typeof (C), cachedInstances[type]);
+            _cachedBindings.Add(typeof (C), _cachedInstances[type]);
 
-            return (C) cachedBindings[typeof (C)];
+            return (C) _cachedBindings[typeof (C)];
         }
 
-        IContact IContext.Identity
+        public IContact Identity
         {
-            get { return _Identity; }
+            get { return _identity; }
         }
 
-        void IContext.SetMyStatus(IStatusCode statusCode)
+        public Task SetMyStatus(IStatusCode statusCode)
         {
-            Snac011e dataOut;
-            UserStatus status;
+            var icqStatus = statusCode as IcqStatusCode;
 
-            status = statusCode.Attributes["IcqUserStatus"] == null
-                ? UserStatus.Offline
-                : (UserStatus) statusCode.Attributes["IcqUserStatus"];
+            if (icqStatus == null)
+                throw new ArgumentException(@"IcqStatusCode required", "statusCode");
 
-            dataOut = new Snac011e();
+            var status = icqStatus.UserStatus;
+
+            var dataOut = new Snac011e();
             dataOut.UserStatus.UserStatus = status;
 
             var transfer = (IIcqDataTranferService) GetService<IConnector>();
-            transfer.Send(dataOut);
+            return transfer.Send(dataOut);
         }
     }
 }

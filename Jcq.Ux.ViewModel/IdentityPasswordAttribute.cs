@@ -20,14 +20,14 @@ using JCsTools.IdentityManager;
 
 namespace JCsTools.JCQ.ViewModel
 {
-    /// <summary>
-    ///     Identity Attribute representing the Identity's password.
-    /// </summary>
-    public class IdentityPasswordAttribute : IIdentityAttribute<string>
-    {
-        public string AttributeName
-        {
-            get { return "Password"; }
-        }
-    }
+    ///// <summary>
+    /////     Identity Attribute representing the Identity's password.
+    ///// </summary>
+    //public class IdentityPasswordAttribute : IIdentityAttribute<string>
+    //{
+    //    public string AttributeName
+    //    {
+    //        get { return "Password"; }
+    //    }
+    //}
 }

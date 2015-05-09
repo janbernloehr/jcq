@@ -17,7 +17,7 @@
     along with JCQ. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<Page x:Class="JCsTools.JCQ.Ux.EditIdentityPage"
+<Page x:Class="JCsTools.JCQ.Ux.EditIcqIdentityPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       WindowTitle="JCQ - Edit identity" Name="wnd">

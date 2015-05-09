@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using JCsTools.Core;
@@ -16,11 +17,20 @@ namespace JCsTools.JCQ.IcqInterface
     {
         private TcpClient _client;
         private NetworkStream _stream;
-        private readonly string _id = Guid.NewGuid().ToString();
+        private readonly string _id;
         private long _bytesReceived;
         private long _bytesSent;
         private readonly BufferBlock<List<byte>> _receivedDataBuffer = new BufferBlock<List<byte>>();
-        
+
+        private static string mylog = "";
+
+        public TcpContextNet45()
+        {
+            _id = Guid.NewGuid().ToString();
+
+            mylog += string.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), _id);
+        }
+
         public void Dispose()
         {
             _stream.Dispose();
@@ -71,12 +81,16 @@ namespace JCsTools.JCQ.IcqInterface
 
         public void SendData(List<byte> data)
         {
-            if (!_client.Connected | ConnectionState != TcpConnectionState.Connected)
+            //if (!_client.Connected | ConnectionState != TcpConnectionState.Connected)
+            //    throw new InvalidOperationException("TcpClient has to be in a connected state to send data.");
+
+            if (ConnectionState != TcpConnectionState.Connected)
                 throw new InvalidOperationException("TcpClient has to be in a connected state to send data.");
+
 
             try
             {
-                lock (_sendLock) // There should be only one thread sending on this network stream.
+                lock (_sendLock) // There should be only one thread sending on this network stream concurrently.
                 {
                     _stream.Write(data.ToArray(), 0, data.Count);
                     _bytesSent += data.Count;

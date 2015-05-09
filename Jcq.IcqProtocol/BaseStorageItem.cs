@@ -16,63 +16,70 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using JCsTools.JCQ.IcqInterface.Annotations;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface
 {
     public abstract class BaseStorageItem : IStorageItem, INotifyPropertyChanged
     {
-        private readonly Hashtable _Attributes;
-        private string _Identifier;
-        private string _Name;
+        //private readonly Hashtable _Attributes;
+        private string _identifier;
+        private string _name;
 
         protected BaseStorageItem()
         {
-            _Attributes = new Hashtable();
+            //_Attributes = new Hashtable();
         }
 
         protected BaseStorageItem(string id, string name)
         {
-            _Attributes = new Hashtable();
-            _Identifier = id;
-            _Name = name;
+            //_Attributes = new Hashtable();
+            _identifier = id;
+            _name = name;
         }
 
-        public Hashtable Attributes
-        {
-            get { return _Attributes; }
-        }
+        //public Hashtable Attributes
+        //{
+        //    get { return _Attributes; }
+        //}
 
         public string Identifier
         {
-            get { return _Identifier; }
+            get { return _identifier; }
             set
             {
-                _Identifier = value;
-                OnPropertyChanged("Identifier");
+                _identifier = value;
+                OnPropertyChanged();
             }
         }
 
         public string Name
         {
-            get { return string.IsNullOrEmpty(_Name) ? _Identifier : _Name; }
+            get { return string.IsNullOrEmpty(_name) ? _identifier : _name; }
             set
             {
-                _Name = value;
-                OnPropertyChanged("Name");
+                _name = value;
+                OnPropertyChanged();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        //protected void OnPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //    {
+        //        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
 
-        protected void OnPropertyChanged(string propertyName)
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

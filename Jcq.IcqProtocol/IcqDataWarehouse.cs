@@ -18,129 +18,105 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using JCsTools.Core;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 using JCsTools.Xml.Formatter;
+using Newtonsoft.Json;
 
 namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqDataWarehouse : ContextService, IDataWarehouseService
     {
-        public IcqDataWarehouse(IcqContext context) : base(context)
+        public IcqDataWarehouse(IcqContext context)
+            : base(context)
         {
         }
 
         void IDataWarehouseService.Load(DirectoryInfo path)
         {
-            FileInfo fiContactListData;
-            FileInfo fiContactListInfo;
-            XmlSerializer serializer;
-            XmlTextReader dataReader;
-            XmlTextReader infoReader;
-
-            IStorageService svStorage;
-
             ContactListInfo info;
 
-            fiContactListData = new FileInfo(Path.Combine(path.FullName, "contactlistdata.xml"));
+            var fiContactListData = new FileInfo(Path.Combine(path.FullName, "contactlistdata.json"));
             if (!fiContactListData.Exists)
                 return;
 
-            serializer = new XmlSerializer();
-            serializer.RegisterReferenceFormatter(typeof (IcqContact),
-                new BaseStorageItemFormatter(Context, serializer, typeof (IcqContact)));
-            serializer.RegisterReferenceFormatter(typeof (KeyedNotifiyingCollection<string, IContact>),
-                new ContactKeyedNotifiyingCollectionFormatter(serializer));
-            serializer.RegisterReferenceFormatter(typeof (List<byte>), new ListOfByteFormatter(serializer));
+            IContact[] items;
 
-            IEnumerable<IContact> items;
-
-            using (var fs = fiContactListData.OpenRead())
+            using (var sr = new StreamReader(fiContactListData.FullName))
             {
-                dataReader = new XmlTextReader(fs);
-                dataReader.WhitespaceHandling = WhitespaceHandling.None;
+                var json = sr.ReadToEnd();
 
-                items = (IEnumerable<IContact>) serializer.Deserialize(dataReader);
+                items = JsonConvert.DeserializeObject<IcqContact[]>(json);
             }
 
-            foreach (IcqContact x in items)
+            foreach (var x in items.Cast<IcqContact>())
             {
                 Context.GetService<IStorageService>().AttachContact(x, x.Group, false);
             }
 
-            fiContactListInfo = new FileInfo(Path.Combine(path.FullName, "contactlistinfo.xml"));
+            var fiContactListInfo = new FileInfo(Path.Combine(path.FullName, "contactlistinfo.json"));
             if (!fiContactListInfo.Exists)
                 return;
 
-            serializer = new XmlSerializer();
-            serializer.RegisterReferenceFormatter(typeof (ContactListInfo), new ContactListInfoFormatter(serializer));
+            //serializer = new XmlSerializer();
+            //serializer.RegisterReferenceFormatter(typeof(ContactListInfo), new ContactListInfoFormatter(serializer));
 
-            using (var fs = fiContactListInfo.OpenRead())
+            //using (var fs = fiContactListInfo.OpenRead())
+            //{
+            //    infoReader = new XmlTextReader(fs);
+            //    infoReader.WhitespaceHandling = WhitespaceHandling.None;
+
+            //    info = (ContactListInfo)serializer.Deserialize(infoReader);
+            //}
+
+            using (var sr = new StreamReader(fiContactListInfo.FullName))
             {
-                infoReader = new XmlTextReader(fs);
-                infoReader.WhitespaceHandling = WhitespaceHandling.None;
+                var json = sr.ReadToEnd();
 
-                info = (ContactListInfo) serializer.Deserialize(infoReader);
+                info = JsonConvert.DeserializeObject<ContactListInfo>(json);
             }
 
-            svStorage = Context.GetService<IStorageService>();
+            var svStorage = Context.GetService<IStorageService>();
             svStorage.RegisterLocalContactList(info.ItemCount, info.DateChanged);
         }
 
         void IDataWarehouseService.Save(DirectoryInfo path)
         {
-            FileInfo fiContactListData;
-            FileInfo fiContactListInfo;
-            XmlSerializer serializer;
+            var svStorage = Context.GetService<IStorageService>();
 
-            XmlTextWriter dataWriter;
-            XmlTextWriter infoWriter;
+            var fiContactListData = new FileInfo(Path.Combine(path.FullName, "contactlistdata.json"));
 
-            IStorageService svStorage;
+            //serializer = new XmlSerializer();
+            //serializer.RegisterReferenceFormatter(typeof(IcqContact),
+            //    new BaseStorageItemFormatter(Context, serializer, typeof(IcqContact)));
+            //serializer.RegisterReferenceFormatter(typeof(List<byte>), new ListOfByteFormatter(serializer));
 
-            svStorage = Context.GetService<IStorageService>();
-
-            fiContactListData = new FileInfo(Path.Combine(path.FullName, "contactlistdata.xml"));
-
-            serializer = new XmlSerializer();
-            serializer.RegisterReferenceFormatter(typeof (IcqContact),
-                new BaseStorageItemFormatter(Context, serializer, typeof (IcqContact)));
-            serializer.RegisterReferenceFormatter(typeof (List<byte>), new ListOfByteFormatter(serializer));
-
-            using (var fs = new FileStream(fiContactListData.FullName, FileMode.Create, FileAccess.Write))
+            using (var sw = new StreamWriter(fiContactListData.FullName))
             {
-                dataWriter = new XmlTextWriter(fs, Encoding.UTF8);
+                var json = JsonConvert.SerializeObject(svStorage.Contacts.Cast<IcqContact>().ToArray(), new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
 
-                serializer.Serialize(svStorage.Contacts, dataWriter);
-
-                dataWriter.Flush();
+                sw.Write(json);
             }
 
             if (svStorage.Info == null)
                 return;
 
-            fiContactListInfo = new FileInfo(Path.Combine(path.FullName, "contactlistinfo.xml"));
+            var fiContactListInfo = new FileInfo(Path.Combine(path.FullName, "contactlistinfo.json"));
 
-            serializer = new XmlSerializer();
-            serializer.RegisterReferenceFormatter(typeof (ContactListInfo), new ContactListInfoFormatter(serializer));
-
-            using (var fs = new FileStream(fiContactListInfo.FullName, FileMode.Create, FileAccess.Write))
+            using (var sw = new StreamWriter(fiContactListInfo.FullName))
             {
-                infoWriter = new XmlTextWriter(fs, Encoding.UTF8);
+                var json = JsonConvert.SerializeObject(svStorage.Info);
 
-                serializer.Serialize(svStorage.Info, infoWriter);
-
-                infoWriter.Flush();
+                sw.Write(json);
             }
         }
 
         void IDataWarehouseService.Clear(DirectoryInfo path)
         {
-            FileInfo[] items;
-
-            items = path.GetFiles("contactlist*.xml");
+            var items = path.GetFiles("contactlist*.json");
 
             foreach (var item in items)
             {
@@ -148,4 +124,127 @@ namespace JCsTools.JCQ.IcqInterface
             }
         }
     }
+
+    //public class IcqDataWarehouse : ContextService, IDataWarehouseService
+    //{
+    //    public IcqDataWarehouse(IcqContext context) : base(context)
+    //    {
+    //    }
+
+    //    void IDataWarehouseService.Load(DirectoryInfo path)
+    //    {
+    //        FileInfo fiContactListData;
+    //        FileInfo fiContactListInfo;
+    //        XmlSerializer serializer;
+    //        XmlTextReader dataReader;
+    //        XmlTextReader infoReader;
+
+    //        IStorageService svStorage;
+
+    //        ContactListInfo info;
+
+    //        fiContactListData = new FileInfo(Path.Combine(path.FullName, "contactlistdata.xml"));
+    //        if (!fiContactListData.Exists)
+    //            return;
+
+    //        serializer = new XmlSerializer();
+    //        serializer.RegisterReferenceFormatter(typeof (IcqContact),
+    //            new BaseStorageItemFormatter(Context, serializer, typeof (IcqContact)));
+    //        serializer.RegisterReferenceFormatter(typeof (KeyedNotifiyingCollection<string, IContact>),
+    //            new ContactKeyedNotifiyingCollectionFormatter(serializer));
+    //        serializer.RegisterReferenceFormatter(typeof (List<byte>), new ListOfByteFormatter(serializer));
+
+    //        IEnumerable<IContact> items;
+
+    //        using (var fs = fiContactListData.OpenRead())
+    //        {
+    //            dataReader = new XmlTextReader(fs);
+    //            dataReader.WhitespaceHandling = WhitespaceHandling.None;
+
+    //            items = (IEnumerable<IContact>) serializer.Deserialize(dataReader);
+    //        }
+
+    //        foreach (IcqContact x in items)
+    //        {
+    //            Context.GetService<IStorageService>().AttachContact(x, x.Group, false);
+    //        }
+
+    //        fiContactListInfo = new FileInfo(Path.Combine(path.FullName, "contactlistinfo.xml"));
+    //        if (!fiContactListInfo.Exists)
+    //            return;
+
+    //        serializer = new XmlSerializer();
+    //        serializer.RegisterReferenceFormatter(typeof (ContactListInfo), new ContactListInfoFormatter(serializer));
+
+    //        using (var fs = fiContactListInfo.OpenRead())
+    //        {
+    //            infoReader = new XmlTextReader(fs);
+    //            infoReader.WhitespaceHandling = WhitespaceHandling.None;
+
+    //            info = (ContactListInfo) serializer.Deserialize(infoReader);
+    //        }
+
+    //        svStorage = Context.GetService<IStorageService>();
+    //        svStorage.RegisterLocalContactList(info.ItemCount, info.DateChanged);
+    //    }
+
+    //    void IDataWarehouseService.Save(DirectoryInfo path)
+    //    {
+    //        FileInfo fiContactListData;
+    //        FileInfo fiContactListInfo;
+    //        XmlSerializer serializer;
+
+    //        XmlTextWriter dataWriter;
+    //        XmlTextWriter infoWriter;
+
+    //        IStorageService svStorage;
+
+    //        svStorage = Context.GetService<IStorageService>();
+
+    //        fiContactListData = new FileInfo(Path.Combine(path.FullName, "contactlistdata.xml"));
+
+    //        serializer = new XmlSerializer();
+    //        serializer.RegisterReferenceFormatter(typeof (IcqContact),
+    //            new BaseStorageItemFormatter(Context, serializer, typeof (IcqContact)));
+    //        serializer.RegisterReferenceFormatter(typeof (List<byte>), new ListOfByteFormatter(serializer));
+
+    //        using (var fs = new FileStream(fiContactListData.FullName, FileMode.Create, FileAccess.Write))
+    //        {
+    //            dataWriter = new XmlTextWriter(fs, Encoding.UTF8);
+
+    //            serializer.Serialize(svStorage.Contacts, dataWriter);
+
+    //            dataWriter.Flush();
+    //        }
+
+    //        if (svStorage.Info == null)
+    //            return;
+
+    //        fiContactListInfo = new FileInfo(Path.Combine(path.FullName, "contactlistinfo.xml"));
+
+    //        serializer = new XmlSerializer();
+    //        serializer.RegisterReferenceFormatter(typeof (ContactListInfo), new ContactListInfoFormatter(serializer));
+
+    //        using (var fs = new FileStream(fiContactListInfo.FullName, FileMode.Create, FileAccess.Write))
+    //        {
+    //            infoWriter = new XmlTextWriter(fs, Encoding.UTF8);
+
+    //            serializer.Serialize(svStorage.Info, infoWriter);
+
+    //            infoWriter.Flush();
+    //        }
+    //    }
+
+    //    void IDataWarehouseService.Clear(DirectoryInfo path)
+    //    {
+    //        FileInfo[] items;
+
+    //        items = path.GetFiles("contactlist*.xml");
+
+    //        foreach (var item in items)
+    //        {
+    //            item.Delete();
+    //        }
+    //    }
+    //}
 }

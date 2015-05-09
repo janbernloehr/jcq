@@ -17,6 +17,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using JCsTools.Core.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface.Interfaces
@@ -34,13 +35,13 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
         IContact GetContactByIdentifier(string identifier);
         IGroup GetGroupByIdentifier(string identifier);
         bool IsContactStored(IContact contact);
-        void AddContact(IContact contact, IGroup @group);
+        Task AddContact(IContact contact, IGroup @group);
         void AttachContact(IContact contact, IGroup @group, bool stored);
-        void RemoveContact(IContact contact, IGroup @group);
-        void UpdateContact(IContact contact);
-        void AddGroup(IGroup @group);
-        void RemoveGroup(IGroup @group);
-        void UpdateGroup(IGroup @group);
+        Task RemoveContact(IContact contact, IGroup @group);
+        Task UpdateContact(IContact contact);
+        Task AddGroup(IGroup @group);
+        Task RemoveGroup(IGroup @group);
+        Task UpdateGroup(IGroup @group);
         void RegisterLocalContactList(int itemCount, DateTime dateChanged);
     }
 }

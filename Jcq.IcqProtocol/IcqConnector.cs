@@ -449,11 +449,6 @@ namespace JCsTools.JCQ.IcqInterface
             await Send(snacUserInfo, confChannel01, confChannel02, confChannel04, extendedStatusRequest, setIdleTime,
                 supportedServices);
 
-            //TODO: Is this still true?
-            // It is required to run the completion asynchronous. otherwise this call would block the analyzation of
-            // data in the analyzation pipe.
-            //ThreadPool.QueueUserWorkItem(AsyncCompleteSignIn);
-
             // now we have to wait for the IcqStorage service to finish contact list analyzation
             // the easiest way to do so is blocking the current thread until the ContactListActivated
             // event is fired.
@@ -463,6 +458,8 @@ namespace JCsTools.JCQ.IcqInterface
                 OnSignInFailed("Timeout while waiting for server response.");
 
                 _signInTaskCompletionSource.SetResult(false);
+
+                //TODO: Integrate SignIn Errors in return value of SignIn Method.
             }
             else
             {

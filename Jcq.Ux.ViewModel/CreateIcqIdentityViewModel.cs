@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EditIdentityViewModel.cs" company="Jan-Cornelius Molnar">
+// <copyright file="CreateIcqIdentityViewModel.cs" company="Jan-Cornelius Molnar">
 // Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
 // 
 // This file is part of JCQ.
@@ -18,28 +18,20 @@
 
 using System;
 using System.IO;
-using System.Windows;
+using Jcq.Ux.ViewModel;
 using JCsTools.Core;
 using JCsTools.IdentityManager;
 
 namespace JCsTools.JCQ.ViewModel
 {
     /// <summary>
-    ///     This ViewModel features identity editing.
+    ///     This ViewModel features identity creation.
     /// </summary>
-    public class EditIdentityViewModel
+    public class CreateIcqIdentityViewModel
     {
-        public EditIdentityViewModel(IIdentity identity)
+        public CreateIcqIdentityViewModel()
         {
-            Identity = identity;
-
             ImageSelector = new ImageSelectorViewModel(ApplicationService.Current.DataStorageDirectory);
-
-            if (Identity.HasAttribute(IdentityAttributes.ImageOriginalFilePathAttribute))
-            {
-                ImageSelector.SelectedImageFile =
-                    Identity.GetAttribute(IdentityAttributes.ImageOriginalFilePathAttribute);
-            }
         }
 
         /// <summary>
@@ -48,45 +40,33 @@ namespace JCsTools.JCQ.ViewModel
         public ImageSelectorViewModel ImageSelector { get; private set; }
 
         /// <summary>
-        ///     Gets the Identity which is edited.
-        /// </summary>
-        public IIdentity Identity { get; private set; }
-
-        /// <summary>
-        ///     Updates the Identity with the specified FullName, Uin, Password and the selected image. FullName, Uin and Image
+        ///     Creates an Identity with the specified FullName, Uin, Password and the selected image. All four properties
         ///     are mandatory.
         /// </summary>
-        public void UpdateIdentity(string fullname, string uin, string password)
+        public void CreateIdentity(string fullname, string uin, string password)
         {
             if (string.IsNullOrEmpty(fullname))
                 throw new ArgumentNullException("fullname");
             if (string.IsNullOrEmpty(uin))
                 throw new ArgumentNullException("uin");
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException("password");
 
             var avatarPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
                 string.Format("{0}.[default].jpg", fullname));
 
             AvatarImageService.CreateAvatarImageFromFile(ImageSelector.SelectedImageFile, avatarPath);
 
-            Identity.Identifier = fullname;
-            Identity.Description = uin;
-            Identity.ImageUrl = avatarPath;
-            Identity.SetAttribute(IdentityAttributes.UinAttribute, uin);
+            var id = new IcqIdentity(fullname)
+            {
+                Description = uin,
+                ImageUrl = avatarPath,
+                IcqUin = uin,
+                IcqPassword = password,
+                ImageOriginalFilePathAttribute = ImageSelector.SelectedImageFile
+            };
 
-            if (!string.IsNullOrEmpty(password))
-                Identity.SetAttribute(IdentityAttributes.PasswordAttribute, password);
-        }
-
-        /// <summary>
-        ///     Deletes the Identity if the user agrees.
-        /// </summary>
-        public void DeleteIdentity()
-        {
-            if (MessageBox.Show(string.Format("Do you really want to delete Identity \"{0}\"?", Identity.Identifier),
-                null, MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
-
-            ApplicationService.Current.IdentityProvider.DeleteIdentity(Identity);
-            NavigateToSignInPage();
+            ApplicationService.Current.IdentityProvider.CreateIdentity(id);
         }
 
         /// <summary>

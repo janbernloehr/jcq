@@ -17,6 +17,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.IO;
+using Jcq.Ux.ViewModel;
 using JCsTools.IdentityManager;
 using JCsTools.JCQ.IcqInterface;
 using JCsTools.JCQ.IcqInterface.Interfaces;
@@ -28,7 +29,7 @@ namespace JCsTools.JCQ.ViewModel
     /// </summary>
     public sealed class ApplicationService
     {
-        private XmlIdentityProvider _IdentityProvider;
+        private JsonIdentityProvider _identityProvider;
 
         private ApplicationService()
         {
@@ -60,7 +61,7 @@ namespace JCsTools.JCQ.ViewModel
         /// </summary>
         public IIdentityProvider IdentityProvider
         {
-            get { return _IdentityProvider; }
+            get { return _identityProvider; }
         }
 
         /// <summary>
@@ -74,19 +75,19 @@ namespace JCsTools.JCQ.ViewModel
         /// <param name="dataStorage">The directory where application data is stored.</param>
         public static void Initialize(DirectoryInfo dataStorage)
         {
-            FileInfo xmlIdentities;
+            var jsonIdentities = new FileInfo(Path.Combine(dataStorage.FullName, "identitystore.json"));
 
-            xmlIdentities = new FileInfo(Path.Combine(dataStorage.FullName, "identitystore.xml"));
-
-            Current = new ApplicationService();
-            Current.DataStorageDirectory = dataStorage;
-            Current._IdentityProvider = new XmlIdentityProvider(xmlIdentities);
+            Current = new ApplicationService
+            {
+                DataStorageDirectory = dataStorage,
+                _identityProvider = new JsonIdentityProvider(jsonIdentities)
+            };
         }
 
-        public IContext CreateContext(IIdentity identity)
+        public IContext CreateContext(IcqIdentity identity)
         {
             Identity = identity;
-            Context = new IcqContext(identity.GetAttribute(IdentityAttributes.UinAttribute));
+            Context = new IcqContext(identity.IcqUin);
 
             LoadContextData(Context);
 
@@ -107,7 +108,7 @@ namespace JCsTools.JCQ.ViewModel
 
         public void LoadServiceData()
         {
-            _IdentityProvider.Load();
+            _identityProvider.Load();
         }
 
         public void SaveServiceData()
@@ -115,7 +116,7 @@ namespace JCsTools.JCQ.ViewModel
             if (Context != null)
                 SaveContextData(Context);
 
-            _IdentityProvider.Save();
+            _identityProvider.Save();
         }
     }
 }

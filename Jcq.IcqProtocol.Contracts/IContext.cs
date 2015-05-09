@@ -16,6 +16,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using JCsTools.Core.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface.Interfaces
@@ -23,6 +24,6 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
     public interface IContext : IServiceProvider<IContextService>
     {
         IContact Identity { get; }
-        void SetMyStatus(IStatusCode statusCode);
+        Task SetMyStatus(IStatusCode statusCode);
     }
 }
