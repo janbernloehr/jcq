@@ -16,6 +16,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,22 +24,24 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
     public class TlvMessageData : Tlv
     {
-        private readonly List<byte> _RequiredCapabilities = new List<byte>();
+        private readonly List<byte> _requiredCapabilities = new List<byte>();
 
-        public TlvMessageData() : base(0x2)
+        public TlvMessageData()
+            : base(0x2)
         {
+            _requiredCapabilities.AddRange(new Byte[] { 1, 6 });
         }
 
         public List<byte> RequiredCapabilities
         {
-            get { return _RequiredCapabilities; }
+            get { return _requiredCapabilities; }
         }
 
         public string MessageText { get; set; }
 
         public override int CalculateDataSize()
         {
-            return 4 + _RequiredCapabilities.Count + 4 + 4 + MessageText.Length;
+            return 4 + _requiredCapabilities.Count + 4 + 4 + 2*MessageText.Length;
         }
 
         public override List<byte> Serialize()
@@ -50,24 +53,39 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             // fragment version
             data.Add(0x1);
 
-            data.AddRange(ByteConverter.GetBytes((ushort) _RequiredCapabilities.Count));
-            data.AddRange(_RequiredCapabilities);
+            data.AddRange(ByteConverter.GetBytes((ushort)_requiredCapabilities.Count));
+            data.AddRange(_requiredCapabilities);
 
             // fragment identifier
             data.Add(0x1);
             // fragment version
             data.Add(0x1);
 
-            data.AddRange(ByteConverter.GetBytes((ushort) (MessageText.Length + 2 + 2)));
+            // Unicode (does not work ...)
+            var messageBytes = Encoding.BigEndianUnicode.GetBytes(MessageText);
+            data.AddRange(ByteConverter.GetBytes((ushort)(4 + messageBytes.Length)));
+
             data.AddRange(new byte[]
             {
                 0x0,
+                0x2,
                 0x0,
-                0xff,
-                0xff
+                0x0
             });
+            
+             data.AddRange(messageBytes);
 
-            data.AddRange(ByteConverter.GetBytes(MessageText));
+            //var messageBytes = ByteConverter.GetBytes(MessageText);
+            //data.AddRange(ByteConverter.GetBytes((ushort)(4 + messageBytes.Length)));
+            //data.AddRange(new byte[]
+            //{
+            //    0x0,
+            //    0x0,
+            //    0xff,
+            //    0xff
+            //});
+
+            //data.AddRange(messageBytes);
 
             return data;
         }
@@ -80,12 +98,10 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             index += 2;
 
-            int length;
-
-            length = ByteConverter.ToUInt16(data.GetRange(index, 2));
+            int length = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            _RequiredCapabilities.AddRange(data.GetRange(index, length));
+            _requiredCapabilities.AddRange(data.GetRange(index, length));
             index += length;
 
             index += 2;
