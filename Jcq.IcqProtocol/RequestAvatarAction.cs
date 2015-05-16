@@ -24,43 +24,42 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class RequestAvatarAction : IAvatarServiceAction
     {
-        private readonly IContact _Contact;
-        private readonly IcqIconService _Service;
+        private readonly IContact _contact;
+        private readonly IcqIconService _service;
 
         public RequestAvatarAction(IcqIconService service, IContact contact)
         {
-            _Service = service;
-            _Contact = contact;
+            _service = service;
+            _contact = contact;
         }
 
         public IContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public IcqIconService Service
         {
-            get { return _Service; }
+            get { return _service; }
         }
 
         public void Execute()
         {
-            if (_Contact.IconHash == null)
+            if (_contact.IconHash == null)
                 return;
 
-            Snac1004 dataOut;
-            dataOut = new Snac1004();
-            dataOut.IconHash.AddRange(_Contact.IconHash);
-            dataOut.Uin = _Contact.Identifier;
+            var dataOut = new Snac1004();
+            dataOut.IconHash.AddRange(_contact.IconHash);
+            dataOut.Uin = _contact.Identifier;
 
-            Debug.WriteLine(string.Format("Requesting Icon for {0}.", _Contact.Identifier), "IcqIconService");
+            Debug.WriteLine(string.Format("Requesting Icon for {0}.", _contact.Identifier), "IcqIconService");
 
             Service.Send(dataOut);
         }
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", base.ToString(), _Contact.Identifier);
+            return string.Format("{0}: {1}", base.ToString(), _contact.Identifier);
         }
     }
 }

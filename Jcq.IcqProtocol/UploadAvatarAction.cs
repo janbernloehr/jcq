@@ -24,28 +24,28 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class UploadAvatarAction : IAvatarServiceAction
     {
-        private static int ReferenceCounter;
-        private readonly byte[] _AvatarBytes;
-        private readonly IcqIconService _Service;
+        private static int _referenceCounter;
+        private readonly byte[] _avatarBytes;
+        private readonly IcqIconService _service;
 
         public UploadAvatarAction(IcqIconService service, byte[] avatar)
         {
-            _Service = service;
-            _AvatarBytes = avatar;
+            _service = service;
+            _avatarBytes = avatar;
         }
 
         public IcqIconService Service
         {
-            get { return _Service; }
+            get { return _service; }
         }
 
         void IAvatarServiceAction.Execute()
         {
-            Snac1002 dataOut;
-
-            dataOut = new Snac1002();
-            dataOut.ReferenceNumber = Interlocked.Increment(ref ReferenceCounter);
-            dataOut.IconData.AddRange(_AvatarBytes);
+            var dataOut = new Snac1002
+            {
+                ReferenceNumber = Interlocked.Increment(ref _referenceCounter)
+            };
+            dataOut.IconData.AddRange(_avatarBytes);
 
             Debug.WriteLine("Sending Icon to server.", "IcqIconService");
 

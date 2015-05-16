@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TcpContext.cs" company="Jan-Cornelius Molnar">
+// <copyright file="TcpContextOld.cs" company="Jan-Cornelius Molnar">
 // Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
 // 
 // This file is part of JCQ.
@@ -15,16 +15,6 @@
 // along with JCQ. If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.Internal;
-using DataReceivedEventArgs = System.Diagnostics.DataReceivedEventArgs;
 
 namespace JCsTools.JCQ.IcqInterface
 {
@@ -139,7 +129,7 @@ namespace JCsTools.JCQ.IcqInterface
 //        private void ReadCallback(IAsyncResult ar)
 //        {
 //            var info = (ReceiveInfo) ar.AsyncState;
-           
+
 //            try
 //            {
 //                lock (_lock)

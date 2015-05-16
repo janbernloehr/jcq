@@ -27,10 +27,7 @@ namespace JCsTools.Core
 
         static LoggingService()
         {
-            JcqTraceSource = new TraceSource("jcq");
-            JcqTraceSource.Switch = new SourceSwitch("MySwitch", "Verbose");
-
-
+            JcqTraceSource = new TraceSource("jcq") {Switch = new SourceSwitch("MySwitch", "Verbose")};
         }
 
         int ILoggingService.DefaultEventId

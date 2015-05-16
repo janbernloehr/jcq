@@ -29,7 +29,8 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqUserInformationService : ContextService, IUserInformationService
     {
-        private static readonly Dictionary<long, ShortUserInformationRequestManager> PendingRequests = new Dictionary<long, ShortUserInformationRequestManager>();
+        private static readonly Dictionary<long, ShortUserInformationRequestManager> PendingRequests =
+            new Dictionary<long, ShortUserInformationRequestManager>();
 
         public IcqUserInformationService(IContext context)
             : base(context)
@@ -51,7 +52,7 @@ namespace JCsTools.JCQ.IcqInterface
         }
 
         public void RequestShortUserInfo(IContact contact, bool force)
-        { 
+        {
             var icqContact = contact as IcqContact;
 
             if (icqContact == null)
@@ -74,12 +75,10 @@ namespace JCsTools.JCQ.IcqInterface
 
         public void RequestShortUserInfoForAllUsers()
         {
-            List<IContact> contacts;
-
             // a copy of the actual list is required since the contact
             // list may change during the following operation causing the
             // enumeration to fail.
-            contacts = Context.GetService<IStorageService>().Contacts.ToList();
+            var contacts = Context.GetService<IStorageService>().Contacts.ToList();
 
             foreach (var x in contacts)
             {
@@ -138,11 +137,8 @@ namespace JCsTools.JCQ.IcqInterface
 
                 if (x.UserStatus.HasData)
                 {
-                    IStatusCode oldStatus;
-                    IStatusCode newStatus;
-
-                    oldStatus = c.Status;
-                    newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
+                    var oldStatus = c.Status;
+                    IStatusCode newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
 
                     Debug.WriteLine(string.Format("User {0} changed Status to {1}.", c.Identifier, newStatus),
                         "IcqUserInformationService");
@@ -156,11 +152,8 @@ namespace JCsTools.JCQ.IcqInterface
                 }
                 else
                 {
-                    IStatusCode oldStatus;
-                    IStatusCode newStatus;
-
-                    oldStatus = c.Status;
-                    newStatus = IcqStatusCodes.Online;
+                    var oldStatus = c.Status;
+                    IStatusCode newStatus = IcqStatusCodes.Online;
 
                     if (!ReferenceEquals(oldStatus, newStatus))
                     {
@@ -211,11 +204,8 @@ namespace JCsTools.JCQ.IcqInterface
 
                 if (x.UserStatus.HasData)
                 {
-                    IStatusCode oldStatus;
-                    IStatusCode newStatus;
-
-                    oldStatus = c.Status;
-                    newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
+                    var oldStatus = c.Status;
+                    IStatusCode newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
 
                     Debug.WriteLine(string.Format("User {0} changed Status to {1}.", c.Identifier, newStatus),
                         "IcqUserInformationService");
@@ -229,11 +219,8 @@ namespace JCsTools.JCQ.IcqInterface
                 }
                 else
                 {
-                    IStatusCode oldStatus;
-                    IStatusCode newStatus;
-
-                    oldStatus = c.Status;
-                    newStatus = IcqStatusCodes.Online;
+                    var oldStatus = c.Status;
+                    IStatusCode newStatus = IcqStatusCodes.Online;
 
                     if (!ReferenceEquals(oldStatus, newStatus))
                     {

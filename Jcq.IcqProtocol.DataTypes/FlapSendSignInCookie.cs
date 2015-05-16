@@ -23,7 +23,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
     public class FlapSendSignInCookie : Flap
     {
-        private readonly TlvAuthorizationCookie _AuthorizationCookie = new TlvAuthorizationCookie();
+        private readonly TlvAuthorizationCookie _authorizationCookie = new TlvAuthorizationCookie();
 
         public FlapSendSignInCookie() : base(FlapChannel.NewConnectionNegotiation)
         {
@@ -31,12 +31,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public TlvAuthorizationCookie AuthorizationCookie
         {
-            get { return _AuthorizationCookie; }
+            get { return _authorizationCookie; }
         }
 
         public override int CalculateDataSize()
         {
-            return 4 + _AuthorizationCookie.CalculateTotalSize();
+            return 4 + _authorizationCookie.CalculateTotalSize();
         }
 
         public override List<byte> Serialize()
@@ -45,7 +45,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             data.AddRange(ByteConverter.GetBytes((uint) 1));
 
-            data.AddRange(_AuthorizationCookie.Serialize());
+            data.AddRange(_authorizationCookie.Serialize());
 
             return data;
         }

@@ -16,8 +16,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Net.Sockets;
-
 namespace JCsTools.JCQ.IcqInterface
 {
     //internal class ReceiveInfo

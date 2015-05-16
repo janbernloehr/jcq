@@ -50,9 +50,6 @@
     <Compile Include="Configuration\MappingConfigElement.cs" />
     <Compile Include="Configuration\MappingConfigElementCollection.cs" />
     <Compile Include="Configuration\MicrokernelSection.cs" />
-    <Compile Include="Configuration\SerializerConfigElement.cs" />
-    <Compile Include="Configuration\SerializerConfigElementCollection.cs" />
-    <Compile Include="DebugTraceListener.cs" />
     <Compile Include="Exceptions\ExceptionInformation.cs" />
     <Compile Include="Exceptions\ExceptionService.cs" />
     <Compile Include="Kernel.cs" />
@@ -66,10 +63,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="TaskScheduler\BaseTask.cs" />
-    <Compile Include="TaskScheduler\BasicAsyncTask.cs" />
-    <Compile Include="TaskScheduler\BasicSyncTask.cs" />
-    <Compile Include="TaskScheduler\SimpleTaskScheduler.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings.resx">

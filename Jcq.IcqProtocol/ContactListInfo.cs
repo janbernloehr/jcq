@@ -30,7 +30,6 @@ namespace JCsTools.JCQ.IcqInterface
         }
 
         public DateTime DateChanged { get; private set; }
-
         public int ItemCount { get; private set; }
     }
 }

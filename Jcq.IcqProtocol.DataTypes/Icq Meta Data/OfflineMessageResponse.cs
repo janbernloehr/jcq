@@ -49,25 +49,19 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             SenderUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4));
             index += 4;
 
-            int year;
-            int month;
-            int day;
-            int hour;
-            int minute;
-
-            year = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            int year = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
             index += 2;
 
-            month = data[index];
+            int month = data[index];
             index += 1;
 
-            day = data[index];
+            int day = data[index];
             index += 1;
 
-            hour = data[index];
+            int hour = data[index];
             index += 1;
 
-            minute = data[index];
+            int minute = data[index];
             index += 1;
 
             DateSent = new DateTime(year, month, day, hour, minute, 0);

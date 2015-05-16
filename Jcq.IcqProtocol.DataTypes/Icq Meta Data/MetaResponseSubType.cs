@@ -28,7 +28,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         SetUserEmailSInfoServerAck = 0x87,
         SetUserInterestsInfoServerAck = 0x8c,
         SetUserAffilationsInfoServerAck = 0x96,
-        ServerSMSResponseDeliveryReceipt = 0x96,
+        ServerSmsResponseDeliveryReceipt = 0x96,
         SetUserPermissionsServerAck = 0xa0,
         SetUserPasswordServerAck = 0xaa,
         UnregisterAccountServerAck = 0xb4,

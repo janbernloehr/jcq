@@ -22,16 +22,16 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
     public class SignInFailedEventArgs : EventArgs
     {
-        private readonly string _Message;
+        private readonly string _message;
 
         public SignInFailedEventArgs(string message)
         {
-            _Message = message;
+            _message = message;
         }
 
         public string Message
         {
-            get { return _Message; }
+            get { return _message; }
         }
     }
 }

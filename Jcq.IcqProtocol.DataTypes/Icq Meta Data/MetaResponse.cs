@@ -25,7 +25,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
     {
         public const int SizeFixPart = 10;
 
-        public MetaResponse(MetaResponseType responseType)
+        protected MetaResponse(MetaResponseType responseType)
         {
             ResponseType = responseType;
         }

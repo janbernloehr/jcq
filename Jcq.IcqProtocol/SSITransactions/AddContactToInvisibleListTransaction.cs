@@ -21,33 +21,31 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class AddContactToInvisibleListTransaction : BaseSSITransaction
+    public class AddContactToInvisibleListTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _Contact;
+        private readonly IcqContact _contact;
 
         public AddContactToInvisibleListTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _Contact = contact;
+            _contact = contact;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public override Snac CreateSnac()
         {
-            Snac1308 data;
-            SSIDenyRecord item;
-
-            item = new SSIDenyRecord();
-
-            item.ItemName = Contact.Identifier;
-            item.ItemId = Service.GetNextSSIItemId();
+            var item = new SSIDenyRecord
+            {
+                ItemName = Contact.Identifier, 
+                ItemId = Service.GetNextSsiItemId()
+            };
 
             Contact.DenyRecordItemId = item.ItemId;
 
-            data = new Snac1308();
+            var data = new Snac1308();
             data.DenyRecords.Add(item);
 
             return data;
@@ -64,7 +62,6 @@ namespace JCsTools.JCQ.IcqInterface
                     throw new InvalidOperationException(
                         string.Format("Cannot add contact '{0}' {1} to invisible list: {2}", Contact.Name,
                             Contact.Identifier, action));
-                    break;
             }
         }
 

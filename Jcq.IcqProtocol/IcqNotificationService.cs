@@ -38,11 +38,8 @@ namespace JCsTools.JCQ.IcqInterface
 
         public void SendNotification(IContact receiver, NotificationType type)
         {
-            Snac0414 dataOut;
+            var dataOut = new Snac0414 {Channel = MessageChannel.Channel1PlainText};
 
-            dataOut = new Snac0414();
-
-            dataOut.Channel = MessageChannel.Channel1PlainText;
 
             switch (type)
             {
@@ -69,10 +66,9 @@ namespace JCsTools.JCQ.IcqInterface
         {
             try
             {
-                IContact contact;
                 NotificationType type;
 
-                contact = Context.GetService<IStorageService>().GetContactByIdentifier(snac.ScreenName);
+                var contact = Context.GetService<IStorageService>().GetContactByIdentifier(snac.ScreenName);
 
                 switch (snac.NotificationType)
                 {

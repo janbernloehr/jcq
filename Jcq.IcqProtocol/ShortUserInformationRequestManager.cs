@@ -27,34 +27,34 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class ShortUserInformationRequestManager
     {
-        private readonly IcqContact _Contact;
-        private readonly IContext _Context;
-        private readonly int _RetryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
-        private bool _RequestSucceeded;
-        private int _RetryIteration;
-        private Timer _RetryTimer;
+        private readonly IcqContact _contact;
+        private readonly IContext _context;
+        private readonly int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
+        private bool _requestSucceeded;
+        private int _retryIteration;
+        private Timer _retryTimer;
 
         public ShortUserInformationRequestManager(IContext context, IcqContact contact)
         {
-            _Context = context;
-            _Contact = contact;
+            _context = context;
+            _contact = contact;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public IContext Context
         {
-            get { return _Context; }
+            get { return _context; }
         }
 
         public long RequestId { get; private set; }
 
         public void ProcessResponse(MetaShortUserInformationResponse response)
         {
-            _RequestSucceeded = true;
+            _requestSucceeded = true;
 
             if (response.SearchSucceeded)
             {
@@ -82,14 +82,14 @@ namespace JCsTools.JCQ.IcqInterface
         {
             try
             {
-                if (!_RequestSucceeded & _RetryIteration < 5)
+                if (!_requestSucceeded & _retryIteration < 5)
                 {
-                    _RetryIteration += 1;
+                    _retryIteration += 1;
                     SendRequest();
                 }
                 else
                 {
-                    _RetryTimer.Dispose();
+                    _retryTimer.Dispose();
                 }
             }
             catch (Exception ex)
@@ -100,21 +100,18 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void SendRequest()
         {
-            Snac1502 dataOut;
-            MetaShortUserInformationRequest req;
+            var dataOut = new Snac1502();
 
-            dataOut = new Snac1502();
-
-            req = new MetaShortUserInformationRequest
+            var req = new MetaShortUserInformationRequest
             {
                 RequestSequenceNumber = MetaRequest.GetNextSequenceNumber(),
-                ClientUin = long.Parse(_Context.Identity.Identifier),
+                ClientUin = long.Parse(_context.Identity.Identifier),
                 SearchUin = int.Parse(Contact.Identifier)
             };
 
             dataOut.MetaData.MetaRequest = req;
 
-            var transfer = (IIcqDataTranferService) _Context.GetService<IConnector>();
+            var transfer = (IIcqDataTranferService) _context.GetService<IConnector>();
             transfer.Send(dataOut);
 
             RequestId = dataOut.RequestId;
@@ -124,7 +121,7 @@ namespace JCsTools.JCQ.IcqInterface
         {
             SendRequest();
 
-            _RetryTimer = new Timer(OnTimerCallback, null, 0, _RetryDueMillisecond);
+            _retryTimer = new Timer(OnTimerCallback, null, 0, _retryDueMillisecond);
         }
     }
 }

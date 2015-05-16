@@ -35,21 +35,19 @@ namespace JCsTools.JCQ.IcqInterface
 
         public delegate void ContactStatusChangedEventHandler(object sender, StatusChangedEventArgs e);
 
-        private readonly KeyedNotifiyingCollection<string, IContact> _allContacts =
-            new KeyedNotifiyingCollection<string, IContact>(c => c.Identifier);
+        private readonly KeyedNotifiyingCollection<string, IcqContact> _allContacts =
+            new KeyedNotifiyingCollection<string, IcqContact>(c => c.Identifier);
 
-        private readonly KeyedNotifiyingCollection<string, IGroup> _groups =
-            new KeyedNotifiyingCollection<string, IGroup>(g => g.Identifier);
+        private readonly KeyedNotifiyingCollection<string, IcqGroup> _groups =
+            new KeyedNotifiyingCollection<string, IcqGroup>(g => g.Identifier);
 
-        private readonly KeyedNotifiyingCollection<string, IContact> _storedContacts =
-            new KeyedNotifiyingCollection<string, IContact>(c => c.Identifier);
+        private readonly KeyedNotifiyingCollection<string, IcqContact> _storedContacts =
+            new KeyedNotifiyingCollection<string, IcqContact>(c => c.Identifier);
 
+        private SSIActionResultCode _codeSsiAkk;
         private bool _isFreshContactList = true;
         private int _maxSsiItemId;
-        
-        //private TaskCompletionSource<SSIActionResultCode> _transactionCompletionSource;
         private SemaphoreSlim _transactionSemaphore;
-        private SSIActionResultCode _codeSsiAkk;
 
         public IcqStorageService(IContext context)
             : base(context)
@@ -73,7 +71,7 @@ namespace JCsTools.JCQ.IcqInterface
             if (connector == null)
                 throw new InvalidCastException("Context Connector Service must be of Type IcqConnector");
 
-            _allContacts.Add(context.Identity);
+            _allContacts.Add((IcqContact) context.Identity);
 
             context.Identity.PropertyChanged += OnContactPropertyChanged;
 
@@ -84,112 +82,7 @@ namespace JCsTools.JCQ.IcqInterface
             connector.RegisterSnacHandler(0x13, 0xf, new Action<Snac130F>(AnalyseSnac130F));
         }
 
-        public IContact GetContactByIdentifier(string identifier)
-        {
-            IContact contact;
-
-            if (!_allContacts.Contains(identifier))
-            {
-                contact = new IcqContact(identifier, identifier);
-
-                _allContacts.Add(contact);
-
-                contact.PropertyChanged += OnContactPropertyChanged;
-            }
-            else
-            {
-                contact = _allContacts[identifier];
-            }
-
-            return contact;
-        }
-
-        public IGroup GetGroupByIdentifier(string identifier)
-        {
-            return _groups.Contains(identifier) ? _groups[identifier] : null;
-        }
-
-        public Task AddContact(IContact contact, IGroup @group)
-        {
-            var icontact = (IcqContact)contact;
-            var igroup = (IcqGroup)@group;
-
-            var trans = new AddContactTransaction(this, icontact, igroup);
-
-            return CommitSSITransaction(trans);
-        }
-
-        public Task RemoveContact(IContact contact, IGroup @group)
-        {
-            var icontact = (IcqContact)contact;
-
-            var trans = new RemoveContactTransaction(this, icontact);
-
-            return CommitSSITransaction(trans);
-        }
-
-        public void AttachContact(IContact contact, IGroup @group, bool stored)
-        {
-            if (!_allContacts.Contains(contact.Identifier))
-            {
-                _allContacts.Add(contact);
-
-                contact.PropertyChanged += OnContactPropertyChanged;
-            }
-
-            if (!stored) return;
-
-            if (!_storedContacts.Contains(contact.Identifier))
-                _storedContacts.Add(contact);
-
-            if (!@group.Contacts.Contains(contact))
-                @group.Contacts.Add(contact);
-        }
-
-        public Task AddGroup(IGroup @group)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveGroup(IGroup @group)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateContact(IContact contact)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateGroup(IGroup @group)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsContactStored(IContact contact)
-        {
-            return _storedContacts.Contains(contact);
-        }
-
-        public INotifyingCollection<IContact> Contacts
-        {
-            get
-            {
-                //TODO: Return ReadOnly list
-                return _storedContacts;
-            }
-        }
-
-        public INotifyingCollection<IGroup> Groups
-        {
-            get
-            {
-                //TODO: Return ReadOnly list
-                return _groups;
-            }
-        }
-
-        public IGroup MasterGroup { get; private set; }
+        public IcqGroup MasterGroup { get; private set; }
 
         public void RegisterLocalContactList(int itemCount, DateTime dateChanged)
         {
@@ -212,46 +105,245 @@ namespace JCsTools.JCQ.IcqInterface
         public event EventHandler ContactListActivated;
         public event EventHandler<StatusChangedEventArgs> ContactStatusChanged;
 
-        private IGroup GetGroupByGroupId(int groupId)
+        IGroup IStorageService.MasterGroup
+        {
+            get { return MasterGroup; }
+        }
+
+        IReadOnlyNotifyingCollection<IContact> IStorageService.Contacts
+        {
+            get { return _storedContacts; }
+        }
+
+        IReadOnlyNotifyingCollection<IGroup> IStorageService.Groups
+        {
+            get { return _groups; }
+        }
+
+        IContact IStorageService.GetContactByIdentifier(string identifier)
+        {
+            return GetContactByIdentifier(identifier);
+        }
+
+        IGroup IStorageService.GetGroupByIdentifier(string identifier)
+        {
+            return GetGroupByIdentifier(identifier);
+        }
+
+        public bool IsContactStored(IContact contact)
+        {
+            var icqContact = contact as IcqContact;
+
+            if (icqContact == null)
+                throw new ArgumentException("Argument of type IcqContact required", "contact");
+
+            return IsContactStored(icqContact);
+        }
+
+        public Task AddContact(IContact contact, IGroup group)
+        {
+            var icqContact = contact as IcqContact;
+            var icqGroup = group as IcqGroup;
+
+            if (icqContact == null)
+                throw new ArgumentException("Argument of type IcqContact required", "contact");
+
+            if (icqGroup == null)
+                throw new ArgumentException("Argument of type IcqGroup required", "group");
+
+            return AddContact(icqContact, icqGroup);
+        }
+
+        public void AttachContact(IContact contact, IGroup group, bool stored)
+        {
+            var icqContact = contact as IcqContact;
+            var icqGroup = group as IcqGroup;
+
+            if (icqContact == null)
+                throw new ArgumentException("Argument of type IcqContact required", "contact");
+
+            if (icqGroup == null)
+                throw new ArgumentException("Argument of type IcqGroup required", "group");
+
+            AttachContact(icqContact, icqGroup, stored);
+        }
+
+        public Task RemoveContact(IContact contact, IGroup group)
+        {
+            var icqContact = contact as IcqContact;
+            var icqGroup = group as IcqGroup;
+
+            if (icqContact == null)
+                throw new ArgumentException("Argument of type IcqContact required", "contact");
+
+            if (icqGroup == null)
+                throw new ArgumentException("Argument of type IcqGroup required", "group");
+
+            return RemoveContact(icqContact, icqGroup);
+        }
+
+        public Task UpdateContact(IContact contact)
+        {
+            var icqContact = contact as IcqContact;
+
+            if (icqContact == null)
+                throw new ArgumentException("Argument of type IcqContact required", "contact");
+
+            return UpdateContact(icqContact);
+        }
+
+        public Task AddGroup(IGroup group)
+        {
+            var icqGroup = group as IcqGroup;
+
+            if (icqGroup == null)
+                throw new ArgumentException("Argument of type IcqGroup required", "group");
+
+            return AddGroup(icqGroup);
+        }
+
+        public Task RemoveGroup(IGroup group)
+        {
+            var icqGroup = group as IcqGroup;
+
+            if (icqGroup == null)
+                throw new ArgumentException("Argument of type IcqGroup required", "group");
+
+            return RemoveGroup(icqGroup);
+        }
+
+        public Task UpdateGroup(IGroup group)
+        {
+            var icqGroup = group as IcqGroup;
+
+            if (icqGroup == null)
+                throw new ArgumentException("Argument of type IcqGroup required", "group");
+
+            return UpdateGroup(icqGroup);
+        }
+
+        public IcqContact GetContactByIdentifier(string identifier)
+        {
+            IcqContact contact;
+
+            if (!_allContacts.Contains(identifier))
+            {
+                contact = new IcqContact(identifier, identifier);
+
+                _allContacts.Add(contact);
+
+                contact.PropertyChanged += OnContactPropertyChanged;
+            }
+            else
+            {
+                contact = _allContacts[identifier];
+            }
+
+            return contact;
+        }
+
+        public IcqGroup GetGroupByIdentifier(string identifier)
+        {
+            return _groups.Contains(identifier) ? _groups[identifier] : null;
+        }
+
+        public Task AddContact(IcqContact contact, IcqGroup group)
+        {
+            var trans = new AddContactTransaction(this, contact, group);
+
+            return CommitSSITransaction(trans);
+        }
+
+        public Task RemoveContact(IcqContact contact, IcqGroup group)
+        {
+            var trans = new RemoveContactTransaction(this, contact);
+
+            return CommitSSITransaction(trans);
+        }
+
+        public void AttachContact(IcqContact contact, IcqGroup group, bool stored)
+        {
+            if (!_allContacts.Contains(contact.Identifier))
+            {
+                _allContacts.Add(contact);
+
+                contact.PropertyChanged += OnContactPropertyChanged;
+            }
+
+            if (!stored) return;
+
+            if (!_storedContacts.Contains(contact.Identifier))
+                _storedContacts.Add(contact);
+
+            if (!group.Contacts.Contains(contact))
+                group.Contacts.Add(contact);
+        }
+
+        public Task AddGroup(IcqGroup group)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveGroup(IcqGroup group)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateContact(IcqContact contact)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateGroup(IcqGroup group)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsContactStored(IcqContact contact)
+        {
+            return _storedContacts.Contains(contact);
+        }
+
+        private IcqGroup GetGroupByGroupId(int groupId)
         {
             return _groups.Cast<IcqGroup>().FirstOrDefault(g => g.GroupId == groupId);
         }
 
-        public int GetNextSSIItemId()
+        public int GetNextSsiItemId()
         {
             return Interlocked.Increment(ref _maxSsiItemId);
         }
 
-        internal void InnerAddContactToStorage(IContact contact, IGroup @group)
+        internal void InnerAddContactToStorage(IcqContact contact, IcqGroup group)
         {
             if (!_storedContacts.Contains(contact.Identifier))
                 _storedContacts.Add(contact);
 
-            ((IcqContact)contact).SetGroup(@group);
+            contact.SetGroup(group);
 
             if (!contact.Group.Contacts.Contains(contact))
-                contact.Group.Contacts.Add(contact);
+                group.Contacts.Add(contact);
         }
 
-        internal void InnerAddContactToVisibleList(IContact contact)
+        internal void InnerAddContactToVisibleList(IcqContact contact)
         {
             if (!_visibleList.Contains(contact))
                 _visibleList.Add(contact);
         }
 
-        internal void InnerAddContactToInvisibleList(IContact contact)
+        internal void InnerAddContactToInvisibleList(IcqContact contact)
         {
             if (!_invisibleList.Contains(contact))
                 _invisibleList.Add(contact);
         }
 
-        internal void InnerAddContactToIgnoreList(IContact contact)
+        internal void InnerAddContactToIgnoreList(IcqContact contact)
         {
             if (!_ignoreList.Contains(contact))
                 _ignoreList.Add(contact);
         }
 
-        internal void InnerRemoveContactFromStorage(IContact contact)
+        internal void InnerRemoveContactFromStorage(IcqContact contact)
         {
             if (!_storedContacts.Contains(contact.Identifier))
                 _storedContacts.Remove(contact.Identifier);
@@ -260,30 +352,30 @@ namespace JCsTools.JCQ.IcqInterface
                 contact.Group.Contacts.Remove(contact);
         }
 
-        internal void InnerRemoveContactFromVisibleList(IContact contact)
+        internal void InnerRemoveContactFromVisibleList(IcqContact contact)
         {
             if (_visibleList.Contains(contact))
                 _visibleList.Remove(contact);
         }
 
-        internal void InnerRemoveContactFromInvisibleList(IContact contact)
+        internal void InnerRemoveContactFromInvisibleList(IcqContact contact)
         {
             if (_invisibleList.Contains(contact))
                 _invisibleList.Remove(contact);
         }
 
-        internal void InnerRemoveContactFromIgnoreList(IContact contact)
+        internal void InnerRemoveContactFromIgnoreList(IcqContact contact)
         {
             if (_ignoreList.Contains(contact))
                 _ignoreList.Remove(contact);
         }
 
-        public async Task CommitSSITransaction(ISSITransaction transaction)
+        public async Task CommitSSITransaction(ISsiTransaction transaction)
         {
             // Check wheter all prerequirements are met to commit the transaction.
             transaction.Validate();
 
-            var transfer = (IIcqDataTranferService)Context.GetService<IConnector>();
+            var transfer = (IIcqDataTranferService) Context.GetService<IConnector>();
 
             // Create the transaction data
             var beginTransaction = new Snac1311();
@@ -292,7 +384,7 @@ namespace JCsTools.JCQ.IcqInterface
 
             //_transactionCompletionSource = new TaskCompletionSource<SSIActionResultCode>();
             // TODO: Check that there are no concurrent transactions!
-            _transactionSemaphore= new SemaphoreSlim(0,1);
+            _transactionSemaphore = new SemaphoreSlim(0, 1);
 
             // Send data.
             await transfer.Send(beginTransaction, item, endTransaction);
@@ -303,16 +395,16 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 throw new TimeoutException("Server did not respond.");
             }
-            
+
             transaction.OnComplete(_codeSsiAkk);
 
             _transactionSemaphore = null;
         }
 
-        public void DetachContact(IContact contact, IGroup @group)
+        public void DetachContact(IcqContact contact, IcqGroup group)
         {
-            if (@group.Contacts.Contains(contact))
-                @group.Contacts.Add(contact);
+            if (group.Contacts.Contains(contact))
+                group.Contacts.Add(contact);
 
             if (_storedContacts.Contains(contact.Identifier))
                 _storedContacts.Add(contact);
@@ -343,15 +435,15 @@ namespace JCsTools.JCQ.IcqInterface
                 {
                     var identifier = ssiGroup.ItemName;
 
-                    var @group = new IcqGroup(identifier, ssiGroup.GroupId);
+                    var group = new IcqGroup(identifier, ssiGroup.GroupId);
 
-                    if (@group.GroupId == 0)
+                    if (group.GroupId == 0)
                     {
-                        MasterGroup = @group;
+                        MasterGroup = group;
                     }
                     else
                     {
-                        _groups.Add(@group);
+                        _groups.Add(group);
                     }
                 }
 
@@ -363,21 +455,21 @@ namespace JCsTools.JCQ.IcqInterface
                 foreach (var ssiContact in dataIn.BuddyRecords)
                 {
                     var identifier = ssiContact.ItemName;
-                    var @group = GetGroupByGroupId(ssiContact.GroupId);
+                    var group = GetGroupByGroupId(ssiContact.GroupId);
 
                     int identifierId;
 
                     if (!int.TryParse(identifier, out identifierId))
                         continue;
 
-                    var contact = (IcqContact)GetContactByIdentifier(identifier);
+                    var contact = GetContactByIdentifier(identifier);
 
                     if (contact.LastShortUserInfoRequest <= DateTime.MinValue)
                         contact.Name = ssiContact.LocalScreenName.LocalScreenName;
                     contact.ItemId = ssiContact.ItemId;
-                    contact.SetGroup(@group);
+                    contact.SetGroup(group);
 
-                    AttachContact(contact, @group, true);
+                    AttachContact(contact, group, true);
                 }
 
                 foreach (var record in dataIn.DenyRecords)
@@ -385,7 +477,7 @@ namespace JCsTools.JCQ.IcqInterface
                     var identifier = record.ItemName;
                     var contact = GetContactByIdentifier(identifier);
 
-                    ((IcqContact)contact).DenyRecordItemId = record.ItemId;
+                    contact.DenyRecordItemId = record.ItemId;
 
                     _invisibleList.Add(contact);
                 }
@@ -395,7 +487,7 @@ namespace JCsTools.JCQ.IcqInterface
                     var identifier = record.ItemName;
                     var contact = GetContactByIdentifier(identifier);
 
-                    ((IcqContact)contact).PermitRecordItemId = record.ItemId;
+                    contact.PermitRecordItemId = record.ItemId;
 
                     _visibleList.Add(contact);
                 }
@@ -405,7 +497,7 @@ namespace JCsTools.JCQ.IcqInterface
                     var identifier = record.ItemName;
                     var contact = GetContactByIdentifier(identifier);
 
-                    ((IcqContact)contact).IgnoreRecordItemId = record.ItemId;
+                    contact.IgnoreRecordItemId = record.ItemId;
 
                     _ignoreList.Add(contact);
                 }
@@ -451,29 +543,29 @@ namespace JCsTools.JCQ.IcqInterface
                 {
                     var identifier = ssiGroup.ItemName;
 
-                    var @group = new IcqGroup(identifier, ssiGroup.GroupId);
+                    var group = new IcqGroup(identifier, ssiGroup.GroupId);
 
-                    _groups.Add(@group);
+                    _groups.Add(group);
                 }
 
                 foreach (var ssiContact in dataIn.BuddyRecords)
                 {
                     var identifier = ssiContact.ItemName;
-                    var @group = GetGroupByGroupId(ssiContact.GroupId);
+                    var group = GetGroupByGroupId(ssiContact.GroupId);
 
                     int identifierId;
 
                     if (!int.TryParse(identifier, out identifierId))
                         continue;
 
-                    var contact = (IcqContact)GetContactByIdentifier(identifier);
+                    var contact = GetContactByIdentifier(identifier);
 
                     if (contact.LastShortUserInfoRequest <= DateTime.MinValue)
                         contact.Name = ssiContact.LocalScreenName.LocalScreenName;
                     contact.ItemId = ssiContact.ItemId;
-                    contact.SetGroup(@group);
+                    contact.SetGroup(group);
 
-                    AttachContact(contact, @group, true);
+                    AttachContact(contact, group, true);
                 }
 
                 foreach (var record in dataIn.DenyRecords)
@@ -481,7 +573,7 @@ namespace JCsTools.JCQ.IcqInterface
                     var identifier = record.ItemName;
                     var contact = GetContactByIdentifier(identifier);
 
-                    ((IcqContact)contact).DenyRecordItemId = record.ItemId;
+                    contact.DenyRecordItemId = record.ItemId;
 
                     _invisibleList.Add(contact);
                 }
@@ -491,7 +583,7 @@ namespace JCsTools.JCQ.IcqInterface
                     var identifier = record.ItemName;
                     var contact = GetContactByIdentifier(identifier);
 
-                    ((IcqContact)contact).PermitRecordItemId = record.ItemId;
+                    contact.PermitRecordItemId = record.ItemId;
 
                     _visibleList.Add(contact);
                 }
@@ -501,7 +593,7 @@ namespace JCsTools.JCQ.IcqInterface
                     var identifier = record.ItemName;
                     var contact = GetContactByIdentifier(identifier);
 
-                    ((IcqContact)contact).IgnoreRecordItemId = record.ItemId;
+                    contact.IgnoreRecordItemId = record.ItemId;
 
                     _ignoreList.Add(contact);
                 }
@@ -518,32 +610,24 @@ namespace JCsTools.JCQ.IcqInterface
 
             try
             {
-                foreach (var record in dataIn.DenyRecords)
+                foreach (var contact in dataIn.DenyRecords.Select(record => GetContactByIdentifier(record.ItemName)))
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
-
-                    ((IcqContact)contact).DenyRecordItemId = 0;
+                    contact.DenyRecordItemId = 0;
 
                     _invisibleList.Remove(contact);
                 }
 
-                foreach (var record in dataIn.PermitRecords)
+                foreach (var contact in dataIn.PermitRecords.Select(record => GetContactByIdentifier(record.ItemName)))
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
-
-                    ((IcqContact)contact).PermitRecordItemId = 0;
+                    contact.PermitRecordItemId = 0;
 
                     _visibleList.Remove(contact);
                 }
 
-                foreach (var record in dataIn.IgnoreListRecords)
+                foreach (
+                    var contact in dataIn.IgnoreListRecords.Select(record => GetContactByIdentifier(record.ItemName)))
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
-
-                    ((IcqContact)contact).IgnoreRecordItemId = 0;
+                    contact.IgnoreRecordItemId = 0;
 
                     _ignoreList.Remove(contact);
                 }
@@ -551,25 +635,25 @@ namespace JCsTools.JCQ.IcqInterface
                 foreach (var ssiContact in dataIn.BuddyRecords)
                 {
                     var identifier = ssiContact.ItemName;
-                    var @group = GetGroupByGroupId(ssiContact.GroupId);
+                    var group = GetGroupByGroupId(ssiContact.GroupId);
 
                     int identifierId;
 
                     if (!int.TryParse(identifier, out identifierId))
                         continue;
 
-                    var contact = (IcqContact)GetContactByIdentifier(identifier);
+                    var contact = GetContactByIdentifier(identifier);
 
-                    DetachContact(contact, @group);
+                    DetachContact(contact, group);
                 }
 
                 foreach (var ssiGroup in dataIn.GroupRecords)
                 {
                     var identifier = ssiGroup.ItemName;
 
-                    var @group = new IcqGroup(identifier, ssiGroup.GroupId);
+                    var group = new IcqGroup(identifier, ssiGroup.GroupId);
 
-                    _groups.Remove(@group);
+                    _groups.Remove(group);
                 }
             }
             catch (Exception ex)

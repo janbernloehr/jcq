@@ -49,7 +49,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         SendRegistrationStatsReport = 0xaa5,
         SendShortcutBarStatsReport = 0xaaf,
         SaveInfoTlvBasedRequest = 0xc3a,
-        ClientSendSMSRequest = 0x1482,
+        ClientSendSmsRequest = 0x1482,
         ClientSpamReportRequest = 0x2008
     }
 }

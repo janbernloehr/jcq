@@ -58,12 +58,6 @@
     <Compile Include="DefaultReferenceFormatterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Jcq.Xml.Formatter\Jcq.Xml.Formatter.csproj">
-      <Project>{6DA666D9-A101-4416-B16D-8B9D91820A52}</Project>
-      <Name>Jcq.Xml.Formatter</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

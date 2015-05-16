@@ -19,14 +19,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Xml;
 using JCsTools.JCQ.IcqInterface;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 using JCsTools.JCQ.ViewModel;
-using JCsTools.Xml.Formatter;
 using Newtonsoft.Json;
 
 namespace JCsTools.JCQ.Ux
@@ -134,7 +130,8 @@ namespace JCsTools.JCQ.Ux
 
             foreach (var pair in _Cache)
             {
-                var fiHistoryFile = new FileInfo(Path.Combine(StorageLocation.FullName, string.Format("{0}.json", pair.Key.Identifier)));
+                var fiHistoryFile =
+                    new FileInfo(Path.Combine(StorageLocation.FullName, string.Format("{0}.json", pair.Key.Identifier)));
 
                 using (var writer = new StreamWriter(fiHistoryFile.FullName))
                 {

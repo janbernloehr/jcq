@@ -21,31 +21,29 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class RemoveContactFromVisibleListTransaction : BaseSSITransaction
+    public class RemoveContactFromVisibleListTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _Contact;
+        private readonly IcqContact _contact;
 
         public RemoveContactFromVisibleListTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _Contact = contact;
+            _contact = contact;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public override Snac CreateSnac()
         {
-            Snac130A data;
-            SSIPermitRecord item;
+            var item = new SSIPermitRecord
+            {
+                ItemName = Contact.Identifier,
+                ItemId = Contact.PermitRecordItemId
+            };
 
-            item = new SSIPermitRecord();
-
-            item.ItemName = Contact.Identifier;
-            item.ItemId = Contact.PermitRecordItemId;
-
-            data = new Snac130A();
+            var data = new Snac130A();
             data.PermitRecords.Add(item);
 
             return data;
@@ -62,7 +60,6 @@ namespace JCsTools.JCQ.IcqInterface
                     throw new InvalidOperationException(
                         string.Format("Cannot remove contact '{0}' {1} from visible list: {2}", Contact.Name,
                             Contact.Identifier, action));
-                    break;
             }
         }
 

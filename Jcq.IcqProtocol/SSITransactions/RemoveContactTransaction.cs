@@ -21,33 +21,31 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class RemoveContactTransaction : BaseSSITransaction
+    public class RemoveContactTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _Contact;
+        private readonly IcqContact _contact;
 
         public RemoveContactTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _Contact = contact;
+            _contact = contact;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public override Snac CreateSnac()
         {
-            Snac130A data;
-            SSIBuddyRecord item;
-
-            item = new SSIBuddyRecord();
-
-            item.ItemId = Contact.ItemId;
-            item.ItemName = Contact.Identifier;
-            item.GroupId = ((IcqGroup) Contact.Group).GroupId;
+            var item = new SSIBuddyRecord
+            {
+                ItemId = Contact.ItemId,
+                ItemName = Contact.Identifier,
+                GroupId = Contact.Group.GroupId
+            };
 
             // Create delete buddy snac
-            data = new Snac130A();
+            var data = new Snac130A();
             data.BuddyRecords.Add(item);
 
             return data;
@@ -63,7 +61,6 @@ namespace JCsTools.JCQ.IcqInterface
                 default:
                     throw new InvalidOperationException(string.Format("Cannot remove contact '{0}' {1}: {2}",
                         Contact.Name, Contact.Identifier, action));
-                    break;
             }
         }
 

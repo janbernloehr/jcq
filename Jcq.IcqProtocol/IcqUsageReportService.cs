@@ -39,9 +39,7 @@ namespace JCsTools.JCQ.IcqInterface
 
         void IUsageReportService.SendUsageReport()
         {
-            Snac0B03 dataOut;
-
-            dataOut = new Snac0B03();
+            var dataOut = new Snac0B03();
 
             dataOut.TlvUsageReport.ScreenName = Context.Identity.Identifier;
 

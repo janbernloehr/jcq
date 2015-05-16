@@ -21,31 +21,29 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class RemoveContactFromInvisibleListTransaction : BaseSSITransaction
+    public class RemoveContactFromInvisibleListTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _Contact;
+        private readonly IcqContact _contact;
 
         public RemoveContactFromInvisibleListTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _Contact = contact;
+            _contact = contact;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public override Snac CreateSnac()
         {
-            Snac130A data;
-            SSIDenyRecord item;
+            var item = new SSIDenyRecord
+            {
+                ItemName = Contact.Identifier,
+                ItemId = Contact.DenyRecordItemId
+            };
 
-            item = new SSIDenyRecord();
-
-            item.ItemName = Contact.Identifier;
-            item.ItemId = Contact.DenyRecordItemId;
-
-            data = new Snac130A();
+            var data = new Snac130A();
             data.DenyRecords.Add(item);
 
             return data;
@@ -62,7 +60,6 @@ namespace JCsTools.JCQ.IcqInterface
                     throw new InvalidOperationException(
                         string.Format("Cannot remove contact '{0}' {1} from invisible list: {2}", Contact.Name,
                             Contact.Identifier, action));
-                    break;
             }
         }
 

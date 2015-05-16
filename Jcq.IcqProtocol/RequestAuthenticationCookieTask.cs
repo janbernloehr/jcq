@@ -17,14 +17,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Jcq.IcqProtocol.Internal;
 using JCsTools.Core;
-using JCsTools.Core.Interfaces;
 using JCsTools.JCQ.IcqInterface.DataTypes;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 
@@ -182,7 +179,8 @@ namespace JCsTools.JCQ.IcqInterface
         private readonly IcqConnector _connector;
         private readonly RequestAuthenticationCookieState _state;
 
-        private readonly TaskCompletionSource<RequestAuthenticationCookieState> _taskCompletionSource = new TaskCompletionSource<RequestAuthenticationCookieState>();
+        private readonly TaskCompletionSource<RequestAuthenticationCookieState> _taskCompletionSource =
+            new TaskCompletionSource<RequestAuthenticationCookieState>();
 
         public RequestAuthenticationCookieUnitOfWork(IcqConnector owner)
         {
@@ -199,7 +197,7 @@ namespace JCsTools.JCQ.IcqInterface
         {
             get { return _connector; }
         }
-        
+
         protected void SetCompleted(RequestAuthenticationCookieState state)
         {
             // When the task is completed we don't have to listen for new
@@ -261,14 +259,14 @@ namespace JCsTools.JCQ.IcqInterface
 
             // we are only interested in tlvs and their type number.
             var tlvsByTypeNumer =
-                (from x in flap.DataItems where x is Tlv select (Tlv)x).ToDictionary(tlv => tlv.TypeNumber);
+                (from x in flap.DataItems where x is Tlv select (Tlv) x).ToDictionary(tlv => tlv.TypeNumber);
 
             if (tlvsByTypeNumer.ContainsKey(0x5) & tlvsByTypeNumer.ContainsKey(0x6))
             {
                 // if these tlvs are present the authentication succeeded and everything is okay :)
 
-                var bosServerTlv = (TlvBosServerAddress)tlvsByTypeNumer[0x5];
-                var authCookieTlv = (TlvAuthorizationCookie)tlvsByTypeNumer[0x6];
+                var bosServerTlv = (TlvBosServerAddress) tlvsByTypeNumer[0x5];
+                var authCookieTlv = (TlvAuthorizationCookie) tlvsByTypeNumer[0x6];
 
                 state.BosServerAddress = bosServerTlv.BosServerAddress;
                 state.AuthCookie = authCookieTlv.AuthorizationCookie;
@@ -280,7 +278,7 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 // if this tlv is present the authentication has failed.
 
-                var authFailedTlv = (TlvAuthFailed)tlvsByTypeNumer[0x8];
+                var authFailedTlv = (TlvAuthFailed) tlvsByTypeNumer[0x8];
 
                 Kernel.Logger.Log("IcqConnector", TraceEventType.Error, "Connection to server failed. ErrorSubCode: {0}",
                     authFailedTlv.ErrorSubCode);
@@ -298,6 +296,5 @@ namespace JCsTools.JCQ.IcqInterface
                 SetCompleted(state);
             }
         }
-
     }
 }

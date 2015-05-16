@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BasicSyncTask.cs" company="Jan-Cornelius Molnar">
+// <copyright file="IReadOnlyNotifyingCollection.cs" company="Jan-Cornelius Molnar">
 // Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
 // 
 // This file is part of JCQ.
@@ -16,22 +16,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
-namespace JCsTools.Core
+namespace JCsTools.Core.Interfaces
 {
-    //public abstract class BasicSyncTask : BaseTask
-    //{
-    //    public override bool IsAsync
-    //    {
-    //        get { return false; }
-    //    }
-
-    //    protected abstract override void PerformOperation();
-
-    //    public override void WaitCompleted()
-    //    {
-    //        throw new NotImplementedException("You cannot wait for a synchronous task.");
-    //    }
-    //}
+    public interface IReadOnlyNotifyingCollection<out T> : IEnumerable<T>, INotifyCollectionChanged,
+        INotifyPropertyChanged
+    {
+    }
 }

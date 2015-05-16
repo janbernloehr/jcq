@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 namespace JCsTools.JCQ.IcqInterface.Internal
@@ -27,54 +26,52 @@ namespace JCsTools.JCQ.IcqInterface.Internal
     public interface ITcpContext
     {
         /// <summary>
-        /// Gets the number of bytes received.
+        ///     Gets the number of bytes received.
         /// </summary>
         long BytesReceived { get; }
 
         /// <summary>
-        /// Gets the number of bytes sent.
+        ///     Gets the number of bytes sent.
         /// </summary>
         long BytesSent { get; }
 
         /// <summary>
-        /// Gets a unique identifier for this ITcpContext.
+        ///     Gets a unique identifier for this ITcpContext.
         /// </summary>
         string Id { get; }
 
         /// <summary>
-        /// Gets the connection state.
+        ///     Gets the connection state.
         /// </summary>
         TcpConnectionState ConnectionState { get; }
 
         /// <summary>
-        /// Gets a value indicating whether an imminent closing of the connection is expected.
+        ///     Gets a value indicating whether an imminent closing of the connection is expected.
         /// </summary>
         bool ConnectionCloseExpected { get; }
-        
-        /// <summary>
-        /// Connect to the given endpoint. If the connection is successfull, 
-        /// the ReceivedDataBuffer is filled with incoming data and data can be send to the endpoint.
-        /// </summary>
-        /// <param name="endPoint"></param>
-        void Connect(IPEndPoint endPoint);
 
-        /// <summary>
-        /// Disconnect from the endpoint. 
-        /// </summary>
-        void Disconnect();
-
-        void SendData(List<byte> data);
-        
-        void SetCloseExpected();
-        void SetCloseUnexpected();
-        
-        event EventHandler<ConnectedEventArgs> Connected;
-        event EventHandler<DisconnectEventArgs> Disconnected;
         //event EventHandler<DataReceivedEventArgs> DataReceived;
 
 
         BufferBlock<List<byte>> ReceivedDataBuffer { get; }
 
+        /// <summary>
+        ///     Connect to the given endpoint. If the connection is successfull,
+        ///     the ReceivedDataBuffer is filled with incoming data and data can be send to the endpoint.
+        /// </summary>
+        /// <param name="endPoint"></param>
+        void Connect(IPEndPoint endPoint);
+
+        /// <summary>
+        ///     Disconnect from the endpoint.
+        /// </summary>
+        void Disconnect();
+
+        void SendData(List<byte> data);
+        void SetCloseExpected();
+        void SetCloseUnexpected();
+        event EventHandler<ConnectedEventArgs> Connected;
+        event EventHandler<DisconnectEventArgs> Disconnected;
     }
 
 

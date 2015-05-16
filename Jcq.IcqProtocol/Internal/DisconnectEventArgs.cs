@@ -30,7 +30,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
         }
 
         /// <summary>
-        /// Gets a value indicating whether the disconnection event was expected.
+        ///     Gets a value indicating whether the disconnection event was expected.
         /// </summary>
         public bool IsExpected
         {

@@ -18,8 +18,8 @@
 
 namespace JCsTools.Core.Interfaces
 {
-    public interface IServiceProvider<S> : IService where S : IService
+    public interface IServiceProvider<in TS> : IService where TS : IService
     {
-        T GetService<T>() where T : S;
+        T GetService<T>() where T : TS;
     }
 }

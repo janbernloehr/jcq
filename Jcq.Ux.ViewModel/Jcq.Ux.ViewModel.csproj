@@ -117,10 +117,6 @@
       <Project>{35b6186a-a870-4e76-9f7c-8311d7692d1a}</Project>
       <Name>Jcq.IdentityManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Jcq.Xml.Formatter\Jcq.Xml.Formatter.csproj">
-      <Project>{6da666d9-a101-4416-b16d-8b9d91820a52}</Project>
-      <Name>Jcq.Xml.Formatter</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

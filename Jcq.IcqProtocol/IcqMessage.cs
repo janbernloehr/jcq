@@ -34,9 +34,7 @@ namespace JCsTools.JCQ.IcqInterface
         }
 
         public IContact Sender { get; set; }
-
         public IContact Recipient { get; set; }
-
         public string Text { get; set; }
     }
 }

@@ -27,44 +27,9 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqContext : Service, IContext
     {
-        private readonly IcqContact _identity;
-        //Private _Connector As IcqConnector
-        //Public ReadOnly Property Connector() As IcqConnector
-        //    Get
-        //        Return _Connector
-        //    End Get
-        //End Property
-
-        //Private _MessageService As IcqMessageService
-        //Public ReadOnly Property MessageService() As IcqMessageService
-        //    Get
-        //        Return _MessageService
-        //    End Get
-        //End Property
-
-        //Private _StorageService As IcqStorageService
-        //Public ReadOnly Property StorageService() As IcqStorageService
-        //    Get
-        //        Return _StorageService
-        //    End Get
-        //End Property
-
-        //Private _IconService As IconService
-        //Public ReadOnly Property IconService() As IconService
-        //    Get
-        //        Return _IconService
-        //    End Get
-        //End Property
-
-        //Private _DataWarehouse As IcqDataWarehouse
-        //Public ReadOnly Property DataWarehouse() As IcqDataWarehouse
-        //    Get
-        //        Return _DataWarehouse
-        //    End Get
-        //End Property
-
         private readonly Dictionary<Type, IContextService> _cachedBindings = new Dictionary<Type, IContextService>();
         private readonly Dictionary<Type, IContextService> _cachedInstances = new Dictionary<Type, IContextService>();
+        private readonly IcqContact _identity;
 
         public IcqContext(string uin)
         {

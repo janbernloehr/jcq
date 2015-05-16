@@ -24,7 +24,6 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqStatusCode : IStatusCode
     {
-        //private readonly Hashtable _Attributes = new Hashtable();
         private readonly int _sortIndex;
 
         public IcqStatusCode(string name, UserStatus status, int sortIndex)
@@ -35,11 +34,6 @@ namespace JCsTools.JCQ.IcqInterface
         }
 
         public UserStatus UserStatus { get; private set; }
-        //public Hashtable Attributes
-        //{
-        //    get { return _Attributes; }
-        //}
-
         public string DisplayName { get; private set; }
 
         public int CompareTo(object obj)

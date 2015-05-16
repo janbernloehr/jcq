@@ -55,7 +55,7 @@ namespace JCsTools.Core.Configuration
             get { return (T) BaseGet(index); }
             set
             {
-                if (!(BaseGet(index) == null))
+                if (BaseGet(index) != null)
                 {
                     BaseRemoveAt(index);
                 }

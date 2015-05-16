@@ -26,18 +26,18 @@ namespace JCsTools.Core.Exceptions
 {
     public class ExceptionService : Service, IExceptionService
     {
-        private readonly NotifyingCollection<IExceptionInformation> _Exceptions;
-        private readonly ReadOnlyNotifyingCollection<IExceptionInformation> _ReadOnlyExceptions;
+        private readonly NotifyingCollection<IExceptionInformation> _exceptions;
+        private readonly ReadOnlyNotifyingCollection<IExceptionInformation> _readOnlyExceptions;
 
         public ExceptionService()
         {
-            _Exceptions = new NotifyingCollection<IExceptionInformation>();
-            _ReadOnlyExceptions = new ReadOnlyNotifyingCollection<IExceptionInformation>(_Exceptions);
+            _exceptions = new NotifyingCollection<IExceptionInformation>();
+            _readOnlyExceptions = new ReadOnlyNotifyingCollection<IExceptionInformation>(_exceptions);
         }
 
         public ReadOnlyCollection<IExceptionInformation> Exceptions
         {
-            get { return _ReadOnlyExceptions; }
+            get { return _readOnlyExceptions; }
         }
 
         public void PublishException(Exception ex)
@@ -52,13 +52,11 @@ namespace JCsTools.Core.Exceptions
 
         public void PublishException(Exception ex, bool handled, bool displayed)
         {
-            ExceptionInformation info;
+            var info = new ExceptionInformation(ex, handled, displayed);
 
-            info = new ExceptionInformation(ex, handled, displayed);
-
-            lock (_Exceptions)
+            lock (_exceptions)
             {
-                _Exceptions.Add(info);
+                _exceptions.Add(info);
             }
 
             Kernel.Logger.Log("ExceptionService", TraceEventType.Error, ex.ToString());

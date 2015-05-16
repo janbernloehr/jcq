@@ -22,7 +22,7 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
     public interface IGroup : IStorageItem
     {
-        INotifyingCollection<IContact> Contacts { get; }
-        INotifyingCollection<IGroup> Groups { get; }
+        IReadOnlyNotifyingCollection<IContact> Contacts { get; }
+        IReadOnlyNotifyingCollection<IGroup> Groups { get; }
     }
 }

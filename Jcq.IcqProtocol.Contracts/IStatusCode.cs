@@ -17,13 +17,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 
 namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
     public interface IStatusCode : IComparable
     {
         string DisplayName { get; }
-        //Hashtable Attributes { get; }
     }
 }

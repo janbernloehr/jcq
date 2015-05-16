@@ -31,7 +31,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
         }
 
         /// <summary>
-        /// Gets the IPEndPoint to which the connection was established.
+        ///     Gets the IPEndPoint to which the connection was established.
         /// </summary>
         public IPEndPoint EndPoint
         {

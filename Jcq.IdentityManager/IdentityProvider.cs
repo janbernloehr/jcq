@@ -18,39 +18,39 @@
 
 using System.Linq;
 using JCsTools.Core;
+using JCsTools.Core.Interfaces;
 
 namespace JCsTools.IdentityManager
 {
     public abstract class IdentityProvider : IIdentityProvider
     {
-        protected NotifyingCollection<IIdentity> _Identities;
-
         protected IdentityProvider()
         {
-            _Identities = new NotifyingCollection<IIdentity>();
+            Identities = new NotifyingCollection<IIdentity>();
         }
+
+        public NotifyingCollection<IIdentity> Identities { get; private set; }
 
         public void CreateIdentity(IIdentity identity)
         {
-            _Identities.Add(identity);
+            Identities.Add(identity);
         }
 
         public IIdentity GetIdentityByIdentifier(string identifier)
         {
-            return (from id in _Identities
-                where
-                    id.Identifier == identifier
+            return (from id in Identities
+                where id.Identifier == identifier
                 select id).FirstOrDefault();
         }
 
         public void DeleteIdentity(IIdentity identity)
         {
-            _Identities.Remove(identity);
+            Identities.Remove(identity);
         }
 
-        public NotifyingCollection<IIdentity> Identities
+        INotifyingCollection<IIdentity> IIdentityProvider.Identities
         {
-            get { return _Identities; }
+            get { return Identities; }
         }
     }
 }

@@ -20,18 +20,18 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public abstract class BaseSSITransaction : ISSITransaction
+    public abstract class BaseSsiTransaction : ISsiTransaction
     {
-        private readonly IcqStorageService _Service;
+        private readonly IcqStorageService _service;
 
-        protected BaseSSITransaction(IcqStorageService owner)
+        protected BaseSsiTransaction(IcqStorageService owner)
         {
-            _Service = owner;
+            _service = owner;
         }
 
         public IcqStorageService Service
         {
-            get { return _Service; }
+            get { return _service; }
         }
 
         public abstract Snac CreateSnac();

@@ -18,12 +18,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
     public class MetaSearchByTlvRequest : MetaInformationRequest
     {
-        private readonly List<Tlv> _SearchTlvs = new List<Tlv>();
+        private readonly List<Tlv> _searchTlvs = new List<Tlv>();
 
         public MetaSearchByTlvRequest(MetaRequestSubType subtype) : base(subtype)
         {
@@ -31,21 +32,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public List<Tlv> SearchTlvs
         {
-            get { return _SearchTlvs; }
+            get { return _searchTlvs; }
         }
 
         public override int CalculateDataSize()
         {
-            int size;
-
-            size = 2;
-
-            foreach (var x in _SearchTlvs)
-            {
-                size += x.CalculateTotalSize();
-            }
-
-            return size;
+            return 2 + _searchTlvs.Sum(x => x.CalculateTotalSize());
         }
 
         public override void Deserialize(List<byte> data)
@@ -57,7 +49,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (var x in _SearchTlvs)
+            foreach (var x in _searchTlvs)
             {
                 data.AddRange(x.Serialize());
             }

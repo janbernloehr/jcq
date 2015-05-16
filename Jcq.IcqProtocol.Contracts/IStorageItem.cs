@@ -16,7 +16,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections;
 using System.ComponentModel;
 
 namespace JCsTools.JCQ.IcqInterface.Interfaces
@@ -25,6 +24,5 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
     {
         string Identifier { get; set; }
         string Name { get; set; }
-        //Hashtable Attributes { get; }
     }
 }

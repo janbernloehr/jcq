@@ -16,13 +16,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core;
+using JCsTools.Core.Interfaces;
 
 namespace JCsTools.IdentityManager
 {
     public interface IIdentityProvider
     {
-        NotifyingCollection<IIdentity> Identities { get; }
+        INotifyingCollection<IIdentity> Identities { get; }
         IIdentity GetIdentityByIdentifier(string identifier);
         void CreateIdentity(IIdentity identity);
         void DeleteIdentity(IIdentity identity);

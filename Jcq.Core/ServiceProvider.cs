@@ -23,56 +23,52 @@ using JCsTools.Core.Interfaces;
 
 namespace JCsTools.Core
 {
-    public class ServiceProvider<S> : Service, IServiceProvider<S> where S : IService
+    public class ServiceProvider<TS> : Service, IServiceProvider<TS> where TS : IService
     {
-        private const int WAIT_TIMEOUT = 20000;
+        private const int WaitTimeout = 20000;
         private readonly ReaderWriterLock _lock;
-        private readonly Dictionary<Type, S> mServices;
+        private readonly Dictionary<Type, TS> _services;
 
         public ServiceProvider()
         {
             _lock = new ReaderWriterLock();
-
-            mServices = new Dictionary<Type, S>();
+            _services = new Dictionary<Type, TS>();
         }
 
-        public C GetService<C>() where C : S
+        public TC GetService<TC>()
+            where TC : TS
         {
-            Type serviceContract;
-            var serviceImplementation = default(C);
-            Type serviceImplementationType;
-            LockCookie cookie;
-
-            serviceContract = typeof (C);
+            var serviceImplementation = default(TC);
+            var serviceContract = typeof (TC);
 
             try
             {
-                _lock.AcquireReaderLock(WAIT_TIMEOUT);
+                _lock.AcquireReaderLock(WaitTimeout);
 
-                if (!mServices.ContainsKey(serviceContract))
+                if (!_services.ContainsKey(serviceContract))
                 {
-                    serviceImplementationType = Kernel.Mapper.GetImplementationType<C>();
+                    var serviceImplementationType = Kernel.Mapper.GetImplementationType<TC>();
 
-                    foreach (var pair in mServices)
+                    foreach (var pair in _services)
                     {
-                        if (ReferenceEquals(pair.GetType(), serviceImplementationType) ||
+                        if (pair.GetType() == serviceImplementationType ||
                             pair.GetType().IsSubclassOf(serviceImplementationType) ||
                             serviceImplementationType.IsSubclassOf(pair.GetType()))
                         {
-                            serviceImplementation = (C) pair.Value;
+                            serviceImplementation = (TC) pair.Value;
                         }
                     }
 
                     if (serviceImplementation == null)
-                        serviceImplementation = Kernel.Mapper.CreateImplementation<C>();
+                        serviceImplementation = Kernel.Mapper.CreateImplementation<TC>();
 
                     if (serviceImplementation != null)
                     {
-                        cookie = _lock.UpgradeToWriterLock(WAIT_TIMEOUT);
+                        var cookie = _lock.UpgradeToWriterLock(WaitTimeout);
 
                         try
                         {
-                            mServices.Add(serviceContract, serviceImplementation);
+                            _services.Add(serviceContract, serviceImplementation);
                         }
                         finally
                         {
@@ -82,7 +78,7 @@ namespace JCsTools.Core
                 }
                 else
                 {
-                    serviceImplementation = (C) mServices[serviceContract];
+                    serviceImplementation = (TC) _services[serviceContract];
                 }
             }
             catch (Exception ex)

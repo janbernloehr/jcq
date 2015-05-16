@@ -84,31 +84,22 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 case UserStatus.Away:
                     return _Away;
-                    break;
                 case UserStatus.DoNotDisturb:
                     return _DoNotDisturb;
-                    break;
                 case UserStatus.FreeForChat:
                     return _Free4Chat;
-                    break;
                 case UserStatus.Invisible:
                     return _Invisible;
-                    break;
                 case UserStatus.NotAvailable:
                     return _NotAvailable;
-                    break;
                 case UserStatus.Occupied:
                     return _Occupied;
-                    break;
                 case UserStatus.Offline:
                     return _Offline;
-                    break;
                 case UserStatus.Online:
                     return _Online;
-                    break;
                 default:
                     return _Unknown;
-                    break;
             }
         }
     }

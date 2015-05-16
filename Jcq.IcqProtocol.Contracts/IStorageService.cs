@@ -27,8 +27,8 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
         bool IsContactListAvailable { get; }
         bool IsFreshContactList { get; }
         IContactListInfo Info { get; }
-        INotifyingCollection<IGroup> Groups { get; }
-        INotifyingCollection<IContact> Contacts { get; }
+        IReadOnlyNotifyingCollection<IGroup> Groups { get; }
+        IReadOnlyNotifyingCollection<IContact> Contacts { get; }
         IGroup MasterGroup { get; }
         event EventHandler ContactListActivated;
         event EventHandler<StatusChangedEventArgs> ContactStatusChanged;

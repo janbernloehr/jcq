@@ -23,17 +23,17 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
     public class FlapRequestSignInCookie : Flap
     {
-        private readonly TlvClientBuildNumber _ClientBuildNumber = new TlvClientBuildNumber();
-        private readonly TlvClientCountry _ClientCountry = new TlvClientCountry();
-        private readonly TlvClientDistributionNumber _ClientDistributionNumber = new TlvClientDistributionNumber();
-        private readonly TlvClientId _ClientId = new TlvClientId();
-        private readonly TlvClientIdString _ClientIdString = new TlvClientIdString();
-        private readonly TlvClientLanguage _ClientLanguage = new TlvClientLanguage();
-        private readonly TlvClientLesserVersion _ClientLesserVersion = new TlvClientLesserVersion();
-        private readonly TlvClientMajorVersion _ClientMajorVersion = new TlvClientMajorVersion();
-        private readonly TlvClientMinorVersion _ClientMinorVersion = new TlvClientMinorVersion();
-        private readonly TlvPassword _Password = new TlvPassword();
-        private readonly TlvScreenName _ScreenName = new TlvScreenName();
+        private readonly TlvClientBuildNumber _clientBuildNumber = new TlvClientBuildNumber();
+        private readonly TlvClientCountry _clientCountry = new TlvClientCountry();
+        private readonly TlvClientDistributionNumber _clientDistributionNumber = new TlvClientDistributionNumber();
+        private readonly TlvClientId _clientId = new TlvClientId();
+        private readonly TlvClientIdString _clientIdString = new TlvClientIdString();
+        private readonly TlvClientLanguage _clientLanguage = new TlvClientLanguage();
+        private readonly TlvClientLesserVersion _clientLesserVersion = new TlvClientLesserVersion();
+        private readonly TlvClientMajorVersion _clientMajorVersion = new TlvClientMajorVersion();
+        private readonly TlvClientMinorVersion _clientMinorVersion = new TlvClientMinorVersion();
+        private readonly TlvPassword _password = new TlvPassword();
+        private readonly TlvScreenName _screenName = new TlvScreenName();
 
         public FlapRequestSignInCookie() : base(FlapChannel.NewConnectionNegotiation)
         {
@@ -41,57 +41,57 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public TlvScreenName ScreenName
         {
-            get { return _ScreenName; }
+            get { return _screenName; }
         }
 
         public TlvPassword Password
         {
-            get { return _Password; }
+            get { return _password; }
         }
 
         public TlvClientIdString ClientIdString
         {
-            get { return _ClientIdString; }
+            get { return _clientIdString; }
         }
 
         public TlvClientId ClientId
         {
-            get { return _ClientId; }
+            get { return _clientId; }
         }
 
         public TlvClientMajorVersion ClientMajorVersion
         {
-            get { return _ClientMajorVersion; }
+            get { return _clientMajorVersion; }
         }
 
         public TlvClientMinorVersion ClientMinorVersion
         {
-            get { return _ClientMinorVersion; }
+            get { return _clientMinorVersion; }
         }
 
         public TlvClientLesserVersion ClientLesserVersion
         {
-            get { return _ClientLesserVersion; }
+            get { return _clientLesserVersion; }
         }
 
         public TlvClientBuildNumber ClientBuildNumber
         {
-            get { return _ClientBuildNumber; }
+            get { return _clientBuildNumber; }
         }
 
         public TlvClientDistributionNumber ClientDistributionNumber
         {
-            get { return _ClientDistributionNumber; }
+            get { return _clientDistributionNumber; }
         }
 
         public TlvClientLanguage ClientLanguage
         {
-            get { return _ClientLanguage; }
+            get { return _clientLanguage; }
         }
 
         public TlvClientCountry ClientCountry
         {
-            get { return _ClientCountry; }
+            get { return _clientCountry; }
         }
 
         public override void Deserialize(List<byte> data)
@@ -101,12 +101,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public override int CalculateDataSize()
         {
-            return 4 + _ScreenName.CalculateTotalSize() + _Password.CalculateTotalSize() +
-                   _ClientIdString.CalculateTotalSize() + _ClientId.CalculateTotalSize() +
-                   _ClientMajorVersion.CalculateTotalSize() + _ClientMinorVersion.CalculateTotalSize() +
-                   _ClientLesserVersion.CalculateTotalSize() + _ClientBuildNumber.CalculateTotalSize() +
-                   _ClientDistributionNumber.CalculateTotalSize() + _ClientLanguage.CalculateTotalSize() +
-                   _ClientCountry.CalculateTotalSize();
+            return 4 + _screenName.CalculateTotalSize() + _password.CalculateTotalSize() +
+                   _clientIdString.CalculateTotalSize() + _clientId.CalculateTotalSize() +
+                   _clientMajorVersion.CalculateTotalSize() + _clientMinorVersion.CalculateTotalSize() +
+                   _clientLesserVersion.CalculateTotalSize() + _clientBuildNumber.CalculateTotalSize() +
+                   _clientDistributionNumber.CalculateTotalSize() + _clientLanguage.CalculateTotalSize() +
+                   _clientCountry.CalculateTotalSize();
         }
 
         public override List<byte> Serialize()
@@ -114,17 +114,17 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             var data = base.Serialize();
 
             data.AddRange(ByteConverter.GetBytes((uint) 1));
-            data.AddRange(_ScreenName.Serialize());
-            data.AddRange(_Password.Serialize());
-            data.AddRange(_ClientIdString.Serialize());
-            data.AddRange(_ClientId.Serialize());
-            data.AddRange(_ClientMajorVersion.Serialize());
-            data.AddRange(_ClientMinorVersion.Serialize());
-            data.AddRange(_ClientLesserVersion.Serialize());
-            data.AddRange(_ClientBuildNumber.Serialize());
-            data.AddRange(_ClientDistributionNumber.Serialize());
-            data.AddRange(_ClientLanguage.Serialize());
-            data.AddRange(_ClientCountry.Serialize());
+            data.AddRange(_screenName.Serialize());
+            data.AddRange(_password.Serialize());
+            data.AddRange(_clientIdString.Serialize());
+            data.AddRange(_clientId.Serialize());
+            data.AddRange(_clientMajorVersion.Serialize());
+            data.AddRange(_clientMinorVersion.Serialize());
+            data.AddRange(_clientLesserVersion.Serialize());
+            data.AddRange(_clientBuildNumber.Serialize());
+            data.AddRange(_clientDistributionNumber.Serialize());
+            data.AddRange(_clientLanguage.Serialize());
+            data.AddRange(_clientCountry.Serialize());
 
             return data;
         }

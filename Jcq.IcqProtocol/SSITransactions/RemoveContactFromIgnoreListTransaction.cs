@@ -21,31 +21,29 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class RemoveContactFromIgnoreListTransaction : BaseSSITransaction
+    public class RemoveContactFromIgnoreListTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _Contact;
+        private readonly IcqContact _contact;
 
         public RemoveContactFromIgnoreListTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _Contact = contact;
+            _contact = contact;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public override Snac CreateSnac()
         {
-            Snac130A data;
-            SSIIgnoreListRecord item;
+            var item = new SSIIgnoreListRecord
+            {
+                ItemName = Contact.Identifier, 
+                ItemId = Contact.IgnoreRecordItemId
+            };
 
-            item = new SSIIgnoreListRecord();
-
-            item.ItemName = Contact.Identifier;
-            item.ItemId = Contact.IgnoreRecordItemId;
-
-            data = new Snac130A();
+            var data = new Snac130A();
             data.IgnoreListRecords.Add(item);
 
             return data;
@@ -62,7 +60,6 @@ namespace JCsTools.JCQ.IcqInterface
                     throw new InvalidOperationException(
                         string.Format("Cannot remove contact '{0}' {1} from ignore list: {2}", Contact.Name,
                             Contact.Identifier, action));
-                    break;
             }
         }
 

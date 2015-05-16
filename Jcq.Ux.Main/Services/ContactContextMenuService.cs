@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using JCsTools.Core;
@@ -189,7 +190,7 @@ namespace JCsTools.JCQ.Ux
                 contact = (ContactViewModel) fe.DataContext;
 
                 svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
-                svStorage.AddContact(contact.Model, svStorage.MasterGroup.Groups[0]);
+                svStorage.AddContact(contact.Model, svStorage.MasterGroup.Groups.First());
             }
             catch (Exception ex)
             {

@@ -22,7 +22,6 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -206,7 +205,6 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
             try
             {
-
                 while (context.ConnectionState == TcpConnectionState.Connected)
                 {
                     // This call will return on its own Thread Pool Thread to
@@ -228,7 +226,8 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                         {
                             // there is more data needed to deserialize the flap. wait for another cycle...
                             Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
-                                "{3}@{4}/{0}: caching {1}, {2} required.", iloop, _analyzeBuffer.Count - index, desc.TotalSize, id, context.Id);
+                                "{3}@{4}/{0}: caching {1}, {2} required.", iloop, _analyzeBuffer.Count - index,
+                                desc.TotalSize, id, context.Id);
 
                             break;
                         }
@@ -250,7 +249,6 @@ namespace JCsTools.JCQ.IcqInterface.Internal
             {
                 Kernel.Exceptions.PublishException(ex);
             }
-
         }
 
         private void ProcessFlap(List<byte> flapData)
@@ -289,7 +287,6 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                 // the analyze loop should still continue.
                 Kernel.Exceptions.PublishException(ex);
             }
-
         }
 
         //private void OnTcpContextDataReceived(object sender, DataReceivedEventArgs e)
@@ -393,8 +390,9 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                 {
                     var dataItem = await sendBuffer.ReceiveAsync();
 
-                    Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose, "{0}@{1} SendBuffer received data {2} items in buffer",
-                            id, context.Id,  _sendBuffer.Count);
+                    Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
+                        "{0}@{1} SendBuffer received data {2} items in buffer",
+                        id, context.Id, _sendBuffer.Count);
 
                     try
                     {

@@ -28,7 +28,7 @@ namespace JCsTools.JCQ.IcqInterface
         {
             OfflineSentDate = dateSent;
         }
-         
+
         public DateTime OfflineSentDate { get; set; }
     }
 }

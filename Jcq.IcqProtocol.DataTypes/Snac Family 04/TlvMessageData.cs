@@ -29,7 +29,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public TlvMessageData()
             : base(0x2)
         {
-            _requiredCapabilities.AddRange(new Byte[] { 1, 6 });
+            _requiredCapabilities.AddRange(new Byte[] {1, 6});
         }
 
         public List<byte> RequiredCapabilities
@@ -53,7 +53,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             // fragment version
             data.Add(0x1);
 
-            data.AddRange(ByteConverter.GetBytes((ushort)_requiredCapabilities.Count));
+            data.AddRange(ByteConverter.GetBytes((ushort) _requiredCapabilities.Count));
             data.AddRange(_requiredCapabilities);
 
             // fragment identifier
@@ -63,7 +63,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             // Unicode (does not work ...)
             var messageBytes = Encoding.BigEndianUnicode.GetBytes(MessageText);
-            data.AddRange(ByteConverter.GetBytes((ushort)(4 + messageBytes.Length)));
+            data.AddRange(ByteConverter.GetBytes((ushort) (4 + messageBytes.Length)));
 
             data.AddRange(new byte[]
             {
@@ -72,8 +72,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 0x0,
                 0x0
             });
-            
-             data.AddRange(messageBytes);
+
+            data.AddRange(messageBytes);
 
             //var messageBytes = ByteConverter.GetBytes(MessageText);
             //data.AddRange(ByteConverter.GetBytes((ushort)(4 + messageBytes.Length)));

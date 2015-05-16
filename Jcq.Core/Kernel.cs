@@ -21,16 +21,11 @@ using JCsTools.Core.Interfaces.Exceptions;
 
 namespace JCsTools.Core
 {
-    public sealed class Kernel
+    public static class Kernel
     {
         private static readonly IMapper _Mapper = new Mapper();
         private static readonly IServiceProvider<IService> _ServiceProvider = new ServiceProvider<IService>();
         private static readonly ILoggingService _Logger = Services.GetService<ILoggingService>();
-        private static readonly ITaskScheduler _TaskScheduler = new SimpleTaskScheduler();
-
-        private Kernel()
-        {
-        }
 
         /// <summary>
         ///     Provides services derived from IService.
@@ -41,11 +36,6 @@ namespace JCsTools.Core
         public static IServiceProvider<IService> Services
         {
             get { return _ServiceProvider; }
-        }
-
-        public static ITaskScheduler TaskScheduler
-        {
-            get { return _TaskScheduler; }
         }
 
         /// <summary>

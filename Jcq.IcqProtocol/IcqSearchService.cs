@@ -28,7 +28,7 @@ namespace JCsTools.JCQ.IcqInterface
     {
         // When a user search is initiated the icq server sends the search results one by one as Snac1503.
         // The results need to be saved until the last one is received.
-        private readonly List<IContact> _TempFoundUsers = new List<IContact>();
+        private readonly List<IContact> _tempFoundUsers = new List<IContact>();
 
         public IcqSearchService(IContext context) : base(context)
         {
@@ -42,19 +42,15 @@ namespace JCsTools.JCQ.IcqInterface
 
         void ISearchService.SearchByUin(string uin)
         {
-            Snac1502 dataOut;
-            dataOut = new Snac1502();
+            var dataOut = new Snac1502();
 
-            MetaSearchByTlvRequest req;
-            req = new MetaSearchByTlvRequest(MetaRequestSubType.SearchByUinRequestTlv)
+            var req = new MetaSearchByTlvRequest(MetaRequestSubType.SearchByUinRequestTlv)
             {
                 RequestSequenceNumber = MetaRequest.GetNextSequenceNumber(),
                 ClientUin = long.Parse(Context.Identity.Identifier)
             };
 
-            SearchByUinTlv tlv;
-            tlv = new SearchByUinTlv();
-            tlv.Uin = int.Parse(uin);
+            var tlv = new SearchByUinTlv {Uin = int.Parse(uin)};
 
             req.SearchTlvs.Add(tlv);
 
@@ -68,26 +64,20 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void AnalyseSnac1503(Snac1503 dataIn)
         {
-            MetaInformationResponse info;
-            MetaSearchByUinResponse resp;
-
             try
             {
                 switch (dataIn.MetaData.MetaResponse.ResponseType)
                 {
                     case MetaResponseType.MetaInformationResponse:
-                        info = (MetaInformationResponse) dataIn.MetaData.MetaResponse;
+                        var info = (MetaInformationResponse) dataIn.MetaData.MetaResponse;
 
                         if (info.ResponseSubType == MetaResponseSubType.SearchUserFoundReply |
                             info.ResponseSubType == MetaResponseSubType.SearchLastUserFoundReply)
                         {
-                            resp = (MetaSearchByUinResponse) dataIn.MetaData.MetaResponse;
+                            var resp = (MetaSearchByUinResponse) dataIn.MetaData.MetaResponse;
 
-                            IContact contact;
-
-                            contact =
-                                Context.GetService<IStorageService>()
-                                    .GetContactByIdentifier(resp.FoundUserUin.ToString());
+                            var contact = Context.GetService<IStorageService>()
+                                .GetContactByIdentifier(resp.FoundUserUin.ToString());
 
                             contact.Name = resp.Nickname;
                             contact.FirstName = resp.FirstName;
@@ -96,12 +86,12 @@ namespace JCsTools.JCQ.IcqInterface
                             contact.Gender = (ContactGender) resp.Gender;
                             contact.AuthorizationRequired = resp.AutorizationRequired;
 
-                            _TempFoundUsers.Add(contact);
+                            _tempFoundUsers.Add(contact);
 
                             if (info.ResponseSubType == MetaResponseSubType.SearchLastUserFoundReply)
                             {
-                                var temp = new List<IContact>(_TempFoundUsers);
-                                _TempFoundUsers.Clear();
+                                var temp = new List<IContact>(_tempFoundUsers);
+                                _tempFoundUsers.Clear();
 
                                 if (SearchResult != null)
                                 {

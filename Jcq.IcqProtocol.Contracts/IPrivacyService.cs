@@ -16,6 +16,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using JCsTools.Core.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface.Interfaces
@@ -25,11 +26,11 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
         IReadOnlyNotifyingCollection<IContact> VisibleList { get; }
         IReadOnlyNotifyingCollection<IContact> InvisibleList { get; }
         IReadOnlyNotifyingCollection<IContact> IgnoreList { get; }
-        void AddContactToVisibleList(IContact contact);
-        void RemoveContactFromVisibleList(IContact contact);
-        void AddContactToInvisibleList(IContact contact);
-        void RemoveContactFromInvisibleList(IContact contact);
-        void AddContactToIgnoreList(IContact contact);
-        void RemoveContactFromIgnoreList(IContact contact);
+        Task AddContactToVisibleList(IContact contact);
+        Task RemoveContactFromVisibleList(IContact contact);
+        Task AddContactToInvisibleList(IContact contact);
+        Task RemoveContactFromInvisibleList(IContact contact);
+        Task AddContactToIgnoreList(IContact contact);
+        Task RemoveContactFromIgnoreList(IContact contact);
     }
 }

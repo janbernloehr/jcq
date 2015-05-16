@@ -17,7 +17,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using JCsTools.JCQ.IcqInterface.DataTypes;
 
@@ -28,8 +27,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
         private readonly List<byte> _data;
         private readonly Flap _flap;
         //private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0, 1);
-        private readonly TaskCompletionSource<int> _taskCompletionSource = new TaskCompletionSource<int>(); 
-
+        private readonly TaskCompletionSource<int> _taskCompletionSource = new TaskCompletionSource<int>();
 
         public FlapDataPair(Flap f)
         {
@@ -38,7 +36,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
         }
 
         /// <summary>
-        /// Gets the Flap.
+        ///     Gets the Flap.
         /// </summary>
         public Flap Flap
         {
@@ -46,7 +44,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
         }
 
         /// <summary>
-        /// Gets the Serialization of the Flap.
+        ///     Gets the Serialization of the Flap.
         /// </summary>
         public List<byte> Data
         {

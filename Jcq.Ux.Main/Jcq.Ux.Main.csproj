@@ -94,14 +94,11 @@
     </Compile>
     <Compile Include="Services\ContactContextMenuService.cs" />
     <Compile Include="Services\ContactHistory.cs" />
-    <Compile Include="Services\ContactHistoryFormatter.cs" />
     <Compile Include="Services\ContactHistoryService.cs" />
     <Compile Include="Services\ContactViewModelService.cs" />
     <Compile Include="Services\MessageFormattingService.cs" />
     <Compile Include="Services\NavigationService.cs" />
-    <Compile Include="Services\OfflineTextMessageViewModelFormatter.cs" />
     <Compile Include="Services\StatusService.cs" />
-    <Compile Include="Services\TextMessageViewModelFormatter.cs" />
     <Compile Include="SigningInPage.xaml.cs">
       <DependentUpon>SigningInPage.xaml</DependentUpon>
     </Compile>
@@ -258,10 +255,6 @@
     <ProjectReference Include="..\Jcq.Wpf.CommonExtenders\Jcq.Wpf.CommonExtenders.csproj">
       <Project>{484e3015-1e2a-4a88-8b9a-dbe4007b29e5}</Project>
       <Name>Jcq.Wpf.CommonExtenders</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Jcq.Xml.Formatter\Jcq.Xml.Formatter.csproj">
-      <Project>{6da666d9-a101-4416-b16d-8b9d91820a52}</Project>
-      <Name>Jcq.Xml.Formatter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

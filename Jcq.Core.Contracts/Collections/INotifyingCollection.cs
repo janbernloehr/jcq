@@ -17,18 +17,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 
 namespace JCsTools.Core.Interfaces
 {
-    public interface INotifyingCollection<T> : IList<T>, ICollection<T>, INotifyCollectionChanged,
-        INotifyPropertyChanged
+    public interface INotifyingCollection<T> : IReadOnlyNotifyingCollection<T>, ICollection<T>
     {
         void Move(int oldIndex, int newIndex);
-    }
-
-    public interface IReadOnlyNotifyingCollection<T> : IEnumerable<T>, INotifyCollectionChanged, INotifyPropertyChanged
-    {
     }
 }

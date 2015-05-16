@@ -24,9 +24,9 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
     public abstract class MetaRequest : ISerializable
     {
         public const int SizeFixPart = 10;
-        private static int reqestSequenceNumber;
+        private static int _reqestSequenceNumber;
 
-        public MetaRequest(MetaRequestType requestType)
+        protected MetaRequest(MetaRequestType requestType)
         {
             RequestType = requestType;
         }
@@ -84,8 +84,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static int GetNextSequenceNumber()
         {
-            reqestSequenceNumber += 1;
-            return reqestSequenceNumber;
+            _reqestSequenceNumber += 1;
+            return _reqestSequenceNumber;
         }
 
         protected void SetDataSize(int index)

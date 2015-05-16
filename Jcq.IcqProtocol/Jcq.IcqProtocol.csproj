@@ -49,9 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseStorageItem.cs" />
-    <Compile Include="ContactKeyedNotifiyingCollectionFormatter.cs" />
     <Compile Include="ContactListInfo.cs" />
-    <Compile Include="ContactListInfoFormatter.cs" />
     <Compile Include="ContextService.cs" />
     <Compile Include="FormatTarget.cs" />
     <Compile Include="IAvatarServiceAction.cs" />
@@ -79,9 +77,7 @@
     <Compile Include="Internal\IIcqDataTranferService.cs" />
     <Compile Include="Internal\FlapDataPair.cs" />
     <Compile Include="Internal\FlapTransportEventArgs.cs" />
-    <Compile Include="Internal\HashtableItemFixUp.cs" />
     <Compile Include="Internal\ITcpContext.cs" />
-    <Compile Include="Internal\BaseStorageItemFormatter.cs" />
     <Compile Include="Internal\ReceiveInfo.cs" />
     <Compile Include="Internal\TcpContextOld.cs" />
     <Compile Include="IcqOfflineMessage.cs" />
@@ -123,10 +119,6 @@
     <ProjectReference Include="..\Jcq.IcqProtocol.DataTypes\Jcq.IcqProtocol.DataTypes.csproj">
       <Project>{bf8ae423-4549-45b9-83e3-ad7b27b72a82}</Project>
       <Name>Jcq.IcqProtocol.DataTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Jcq.Xml.Formatter\Jcq.Xml.Formatter.csproj">
-      <Project>{6da666d9-a101-4416-b16d-8b9d91820a52}</Project>
-      <Name>Jcq.Xml.Formatter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

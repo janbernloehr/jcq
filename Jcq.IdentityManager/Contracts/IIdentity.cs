@@ -23,12 +23,5 @@ namespace JCsTools.IdentityManager
         string Identifier { get; set; }
         string Description { get; set; }
         string ImageUrl { get; set; }
-        //object GetAttribute(string key);
-        //T GetAttribute<T>(IIdentityAttribute<T> key);
-        //void SetAttribute<T>(IIdentityAttribute<T> key, T value);
-        //void SetAttribute(string key, object value);
-        //bool HasAttribute(string key);
-        //bool HasAttribute<T>(IIdentityAttribute<T> key);
-        //string[] GetAttributeNames();
     }
 }

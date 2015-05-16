@@ -17,6 +17,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using JCsTools.Core.Interfaces;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 
@@ -24,9 +25,9 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqPrivacyService : ContextService, IPrivacyService
     {
-        private readonly IReadOnlyNotifyingCollection<IContact> _IgnoreList;
-        private readonly IReadOnlyNotifyingCollection<IContact> _InvisibleList;
-        private readonly IReadOnlyNotifyingCollection<IContact> _VisibleList;
+        private readonly IReadOnlyNotifyingCollection<IContact> _ignoreList;
+        private readonly IReadOnlyNotifyingCollection<IContact> _invisibleList;
+        private readonly IReadOnlyNotifyingCollection<IContact> _visibleList;
 
         public IcqPrivacyService(IContext context) : base(context)
         {
@@ -37,108 +38,84 @@ namespace JCsTools.JCQ.IcqInterface
 
             var svStorage = context.GetService<IStorageService>() as IcqStorageService;
 
-            _IgnoreList = svStorage.IgnoreList;
-            _InvisibleList = svStorage.InvisibleList;
-            _VisibleList = svStorage.VisibleList;
+            _ignoreList = svStorage.IgnoreList;
+            _invisibleList = svStorage.InvisibleList;
+            _visibleList = svStorage.VisibleList;
         }
 
         IReadOnlyNotifyingCollection<IContact> IPrivacyService.IgnoreList
         {
-            get { return _IgnoreList; }
+            get { return _ignoreList; }
         }
 
         IReadOnlyNotifyingCollection<IContact> IPrivacyService.InvisibleList
         {
-            get { return _InvisibleList; }
+            get { return _invisibleList; }
         }
 
         IReadOnlyNotifyingCollection<IContact> IPrivacyService.VisibleList
         {
-            get { return _VisibleList; }
+            get { return _visibleList; }
         }
 
-        void IPrivacyService.AddContactToIgnoreList(IContact contact)
+        Task IPrivacyService.AddContactToIgnoreList(IContact contact)
         {
-            AddContactToIgnoreListTransaction trans;
-            IcqStorageService svStorage;
-            IcqContact icontact;
+            var svStorage = (IcqStorageService) Context.GetService<IStorageService>();
+            var icontact = (IcqContact) contact;
 
-            svStorage = (IcqStorageService) Context.GetService<IStorageService>();
-            icontact = (IcqContact) contact;
+            var trans = new AddContactToIgnoreListTransaction(svStorage, icontact);
 
-            trans = new AddContactToIgnoreListTransaction(svStorage, icontact);
-
-            svStorage.CommitSSITransaction(trans);
+            return svStorage.CommitSSITransaction(trans);
         }
 
-        void IPrivacyService.AddContactToInvisibleList(IContact contact)
+        Task IPrivacyService.AddContactToInvisibleList(IContact contact)
         {
-            AddContactToInvisibleListTransaction trans;
-            IcqStorageService svStorage;
-            IcqContact icontact;
+            var svStorage = (IcqStorageService) Context.GetService<IStorageService>();
+            var icontact = (IcqContact) contact;
 
-            svStorage = (IcqStorageService) Context.GetService<IStorageService>();
-            icontact = (IcqContact) contact;
+            var trans = new AddContactToInvisibleListTransaction(svStorage, icontact);
 
-            trans = new AddContactToInvisibleListTransaction(svStorage, icontact);
-
-            svStorage.CommitSSITransaction(trans);
+            return svStorage.CommitSSITransaction(trans);
         }
 
-        void IPrivacyService.AddContactToVisibleList(IContact contact)
+        Task IPrivacyService.AddContactToVisibleList(IContact contact)
         {
-            AddContactToVisibleListTransaction trans;
-            IcqStorageService svStorage;
-            IcqContact icontact;
+            var svStorage = (IcqStorageService) Context.GetService<IStorageService>();
+            var icontact = (IcqContact) contact;
 
-            svStorage = (IcqStorageService) Context.GetService<IStorageService>();
-            icontact = (IcqContact) contact;
+            var trans = new AddContactToVisibleListTransaction(svStorage, icontact);
 
-            trans = new AddContactToVisibleListTransaction(svStorage, icontact);
-
-            svStorage.CommitSSITransaction(trans);
+            return svStorage.CommitSSITransaction(trans);
         }
 
-        void IPrivacyService.RemoveContactFromIgnoreList(IContact contact)
+        Task IPrivacyService.RemoveContactFromIgnoreList(IContact contact)
         {
-            RemoveContactFromIgnoreListTransaction trans;
-            IcqStorageService svStorage;
-            IcqContact icontact;
+            var svStorage = (IcqStorageService) Context.GetService<IStorageService>();
+            var icontact = (IcqContact) contact;
 
-            svStorage = (IcqStorageService) Context.GetService<IStorageService>();
-            icontact = (IcqContact) contact;
+            var trans = new RemoveContactFromIgnoreListTransaction(svStorage, icontact);
 
-            trans = new RemoveContactFromIgnoreListTransaction(svStorage, icontact);
-
-            svStorage.CommitSSITransaction(trans);
+            return svStorage.CommitSSITransaction(trans);
         }
 
-        void IPrivacyService.RemoveContactFromInvisibleList(IContact contact)
+        Task IPrivacyService.RemoveContactFromInvisibleList(IContact contact)
         {
-            RemoveContactFromInvisibleListTransaction trans;
-            IcqStorageService svStorage;
-            IcqContact icontact;
+            var svStorage = (IcqStorageService) Context.GetService<IStorageService>();
+            var icontact = (IcqContact) contact;
 
-            svStorage = (IcqStorageService) Context.GetService<IStorageService>();
-            icontact = (IcqContact) contact;
+            var trans = new RemoveContactFromInvisibleListTransaction(svStorage, icontact);
 
-            trans = new RemoveContactFromInvisibleListTransaction(svStorage, icontact);
-
-            svStorage.CommitSSITransaction(trans);
+            return svStorage.CommitSSITransaction(trans);
         }
 
-        void IPrivacyService.RemoveContactFromVisibleList(IContact contact)
+        Task IPrivacyService.RemoveContactFromVisibleList(IContact contact)
         {
-            RemoveContactFromVisibleListTransaction trans;
-            IcqStorageService svStorage;
-            IcqContact icontact;
+            var svStorage = (IcqStorageService) Context.GetService<IStorageService>();
+            var icontact = (IcqContact) contact;
 
-            svStorage = (IcqStorageService) Context.GetService<IStorageService>();
-            icontact = (IcqContact) contact;
+            var trans = new RemoveContactFromVisibleListTransaction(svStorage, icontact);
 
-            trans = new RemoveContactFromVisibleListTransaction(svStorage, icontact);
-
-            svStorage.CommitSSITransaction(trans);
+            return svStorage.CommitSSITransaction(trans);
         }
     }
 }

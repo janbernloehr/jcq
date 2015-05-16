@@ -60,11 +60,9 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public virtual List<byte> Serialize()
         {
-            List<byte> data;
-
             DataSize = CalculateDataSize();
 
-            data = new List<byte>(SizeFixPart + DataSize);
+            var data = new List<byte>(SizeFixPart + DataSize);
 
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(TypeNumber)));
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(DataSize)));

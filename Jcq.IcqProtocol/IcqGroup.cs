@@ -24,14 +24,13 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class IcqGroup : BaseStorageItem, IGroup
     {
-        private readonly NotifyingCollection<IContact> _contacts;
-        private readonly NotifyingCollection<IGroup> _groups;
         private int _groupId;
 
-        public IcqGroup(string id, int groupId) : base(id, id)
+        public IcqGroup(string identifier, int groupId)
+            : base(identifier, identifier)
         {
-            _contacts = new NotifyingCollection<IContact>();
-            _groups = new NotifyingCollection<IGroup>();
+            Contacts = new NotifyingCollection<IcqContact>();
+            Groups = new NotifyingCollection<IcqGroup>();
 
             _groupId = groupId;
         }
@@ -46,14 +45,21 @@ namespace JCsTools.JCQ.IcqInterface
             }
         }
 
-        INotifyingCollection<IContact> IGroup.Contacts
+        public NotifyingCollection<IcqContact> Contacts { get; private set; }
+        public NotifyingCollection<IcqGroup> Groups { get; private set; }
+
+        #region IGroup Interface Members
+
+        IReadOnlyNotifyingCollection<IContact> IGroup.Contacts
         {
-            get { return _contacts; }
+            get { return Contacts; }
         }
 
-        INotifyingCollection<IGroup> IGroup.Groups
+        IReadOnlyNotifyingCollection<IGroup> IGroup.Groups
         {
-            get { return _groups; }
+            get { return Groups; }
         }
+
+        #endregion
     }
 }

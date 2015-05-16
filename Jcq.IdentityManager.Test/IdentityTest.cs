@@ -17,9 +17,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using JCsTools.IdentityManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -46,10 +44,11 @@ namespace Jcq.IdentityManager.Test
         {
             var id = Guid.NewGuid().ToString();
             IIdentity target = new Identity(id);
+
             var expected = Path.GetTempFileName();
-            string actual = null;
             target.ImageUrl = expected;
-            actual = target.ImageUrl;
+            var actual = target.ImageUrl;
+
             Assert.AreEqual(expected, actual, false);
         }
 
@@ -65,7 +64,6 @@ namespace Jcq.IdentityManager.Test
             Assert.AreEqual(id, target.Identifier, "Identifier provided by constructor not set.");
 
             var expected = Guid.NewGuid().ToString();
-
             target.Identifier = expected;
 
             Assert.AreEqual(expected, target.Identifier, "Identifier provided by Property not set.");
@@ -79,119 +77,12 @@ namespace Jcq.IdentityManager.Test
         {
             var id = Guid.NewGuid().ToString();
             IIdentity target = new Identity(id);
+
             var expected = Guid.NewGuid().ToString();
-            string actual = null;
             target.Description = expected;
-            actual = target.Description;
+            var actual = target.Description;
+
             Assert.AreEqual(expected, actual);
         }
-
-        ///// <summary>
-        /////     A test for SetAttribute
-        ///// </summary>
-        //[TestMethod]
-        //public void GetSetAttributeTest()
-        //{
-        //    var id = Guid.NewGuid().ToString();
-        //    IIdentity target = new Identity(id);
-
-        //    var key = Guid.NewGuid().ToString();
-        //    var value = new object();
-        //    object actual = null;
-
-        //    target.SetAttribute(key, value);
-
-        //    actual = target.GetAttribute(key);
-
-        //    Assert.AreEqual(value, actual);
-        //}
-
-        ///// <summary>
-        /////     A test for SetAttribute
-        ///// </summary>
-        //[TestMethod]
-        //public void GetSetAttributeGenericTest()
-        //{
-        //    var id = Guid.NewGuid().ToString();
-        //    IIdentity target = new Identity(id);
-
-        //    var attribute = new TestAttribute();
-        //    var value = Guid.NewGuid().ToString();
-        //    string actual = null;
-
-        //    target.SetAttribute(attribute, value);
-
-        //    actual = target.GetAttribute(attribute);
-
-        //    Assert.AreEqual(value, actual);
-        //}
-
-        ///// <summary>
-        /////     A test for GetAttributeNames
-        ///// </summary>
-        //[TestMethod]
-        //public void GetAttributeNamesTest()
-        //{
-        //    var id = Guid.NewGuid().ToString();
-        //    IIdentity target = new Identity(id);
-
-        //    var expected = default(List<string>);
-
-        //    expected = new List<string>();
-
-        //    for (var i = 1; i <= 5; i++)
-        //    {
-        //        string attributeName = null;
-        //        attributeName = Guid.NewGuid().ToString();
-        //        target.SetAttribute(attributeName, new object());
-        //        expected.Add(attributeName);
-        //    }
-
-        //    var actual = default(List<string>);
-
-        //    actual = target.GetAttributeNames().ToList();
-        //    Assert.AreEqual(expected.Count, actual.Count, "The array lenghts do not match.");
-
-        //    foreach (var item in expected)
-        //    {
-        //        Assert.IsTrue(actual.Contains(item), "Item not found in actual list.");
-        //    }
-        //}
-
-        //public class TestAttribute : IIdentityAttribute<string>
-        //{
-        //    public string AttributeName
-        //    {
-        //        get { return "TestAttribute"; }
-        //    }
-        //}
-
-        #region "Additional test attributes"
-
-        //
-        //You can use the following additional attributes as you write your tests:
-        //
-        //Use ClassInitialize to run code before running the first test in the class
-        //<ClassInitialize()>  _
-        //Public Shared Sub MyClassInitialize(ByVal testContext As TestContext)
-        //End Sub
-        //
-        //Use ClassCleanup to run code after all tests in a class have run
-        //<ClassCleanup()>  _
-        //Public Shared Sub MyClassCleanup()
-        //End Sub
-        //
-        //Use TestInitialize to run code before running each test
-        //<TestInitialize()>  _
-        //Public Sub MyTestInitialize()
-        //End Sub
-        //
-        //Use TestCleanup to run code after each test has run
-        //<TestCleanup()>  _
-        //Public Sub MyTestCleanup()
-        //End Sub
-        //
-
-        #endregion
     }
 }

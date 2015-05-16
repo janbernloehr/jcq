@@ -49,7 +49,6 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             base.Deserialize(data);
 
             var index = SizeFixPart + 2;
-            var dataSize = 0;
 
             Kernel.Logger.Log("MetaSearchByUinResponse", TraceEventType.Information,
                 "found at index {0}; total size: {1}", index, data.Count);
@@ -59,7 +58,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 // Search succeeded
                 index += 1;
 
-                dataSize = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+                int dataSize = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
                 index += 2;
 
                 Kernel.Logger.Log("MetaSearchByUinResponse", TraceEventType.Information,

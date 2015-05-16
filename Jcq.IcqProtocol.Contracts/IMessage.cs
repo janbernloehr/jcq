@@ -16,8 +16,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections;
-
 namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
     public interface IMessage

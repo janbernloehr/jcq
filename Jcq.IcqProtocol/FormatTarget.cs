@@ -18,9 +18,9 @@
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public enum FormatTarget
-    {
-        Attribute,
-        Element
-    }
+    //public enum FormatTarget
+    //{
+    //    Attribute,
+    //    Element
+    //}
 }

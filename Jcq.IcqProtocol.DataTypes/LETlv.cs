@@ -35,9 +35,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public override List<byte> Serialize()
         {
-            List<byte> data;
-
-            data = new List<byte>(CalculateTotalSize());
+            var data = new List<byte>(CalculateTotalSize());
 
             data.AddRange(ByteConverter.GetBytesLE(Convert.ToUInt16(TypeNumber)));
             data.AddRange(ByteConverter.GetBytesLE(Convert.ToUInt16(CalculateDataSize())));

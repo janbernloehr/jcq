@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="IdentityTest.cs" />
     <Compile Include="JsonIdentityProviderTest.cs" />
-    <Compile Include="XmlIdentityProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

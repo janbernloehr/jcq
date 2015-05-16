@@ -38,14 +38,14 @@ namespace JCsTools.JCQ.IcqInterface
 
         void IMessageService.SendMessage(IMessage message)
         {
-            Snac0406 dataOut;
-
-            dataOut = new Snac0406();
-            dataOut.Channel = MessageChannel.Channel1PlainText;
-            dataOut.CookieID = Environment.TickCount;
-            dataOut.RequestAnAckFromServer = false;
-            dataOut.ScreenName = message.Recipient.Identifier;
-            dataOut.StoreMessageIfRecipientIsOffline = true;
+            var dataOut = new Snac0406
+            {
+                Channel = MessageChannel.Channel1PlainText,
+                CookieID = Environment.TickCount,
+                RequestAnAckFromServer = false,
+                ScreenName = message.Recipient.Identifier,
+                StoreMessageIfRecipientIsOffline = true
+            };
 
             dataOut.MessageData.MessageText = message.Text;
 
@@ -57,13 +57,9 @@ namespace JCsTools.JCQ.IcqInterface
 
         void IOfflineMessageService.DeleteOfflineMessages()
         {
-            Snac1502 dataOut;
+            var dataOut = new Snac1502();
 
-            dataOut = new Snac1502();
-
-            DeleteOfflineMessagesRequest req;
-            req = new DeleteOfflineMessagesRequest();
-            req.ClientUin = long.Parse(Context.Identity.Identifier);
+            var req = new DeleteOfflineMessagesRequest {ClientUin = long.Parse(Context.Identity.Identifier)};
 
             dataOut.MetaData.MetaRequest = req;
 
@@ -73,13 +69,9 @@ namespace JCsTools.JCQ.IcqInterface
 
         void IOfflineMessageService.RequestOfflineMessages()
         {
-            Snac1502 dataOut;
+            var dataOut = new Snac1502();
 
-            dataOut = new Snac1502();
-
-            OfflineMessageRequest req;
-            req = new OfflineMessageRequest();
-            req.ClientUin = long.Parse(Context.Identity.Identifier);
+            var req = new OfflineMessageRequest {ClientUin = long.Parse(Context.Identity.Identifier)};
 
             dataOut.MetaData.MetaRequest = req;
 
@@ -91,23 +83,15 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void AnalyseSnac0407(Snac0407 snac)
         {
-            IcqMessage msg;
-
-            string senderId;
-            string messageText;
-
-            IContact sender;
-            IContact recipient;
-
             try
             {
-                senderId = snac.ScreenName;
-                messageText = snac.MessageData.MessageText;
+                var senderId = snac.ScreenName;
+                var messageText = snac.MessageData.MessageText;
 
-                sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
-                recipient = Context.Identity;
+                var sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
+                var recipient = Context.Identity;
 
-                msg = new IcqMessage(sender, recipient, messageText);
+                var msg = new IcqMessage(sender, recipient, messageText);
 
                 if (MessageReceived != null)
                 {
@@ -122,14 +106,6 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void AnalyseSnac1503(Snac1503 snac)
         {
-            IcqOfflineMessage msg;
-
-            string senderId;
-            string messageText;
-
-            IContact sender;
-            IContact recipient;
-
             try
             {
                 switch (snac.MetaData.MetaResponse.ResponseType)
@@ -137,13 +113,13 @@ namespace JCsTools.JCQ.IcqInterface
                     case MetaResponseType.OfflineMessageResponse:
                         var resp = (OfflineMessageResponse) snac.MetaData.MetaResponse;
 
-                        senderId = resp.ClientUin.ToString();
-                        messageText = resp.MessageText;
+                        var senderId = resp.ClientUin.ToString();
+                        var messageText = resp.MessageText;
 
-                        sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
-                        recipient = Context.Identity;
+                        var sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
+                        var recipient = Context.Identity;
 
-                        msg = new IcqOfflineMessage(sender, recipient, messageText, resp.DateSent);
+                        var msg = new IcqOfflineMessage(sender, recipient, messageText, resp.DateSent);
 
                         if (MessageReceived != null)
                         {

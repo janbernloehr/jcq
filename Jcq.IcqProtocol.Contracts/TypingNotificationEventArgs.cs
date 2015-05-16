@@ -28,7 +28,7 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
             NotificationType = type;
         }
 
-        public NotificationType NotificationType { get; set; }
-        public IContact Contact { get; set; }
+        public NotificationType NotificationType { get; private set; }
+        public IContact Contact { get; private set; }
     }
 }

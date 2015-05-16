@@ -21,33 +21,31 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class AddContactToVisibleListTransaction : BaseSSITransaction
+    public class AddContactToVisibleListTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _Contact;
+        private readonly IcqContact _contact;
 
         public AddContactToVisibleListTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _Contact = contact;
+            _contact = contact;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public override Snac CreateSnac()
         {
-            Snac1308 data;
-            SSIPermitRecord item;
-
-            item = new SSIPermitRecord();
-
-            item.ItemName = Contact.Identifier;
-            item.ItemId = Service.GetNextSSIItemId();
+            var item = new SSIPermitRecord
+            {
+                ItemName = Contact.Identifier, 
+                ItemId = Service.GetNextSsiItemId()
+            };
 
             Contact.PermitRecordItemId = item.ItemId;
 
-            data = new Snac1308();
+            var data = new Snac1308();
             data.PermitRecords.Add(item);
 
             return data;
@@ -64,7 +62,6 @@ namespace JCsTools.JCQ.IcqInterface
                     throw new InvalidOperationException(
                         string.Format("Cannot add contact '{0}' {1} to visible list: {2}", Contact.Name,
                             Contact.Identifier, action));
-                    break;
             }
         }
 

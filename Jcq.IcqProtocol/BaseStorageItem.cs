@@ -23,28 +23,20 @@ using JCsTools.JCQ.IcqInterface.Interfaces;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public abstract class BaseStorageItem : IStorageItem, INotifyPropertyChanged
+    public abstract class BaseStorageItem : IStorageItem
     {
-        //private readonly Hashtable _Attributes;
         private string _identifier;
         private string _name;
 
         protected BaseStorageItem()
         {
-            //_Attributes = new Hashtable();
         }
 
-        protected BaseStorageItem(string id, string name)
+        protected BaseStorageItem(string identifier, string name)
         {
-            //_Attributes = new Hashtable();
-            _identifier = id;
+            _identifier = identifier;
             _name = name;
         }
-
-        //public Hashtable Attributes
-        //{
-        //    get { return _Attributes; }
-        //}
 
         public string Identifier
         {
@@ -67,13 +59,6 @@ namespace JCsTools.JCQ.IcqInterface
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        //protected void OnPropertyChanged(string propertyName)
-        //{
-        //    if (PropertyChanged != null)
-        //    {
-        //        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        //    }
-        //}
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

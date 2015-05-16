@@ -1,3 +1,21 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SnacFamily08Tests.cs" company="Jan-Cornelius Molnar">
+// Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
+// 
+// This file is part of JCQ.
+// JCQ is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your [option]) any later version.
+// JCQ is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with JCQ. If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jcq.IcqProtocol.Tests
@@ -5,39 +23,6 @@ namespace Jcq.IcqProtocol.Tests
     [TestClass]
     public class SnacFamily08Tests
     {
-
-        //[TestMethod]
-        //public void Snac0801DeserializeTest()
-        //{
-        //    var data = new byte[]
-        //    {
-        //        0x2A, 0x02, 0xE1, 0xCA, 0x00, 0x0C, 0x00, 0x08, 0x00, 0x01, 0x00, 0x00, 0x7A, 0xC6, 0x21, 0x64, 
-        //        0x00, 0x02
-        //    };
-
-        //    var f = SerializationTools.DeserializeFlap(data);
-        //    var s = SerializationTools.DeserializeSnac<Snac0801>(f);
-
-        //    Assert.Inconclusive("Verify that Snac0801 was deserialized correctly.");
-        //}
-
-        //[TestMethod]
-        //public void Snac0802DeserializeTest()
-        //{
-        //    var data = new byte[]
-        //    {
-        //        0x2A, 0x02, 0x85, 0x66, 0x00, 0x36, 0x00, 0x08, 0x00, 0x02, 0x00, 0x00, 0x8E, 0xCD, 0xF4, 0x87, 
-        //        0x00, 0x03, 0x00, 0x02, 0x00, 0xD9, 0x00, 0x04, 0x00, 0x02, 0x00, 0x96, 0x00, 0x05, 0x00, 0x02, 
-        //        0x00, 0x16, 0x00, 0x02, 0x00, 0x0E, 0x68, 0x74, 0x74, 0x70, 0x3A, 0x2F, 0x2F, 0x75, 0x72, 0x6C, 
-        //        0x2E, 0x63, 0x6F, 0x6D, 0x00, 0x01, 0x00, 0x04, 0x74, 0x65, 0x73, 0x74
-        //    };
-
-        //    var f = SerializationTools.DeserializeFlap(data);
-        //    var s = SerializationTools.DeserializeSnac<Snac0802>(f);
-
-        //    Assert.Inconclusive("Verify that Snac0802 was deserialized correctly.");
-        //}
-
-
+        
     }
 }

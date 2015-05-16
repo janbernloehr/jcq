@@ -22,23 +22,23 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
     public class DisconnectedEventArgs : EventArgs
     {
-        private readonly bool _IsExpected;
-        private readonly string _Message;
+        private readonly bool _isExpected;
+        private readonly string _message;
 
         public DisconnectedEventArgs(string message, bool isExpected)
         {
-            _Message = message;
-            _IsExpected = isExpected;
+            _message = message;
+            _isExpected = isExpected;
         }
 
         public bool IsExpected
         {
-            get { return _IsExpected; }
+            get { return _isExpected; }
         }
 
         public string Message
         {
-            get { return _Message; }
+            get { return _message; }
         }
     }
 }

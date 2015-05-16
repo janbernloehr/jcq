@@ -36,9 +36,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public override List<byte> Serialize()
         {
-            List<byte> data;
-
-            data = base.Serialize();
+            var data = base.Serialize();
 
             data.AddRange(ByteConverter.GetBytesLE((uint) Uin));
 

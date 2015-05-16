@@ -21,39 +21,37 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public class AddContactTransaction : BaseSSITransaction
+    public class AddContactTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _Contact;
-        private readonly IcqGroup _Group;
+        private readonly IcqContact _contact;
+        private readonly IcqGroup _group;
 
-        public AddContactTransaction(IcqStorageService owner, IcqContact contact, IcqGroup @group) : base(owner)
+        public AddContactTransaction(IcqStorageService owner, IcqContact contact, IcqGroup group) : base(owner)
         {
-            _Contact = contact;
-            _Group = @group;
+            _contact = contact;
+            _group = group;
         }
 
         public IcqContact Contact
         {
-            get { return _Contact; }
+            get { return _contact; }
         }
 
         public IcqGroup Group
         {
-            get { return _Group; }
+            get { return _group; }
         }
 
         public override Snac CreateSnac()
         {
-            Snac1308 data;
-            SSIBuddyRecord item;
+            var item = new SSIBuddyRecord
+            {
+                ItemName = Contact.Identifier,
+                ItemId = Service.GetNextSsiItemId(),
+                GroupId = Group.GroupId
+            };
 
-            item = new SSIBuddyRecord();
-
-            item.ItemName = Contact.Identifier;
-            item.ItemId = Service.GetNextSSIItemId();
-            item.GroupId = Group.GroupId;
-
-            data = new Snac1308();
+            var data = new Snac1308();
             data.BuddyRecords.Add(item);
 
             return data;
@@ -69,7 +67,6 @@ namespace JCsTools.JCQ.IcqInterface
                 default:
                     throw new InvalidOperationException(string.Format("Cannot add contact '{0}' {1}: {2}", Contact.Name,
                         Contact.Identifier, action));
-                    break;
             }
         }
 

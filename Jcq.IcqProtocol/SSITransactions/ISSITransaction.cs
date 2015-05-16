@@ -20,7 +20,7 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 
 namespace JCsTools.JCQ.IcqInterface
 {
-    public interface ISSITransaction
+    public interface ISsiTransaction
     {
         IcqStorageService Service { get; }
         void Validate();

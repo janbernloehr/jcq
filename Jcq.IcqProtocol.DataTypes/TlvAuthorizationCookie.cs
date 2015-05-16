@@ -22,7 +22,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
     public class TlvAuthorizationCookie : Tlv
     {
-        private readonly List<byte> _AuthorizationCookie = new List<byte>();
+        private readonly List<byte> _authorizationCookie = new List<byte>();
 
         public TlvAuthorizationCookie() : base(0x6)
         {
@@ -30,7 +30,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public List<byte> AuthorizationCookie
         {
-            get { return _AuthorizationCookie; }
+            get { return _authorizationCookie; }
         }
 
         public override void Deserialize(List<byte> data)
@@ -39,21 +39,21 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             var index = SizeFixPart;
 
-            _AuthorizationCookie.AddRange(data.GetRange(index, DataSize));
+            _authorizationCookie.AddRange(data.GetRange(index, DataSize));
         }
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            data.AddRange(_AuthorizationCookie);
+            data.AddRange(_authorizationCookie);
 
             return data;
         }
 
         public override int CalculateDataSize()
         {
-            return _AuthorizationCookie.Count;
+            return _authorizationCookie.Count;
         }
     }
 }

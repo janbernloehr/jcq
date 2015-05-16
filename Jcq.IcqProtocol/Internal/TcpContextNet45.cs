@@ -1,28 +1,42 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TcpContextNet45.cs" company="Jan-Cornelius Molnar">
+// Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
+// 
+// This file is part of JCQ.
+// JCQ is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your [option]) any later version.
+// JCQ is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with JCQ. If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using JCsTools.Core;
 using JCsTools.JCQ.IcqInterface.Internal;
-using DataReceivedEventArgs = JCsTools.JCQ.IcqInterface.Internal.DataReceivedEventArgs;
 
 namespace JCsTools.JCQ.IcqInterface
 {
     public class TcpContextNet45 : ITcpContext, IDisposable
     {
+        private static string mylog = "";
+        private readonly string _id;
+        private readonly BufferBlock<List<byte>> _receivedDataBuffer = new BufferBlock<List<byte>>();
+        private readonly object _sendLock = new object();
         private TcpClient _client;
         private NetworkStream _stream;
-        private readonly string _id;
-        private long _bytesReceived;
-        private long _bytesSent;
-        private readonly BufferBlock<List<byte>> _receivedDataBuffer = new BufferBlock<List<byte>>();
-
-        private static string mylog = "";
 
         public TcpContextNet45()
         {
@@ -36,15 +50,8 @@ namespace JCsTools.JCQ.IcqInterface
             _stream.Dispose();
         }
 
-        public long BytesReceived
-        {
-            get { return _bytesReceived; }
-        }
-
-        public long BytesSent
-        {
-            get { return _bytesSent; }
-        }
+        public long BytesReceived { get; private set; }
+        public long BytesSent { get; private set; }
 
         public string Id
         {
@@ -77,8 +84,6 @@ namespace JCsTools.JCQ.IcqInterface
             _receivedDataBuffer.Complete();
         }
 
-        private readonly object _sendLock = new object();
-
         public void SendData(List<byte> data)
         {
             //if (!_client.Connected | ConnectionState != TcpConnectionState.Connected)
@@ -93,7 +98,7 @@ namespace JCsTools.JCQ.IcqInterface
                 lock (_sendLock) // There should be only one thread sending on this network stream concurrently.
                 {
                     _stream.Write(data.ToArray(), 0, data.Count);
-                    _bytesSent += data.Count;
+                    BytesSent += data.Count;
                 }
             }
             catch (Exception ex)
@@ -124,6 +129,12 @@ namespace JCsTools.JCQ.IcqInterface
         public event EventHandler<ConnectedEventArgs> Connected;
         public event EventHandler<DisconnectEventArgs> Disconnected;
         public TcpConnectionState ConnectionState { get; private set; }
+
+        public BufferBlock<List<byte>> ReceivedDataBuffer
+        {
+            get { return _receivedDataBuffer; }
+        }
+
         //public event EventHandler<DataReceivedEventArgs> DataReceived;
 
         private async Task ReadTask()
@@ -160,7 +171,7 @@ namespace JCsTools.JCQ.IcqInterface
 
                     Debug.WriteLine(BitConverter.ToString(result.ToArray()));
 
-                    _bytesReceived += result.Count;
+                    BytesReceived += result.Count;
 
                     _receivedDataBuffer.Post(result);
 
@@ -198,11 +209,6 @@ namespace JCsTools.JCQ.IcqInterface
         {
             if (Disconnected != null)
                 Disconnected(this, new DisconnectEventArgs(expected));
-        }
-
-        public BufferBlock<List<byte>> ReceivedDataBuffer
-        {
-            get { return _receivedDataBuffer; }
         }
     }
 }

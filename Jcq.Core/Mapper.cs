@@ -26,25 +26,23 @@ namespace JCsTools.Core
 {
     public class Mapper : IMapper
     {
-        private readonly Dictionary<Type, Type> _Mappings = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Type> _mappings;
 
         public Mapper()
         {
-            _Mappings = new Dictionary<Type, Type>();
+            _mappings = new Dictionary<Type, Type>();
 
             LoadMappings();
         }
 
-        public I CreateImplementation<I>(params Object[] args)
+        public T CreateImplementation<T>(params Object[] args)
         {
-            return (I) CreateImplementation(typeof (I), args);
+            return (T) CreateImplementation(typeof (T), args);
         }
 
         public object CreateImplementation(Type interfaceType, params object[] args)
         {
-            Type mType;
-
-            mType = GetImplementationType(interfaceType);
+            var mType = GetImplementationType(interfaceType);
 
             if (mType == null)
                 throw new ImplementationNotFoundException(interfaceType);
@@ -59,15 +57,15 @@ namespace JCsTools.Core
 
         public Type GetImplementationType(Type interfaceType)
         {
-            Type mappedType = null;
+            Type mappedType;
 
             if (interfaceType.IsInterface)
             {
-                if (!_Mappings.ContainsKey(interfaceType))
+                if (!_mappings.ContainsKey(interfaceType))
                 {
                     throw new ImplementationNotFoundException(interfaceType);
                 }
-                mappedType = _Mappings[interfaceType];
+                mappedType = _mappings[interfaceType];
             }
             else
             {
@@ -84,35 +82,30 @@ namespace JCsTools.Core
 
         public bool ExistsImplementation(Type interfaceType)
         {
-            return _Mappings.ContainsKey(interfaceType);
+            return _mappings.ContainsKey(interfaceType);
         }
 
         public void AddImplementationMapping(Type contractType, Type implementationType)
         {
-            lock (_Mappings)
+            lock (_mappings)
             {
-                _Mappings.Add(contractType, implementationType);
+                _mappings.Add(contractType, implementationType);
             }
         }
 
         private void LoadMappings()
         {
-            MicrokernelSection mkSection;
-
-            mkSection = (MicrokernelSection) ConfigurationManager.GetSection("Microkernel");
+            var mkSection = (MicrokernelSection) ConfigurationManager.GetSection("Microkernel");
 
             if (mkSection == null)
                 throw new ConfigSectionNotFoundException("Microkernel");
 
             foreach (MappingConfigElement element in mkSection.References)
             {
-                Type interfaceType;
-                Type mappingType;
+                var interfaceType = Type.GetType(element.InterfaceType, true, true);
+                var mappingType = Type.GetType(element.MappingType, true, true);
 
-                interfaceType = Type.GetType(element.InterfaceType, true, true);
-                mappingType = Type.GetType(element.MappingType, true, true);
-
-                _Mappings.Add(interfaceType, mappingType);
+                _mappings.Add(interfaceType, mappingType);
             }
         }
     }

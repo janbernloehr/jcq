@@ -27,11 +27,5 @@ namespace JCsTools.Core.Configuration
         {
             get { return (MappingConfigElementCollection) this["References"]; }
         }
-
-        [ConfigurationProperty("Serializers", IsDefaultCollection = false)]
-        public SerializerConfigElementCollection Serializers
-        {
-            get { return (SerializerConfigElementCollection) this["Serializers"]; }
-        }
     }
 }

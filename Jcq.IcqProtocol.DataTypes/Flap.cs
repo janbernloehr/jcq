@@ -26,7 +26,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
     public class Flap : ISerializable
     {
         public const int SizeFixPart = 6;
-        private readonly List<ISerializable> _DataItems = new List<ISerializable>();
+        private readonly List<ISerializable> _dataItems = new List<ISerializable>();
 
         public Flap()
         {
@@ -44,7 +44,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public List<ISerializable> DataItems
         {
-            get { return _DataItems; }
+            get { return _dataItems; }
         }
 
         public int FlapDataSize { get; private set; }
@@ -69,7 +69,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public virtual int CalculateDataSize()
         {
             var size = 0;
-            size += _DataItems.Sum(x => x.CalculateTotalSize());
+            size += _dataItems.Sum(x => x.CalculateTotalSize());
             return size;
         }
 
@@ -106,7 +106,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                                 SnacDescriptor.GetKey(descriptor)));
                         index += x.TotalSize;
 
-                        _DataItems.Add(x);
+                        _dataItems.Add(x);
 
                         if (index < FlapDataSize)
                             throw new InvalidOperationException(
@@ -126,33 +126,25 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                         switch (desc.TypeId)
                         {
                             case 0x1:
-                                TlvScreenName tlv1;
-
-                                tlv1 = new TlvScreenName();
+                                var tlv1 = new TlvScreenName();
                                 tlv1.Deserialize(data.GetRange(index, desc.TotalSize));
 
                                 DataItems.Add(tlv1);
                                 break;
                             case 0x5:
-                                TlvBosServerAddress tlv5;
-
-                                tlv5 = new TlvBosServerAddress();
+                                var tlv5 = new TlvBosServerAddress();
                                 tlv5.Deserialize(data.GetRange(index, desc.TotalSize));
 
                                 DataItems.Add(tlv5);
                                 break;
                             case 0x6:
-                                TlvAuthorizationCookie tlv6;
-
-                                tlv6 = new TlvAuthorizationCookie();
+                                var tlv6 = new TlvAuthorizationCookie();
                                 tlv6.Deserialize(data.GetRange(index, desc.TotalSize));
 
                                 DataItems.Add(tlv6);
                                 break;
                             case 0x8:
-                                TlvAuthFailed tlv8;
-
-                                tlv8 = new TlvAuthFailed();
+                                var tlv8 = new TlvAuthFailed();
                                 tlv8.Deserialize(data.GetRange(index, desc.TotalSize));
 
                                 DataItems.Add(tlv8);
@@ -169,14 +161,13 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public virtual List<byte> Serialize()
         {
-            List<byte> data;
-
             FlapDataSize = CalculateDataSize();
 
-            data = new List<byte>(SizeFixPart + FlapDataSize);
+            var data = new List<byte>(SizeFixPart + FlapDataSize)
+            {
+                0x2a, (byte) Channel
+            };
 
-            data.Add(0x2a);
-            data.Add((byte) Channel);
             data.AddRange(ByteConverter.GetBytes((ushort) DatagramSequenceNumber));
 
             if (FlapDataSize > UInt16.MaxValue)

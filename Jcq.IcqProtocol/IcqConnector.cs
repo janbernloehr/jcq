@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using JCsTools.Core;
@@ -28,19 +27,17 @@ using JCsTools.JCQ.IcqInterface.DataTypes;
 using JCsTools.JCQ.IcqInterface.Interfaces;
 using JCsTools.JCQ.IcqInterface.Internal;
 
-
-
 namespace JCsTools.JCQ.IcqInterface
 {
     /// <summary>
-    /// Provides the state for an authentication cookie request.
+    ///     Provides the state for an authentication cookie request.
     /// </summary>
     /// <remarks></remarks>
     public class IcqConnector : BaseConnector, IConnector
     {
+        private SemaphoreSlim _contactListActivated;
         private bool _isSigningIn;
         private TaskCompletionSource<bool> _signInTaskCompletionSource;
-        private SemaphoreSlim _contactListActivated;
 
         public IcqConnector(IContext context)
             : base(context)
@@ -58,57 +55,7 @@ namespace JCsTools.JCQ.IcqInterface
         public event EventHandler SignInCompleted;
         public event EventHandler<SignInFailedEventArgs> SignInFailed;
         public event EventHandler<DisconnectedEventArgs> Disconnected;
-
-        //public void SignIn(ICredential credential)
-        //{
-        //    var password = credential as IPasswordCredential;
-        //    if (password == null)
-        //        throw new ArgumentException("Credential musst be of Type IPasswordCredential", "credential");
-
-        //    try
-        //    {
-        //        _isSigningIn = true;
-
-        //        // Connect to the icq server and get a bos server address and and authentication cookie.
-        //        InnerConnect();
-
-        //        var requestAuthCookieTask = new RequestAuthenticationCookieTask(this, password);
-
-        //        requestAuthCookieTask.Run();
-
-        //        // When the task is run, we can exspect a disconnect ...
-        //        TcpContext.SetCloseExpected();
-
-        //        requestAuthCookieTask.WaitCompleted();
-
-        //        if (!requestAuthCookieTask.State.AuthenticationSucceeded)
-        //        {
-        //            // The authentication attempt was not successfull. There are many reasons for this
-        //            // to occur for example wrong password, to many connections etc.
-        //            // The client needs to be informed that the sign in failed.
-
-        //            OnSignInFailed(requestAuthCookieTask.State.AuthenticationError.ToString());
-        //            _isSigningIn = false;
-        //            return;
-        //        }
-
-        //        // if the authentication attempt was successfull we can connect to the bos server
-        //        // and send the just received authentication cookie to begin the sign in procedure.
-
-        //        var serverEndpoint = ConvertServerAddressToEndPoint(requestAuthCookieTask.State.BosServerAddress);
-
-        //        InnerConnect(serverEndpoint);
-
-        //        SendAuthenticationCookie(requestAuthCookieTask.State.AuthCookie);
-        //    }
-        //    catch
-        //    {
-        //        _isSigningIn = false;
-
-        //        throw;
-        //    }
-        //}
-
+        
         public async Task<bool> SignInAsync(ICredential credential)
         {
             var password = credential as IPasswordCredential;
@@ -429,7 +376,7 @@ namespace JCsTools.JCQ.IcqInterface
 
             // The user is not idle so set the idle time to zero.
 
-            var setIdleTime = new Snac0111 { IdleTime = TimeSpan.FromSeconds(0) };
+            var setIdleTime = new Snac0111 {IdleTime = TimeSpan.FromSeconds(0)};
 
             // This is used to tell the server the understood services.
             // Since this is an Icq Client only icq services are listed.
@@ -469,8 +416,6 @@ namespace JCsTools.JCQ.IcqInterface
 
                 _signInTaskCompletionSource.SetResult(true);
             }
-
-
         }
     }
 }

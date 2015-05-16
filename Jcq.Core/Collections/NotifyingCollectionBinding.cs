@@ -19,7 +19,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 
 namespace JCsTools.Core
@@ -37,7 +36,6 @@ namespace JCsTools.Core
             _source.CollectionChanged += OnSourceChanged;
         }
 
-        [IndexerName("TargetItem")]
         protected T this[int index]
         {
             get { return _target[index]; }

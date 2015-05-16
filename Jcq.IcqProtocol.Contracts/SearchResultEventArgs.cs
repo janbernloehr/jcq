@@ -23,16 +23,16 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
 {
     public class SearchResultEventArgs : EventArgs
     {
-        private readonly List<IContact> _Contacts = new List<IContact>();
+        private readonly List<IContact> _contacts;
 
         public SearchResultEventArgs(IEnumerable<IContact> contacts)
         {
-            _Contacts = new List<IContact>(contacts);
+            _contacts = new List<IContact>(contacts);
         }
 
         public List<IContact> Contacts
         {
-            get { return _Contacts; }
+            get { return _contacts; }
         }
     }
 }

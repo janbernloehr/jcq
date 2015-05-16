@@ -28,11 +28,9 @@ namespace JCsTools.JCQ.IcqInterface
     {
         event EventHandler<FlapTransportEventArgs> FlapReceived;
         event EventHandler<FlapTransportEventArgs> FlapSent;
-
         Task<int[]> SendList(IEnumerable<Snac> snacs);
         Task<int[]> Send(params Snac[] snacs);
         Task<int> Send(Flap flap);
-        
         void RegisterSnacHandler<T>(int serviceId, int subtypeId, Action<T> handler) where T : Snac;
     }
 }

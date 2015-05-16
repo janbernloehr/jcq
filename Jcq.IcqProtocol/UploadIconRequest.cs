@@ -23,18 +23,18 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public class UploadIconRequest
     {
-        private readonly byte[] _IconData;
-        private readonly byte[] _IconMd5;
+        private readonly byte[] _iconData;
+        private readonly byte[] _iconMd5;
 
         public UploadIconRequest(byte[] data)
         {
-            _IconData = data;
+            _iconData = data;
 
             using (var cg = new MD5CryptoServiceProvider())
             {
                 using (var ms = new MemoryStream(IconData))
                 {
-                    _IconMd5 = cg.ComputeHash(ms);
+                    _iconMd5 = cg.ComputeHash(ms);
                 }
             }
         }
@@ -45,12 +45,12 @@ namespace JCsTools.JCQ.IcqInterface
 
         public byte[] IconData
         {
-            get { return _IconData; }
+            get { return _iconData; }
         }
 
         public byte[] IconMd5
         {
-            get { return _IconMd5; }
+            get { return _iconMd5; }
         }
     }
 }

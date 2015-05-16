@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ITaskScheduler.cs" company="Jan-Cornelius Molnar">
+// <copyright file="KnownTypeJsonConverter.cs" company="Jan-Cornelius Molnar">
 // Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
 // 
 // This file is part of JCQ.
@@ -16,11 +16,27 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.Core.Interfaces
+using System;
+using Newtonsoft.Json;
+
+namespace JCsTools.JCQ.IcqInterface
 {
-    public interface ITaskScheduler
+    public class KnownTypeJsonConverter<T> : JsonConverter
     {
-        void RunAsync(ITask task);
-        void RunSync(ITask task);
+        public override bool CanConvert(Type objectType)
+        {
+            return (objectType == typeof (T));
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
+        {
+            return serializer.Deserialize<T>(reader);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            serializer.Serialize(writer, value);
+        }
     }
 }

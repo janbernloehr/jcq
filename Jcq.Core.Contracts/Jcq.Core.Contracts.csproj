@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\INotifyingCollection.cs" />
+    <Compile Include="Collections\IReadOnlyNotifyingCollection.cs" />
     <Compile Include="EventArgs\ExceptionEventArgs.cs" />
     <Compile Include="Exceptions\IExceptionInformation.cs" />
     <Compile Include="Exceptions\IExceptionService.cs" />
@@ -55,9 +56,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="TaskScheduler\ITask.cs" />
-    <Compile Include="TaskScheduler\ITaskScheduler.cs" />
-    <Compile Include="TaskScheduler\ITaskWithState.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings.resx">

@@ -23,16 +23,16 @@ namespace JCsTools.JCQ.IcqInterface
 {
     public abstract class ContextService : Service, IContextService
     {
-        private readonly IContext _Context;
+        private readonly IContext _context;
 
         protected ContextService(IContext context)
         {
-            _Context = context;
+            _context = context;
         }
 
         public IContext Context
         {
-            get { return _Context; }
+            get { return _context; }
         }
     }
 }
