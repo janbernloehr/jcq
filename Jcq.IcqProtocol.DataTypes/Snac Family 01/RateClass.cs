@@ -1,23 +1,33 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RateClass.cs" company="Jan-Cornelius Molnar">
-// Copyright 2008-2015 Jan Molnar <jan.molnar@me.com>
+// The MIT License (MIT)
 // 
-// This file is part of JCQ.
-// JCQ is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 2 of the License, or
-// (at your [option]) any later version.
-// JCQ is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// You should have received a copy of the GNU General Public License
-// along with JCQ. If not, see <http://www.gnu.org/licenses/>.
+// Copyright (c) 2015 Jan-Cornelius Molnar
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using JCsTools.Core;
 
 namespace JCsTools.JCQ.IcqInterface.DataTypes
 {
@@ -87,6 +97,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             DataSize = index;
             HasData = true;
+
+            Kernel.Logger.Log("RateLimits", TraceEventType.Information, ToString());
         }
 
         public virtual List<byte> Serialize()
@@ -100,10 +112,9 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             return
                 string.Format(
-                    "Window size: {0}\\nClear level: {1}\\nAlert level: {2}\\n" +
-                    "Limit level: {3}\\nDisconnect level: {4}\\nCurrent level: {5}\\n" +
-                    "Max level: {6}\\nLast time: {7}", WindowSize, ClearLevel, AlertLevel, LimitLevel, DisconnectLevel,
-                    CurrentLevel, MaxLevel, LastTime).Replace("\\n", Environment.NewLine);
+                    "{8} Window size: {0}\n{8} Clear level: {1}\n{8} Alert level: {2}\n{8} Limit level: {3}\n{8} Disconnect level: {4}\n{8} Current level: {5}\n{8} Max level: {6}\n{8} Last time: {7}",
+                    WindowSize, ClearLevel, AlertLevel, LimitLevel, DisconnectLevel, CurrentLevel, MaxLevel, LastTime,
+                    ClassId).Replace("\\n", Environment.NewLine);
         }
     }
 }

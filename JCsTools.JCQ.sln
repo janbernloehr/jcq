@@ -33,6 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jcq.Ux.Main", "Jcq.Ux.Main\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jcq.IcqProtocol.Tests", "Jcq.IcqProtocol.Tests\Jcq.IcqProtocol.Tests.csproj", "{61FD754D-D892-4D12-9DC2-779110943D42}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{27BBBAB5-E630-4D42-A3D9-3F9E4DA6692A}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
