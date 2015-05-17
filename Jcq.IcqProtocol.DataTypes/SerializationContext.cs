@@ -26,24 +26,29 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public static class SerializationContext
     {
-        private static readonly Type _ContextType = typeof (SerializationContext);
-        private static readonly string _AssemblyName = "Jcq.IcqProtocol.DataTypes";
-        private static readonly string _SnacNamespace = "JCsTools.JCQ.IcqInterface.DataTypes";
+        private static readonly Type ContextType = typeof (SerializationContext);
+        private static readonly string AssemblyName;
+        private static readonly string SnacNamespace;
+
+        static SerializationContext()
+        {
+            AssemblyName = ContextType.Assembly.FullName;
+            SnacNamespace = ContextType.Namespace;
+        }
 
         private static Type GetSnacMapping(SnacDescriptor desc)
         {
-            string typeName;
-            Type snacType;
+            var typeName = string.Format("{1}.Snac{0}, {2}", 
+                SnacDescriptor.GetKey(desc).Replace(",", ""), SnacNamespace, AssemblyName);
 
-            typeName = string.Format("{1}.Snac{0}, {2}", SnacDescriptor.GetKey(desc).Replace(",", ""), _SnacNamespace,
-                _AssemblyName);
-            snacType = Type.GetType(typeName, false, true);
-
+            var snacType = Type.GetType(typeName, false, true);
+           
             return snacType;
         }
 
@@ -51,15 +56,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             var data = bytes.GetRange(offset, bytes.Count - offset);
 
-            Type type;
-            Snac x;
-
-            type = GetSnacMapping(desc);
+            var type = GetSnacMapping(desc);
 
             if (type == null)
                 return null;
 
-            x = (Snac) Activator.CreateInstance(type);
+            var x = (Snac) Activator.CreateInstance(type);
             x.Deserialize(data);
 
             return x;

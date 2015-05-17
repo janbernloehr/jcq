@@ -27,7 +27,7 @@
 using System;
 using System.Net;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public class ConnectedEventArgs : EventArgs
     {

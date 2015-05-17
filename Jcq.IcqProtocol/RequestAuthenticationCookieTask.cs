@@ -29,11 +29,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Jcq.IcqProtocol.Internal;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     ///// <summary>
     /////     This task requests an authentication cookie for a username and a password.

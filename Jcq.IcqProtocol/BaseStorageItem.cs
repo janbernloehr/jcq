@@ -26,10 +26,10 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using JCsTools.JCQ.IcqInterface.Annotations;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Annotations;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public abstract class BaseStorageItem : IStorageItem
     {

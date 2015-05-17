@@ -24,13 +24,26 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines a message for sending or receiving.
+    /// </summary>
     public interface IMessage
     {
-        //Hashtable Attributes { get; }
+        /// <summary>
+        /// Gets or sets the sender.
+        /// </summary>
         IContact Sender { get; set; }
+
+        /// <summary>
+        /// Gets or sets the recipient.
+        /// </summary>
         IContact Recipient { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message text.
+        /// </summary>
         string Text { get; set; }
     }
 }

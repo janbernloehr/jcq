@@ -26,12 +26,26 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines a service contract to download and delete offline messages.
+    /// </summary>
     public interface IOfflineMessageService : IContextService
     {
+        /// <summary>
+        /// Occurs when all offline messages have been received.
+        /// </summary>
         event EventHandler AllOfflineMessagesReceived;
+
+        /// <summary>
+        /// Request all offline messages from the server.
+        /// </summary>
         void RequestOfflineMessages();
+
+        /// <summary>
+        /// Delete all offline messages from the server.
+        /// </summary>
         void DeleteOfflineMessages();
     }
 }

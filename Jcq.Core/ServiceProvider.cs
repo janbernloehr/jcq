@@ -27,9 +27,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     public class ServiceProvider<TS> : Service, IServiceProvider<TS> where TS : IService
     {

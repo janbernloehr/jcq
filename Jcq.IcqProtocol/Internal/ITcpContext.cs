@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public interface ITcpContext
     {

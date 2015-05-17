@@ -27,14 +27,38 @@
 using System;
 using System.Threading.Tasks;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines a service contract for establishing a connection to the network.
+    /// </summary>
     public interface IConnector : IContextService
     {
+        /// <summary>
+        /// Occurs when the sign in to the network has been completed successfully.
+        /// </summary>
         event EventHandler SignInCompleted;
+
+        /// <summary>
+        /// Occurs when the sign in to the network has failed.
+        /// </summary>
         event EventHandler<SignInFailedEventArgs> SignInFailed;
+
+        /// <summary>
+        /// Occurs when the connection to the network was interrupted.
+        /// </summary>
         event EventHandler<DisconnectedEventArgs> Disconnected;
+
+        /// <summary>
+        /// Sign out of the network.
+        /// </summary>
         void SignOut();
+
+        /// <summary>
+        /// Sign in to the network.
+        /// </summary>
+        /// <param name="credential">The credentials used to sign in.</param>
+        /// <returns></returns>
         Task<bool> SignInAsync(ICredential credential);
     }
 }

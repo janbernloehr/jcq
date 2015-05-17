@@ -27,7 +27,7 @@
 using System.Windows;
 using System.Windows.Documents;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class RunBinding : DependencyObject
     {

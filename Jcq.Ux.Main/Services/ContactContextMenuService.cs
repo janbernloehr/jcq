@@ -29,12 +29,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.ViewModel;
+using Jcq.Core;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.Main.Views;
+using Jcq.Ux.ViewModel;
+using Jcq.Ux.ViewModel.Contracts;
+using JCsTools.JCQ.Ux;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Services
 {
     public class ContactContextMenuService : ContextService, IContactContextMenuService
     {

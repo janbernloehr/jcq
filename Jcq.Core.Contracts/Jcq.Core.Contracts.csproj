@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="Collections\INotifyingCollection.cs" />
     <Compile Include="Collections\IReadOnlyNotifyingCollection.cs" />
-    <Compile Include="EventArgs\ExceptionEventArgs.cs" />
+    <Compile Include="Exceptions\ExceptionEventArgs.cs" />
     <Compile Include="Exceptions\IExceptionInformation.cs" />
     <Compile Include="Exceptions\IExceptionService.cs" />
     <Compile Include="ILoggingService.cs" />

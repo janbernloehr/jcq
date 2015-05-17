@@ -27,10 +27,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using JCsTools.Core.Interfaces;
-using JCsTools.Core.Interfaces.Exceptions;
+using Jcq.Core.Collections;
+using Jcq.Core.Contracts.Exceptions;
 
-namespace JCsTools.Core.Exceptions
+namespace Jcq.Core.Exceptions
 {
     public class ExceptionService : Service, IExceptionService
     {

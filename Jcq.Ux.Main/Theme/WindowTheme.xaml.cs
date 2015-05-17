@@ -26,27 +26,25 @@
 
 using System.Windows;
 using System.Windows.Input;
-using JCsTools.Wpf.Extenders;
+using Jcq.Wpf.CommonExtenders;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Theme
 {
     public partial class WindowTheme
     {
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
+            if (Mouse.LeftButton != MouseButtonState.Pressed) return;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            var wnd = ((FrameworkElement)sender).TemplatedParent as Window;
 
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            if (wnd != null) 
                 wnd.DragMove();
         }
 
         private void OnWindowClose(object sender, RoutedEventArgs e)
         {
-            Window wnd;
-
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
             if (wnd != null)
                 wnd.Close();
@@ -54,9 +52,7 @@ namespace JCsTools.JCQ.Ux
 
         private void OnWindowRestore(object sender, RoutedEventArgs e)
         {
-            Window wnd;
-
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
             if (wnd != null)
                 wnd.WindowState = WindowState.Normal;
@@ -64,9 +60,7 @@ namespace JCsTools.JCQ.Ux
 
         private void OnWindowMaximize(object sender, RoutedEventArgs e)
         {
-            Window wnd;
-
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
             if (wnd != null)
                 wnd.WindowState = WindowState.Maximized;
@@ -74,9 +68,7 @@ namespace JCsTools.JCQ.Ux
 
         private void OnWindowMinimize(object sender, RoutedEventArgs e)
         {
-            Window wnd;
-
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
             if (wnd != null)
                 wnd.WindowState = WindowState.Minimized;
@@ -84,135 +76,100 @@ namespace JCsTools.JCQ.Ux
 
         private void OnMouseDownOnGrid(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
+            if (Mouse.LeftButton != MouseButtonState.Pressed) return;
 
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
-            {
-                wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-                if (wnd != null)
-                    wnd.DragMove();
-            }
+            if (wnd != null)
+                wnd.DragMove();
         }
 
         private void OnSizeNorth(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.North);
-            }
+            wse.DragSize(SizingAction.North);
         }
 
         private void OnSizeSouth(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.South);
-            }
+            wse.DragSize(SizingAction.South);
         }
 
         private void OnSizeEast(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.East);
-            }
+            wse.DragSize(SizingAction.East);
         }
 
         private void OnSizeWest(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.West);
-            }
+            wse.DragSize(SizingAction.West);
         }
 
         private void OnSizeNorthEast(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.NorthEast);
-            }
+            wse.DragSize(SizingAction.NorthEast);
         }
 
         private void OnSizeNorthWest(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.NorthWest);
-            }
+            wse.DragSize(SizingAction.NorthWest);
         }
 
         private void OnSizeSouthEast(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.SouthEast);
-            }
+            wse.DragSize(SizingAction.SouthEast);
         }
 
         private void OnSizeSouthWest(object sender, MouseButtonEventArgs e)
         {
-            Window wnd;
-            WindowResizeExtender wse;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            wnd = ((FrameworkElement) sender).TemplatedParent as Window;
+            if (wnd == null) return;
 
-            if (wnd != null)
-            {
-                wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
-                wse.DragSize(SizingAction.SouthWest);
-            }
+            wse.DragSize(SizingAction.SouthWest);
         }
     }
 }

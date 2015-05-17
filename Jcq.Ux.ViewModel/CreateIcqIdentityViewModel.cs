@@ -26,15 +26,15 @@
 
 using System;
 using System.IO;
-using Jcq.Ux.ViewModel;
-using JCsTools.Core;
+using Jcq.Core;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     /// <summary>
     ///     This ViewModel features identity creation.
     /// </summary>
-    public class CreateIcqIdentityViewModel
+    public class CreateIcqIdentityViewModel : ViewModelBase
     {
         public CreateIcqIdentityViewModel()
         {

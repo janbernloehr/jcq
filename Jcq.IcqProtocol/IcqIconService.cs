@@ -29,13 +29,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Internal;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.IcqInterface.Internal;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqIconService : BaseConnector, IIconService
     {

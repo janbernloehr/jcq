@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public class DataReceivedEventArgs : EventArgs
     {

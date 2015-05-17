@@ -7,7 +7,7 @@
     <ProjectGuid>{BF8AE423-4549-45B9-83E3-AD7B27B72A82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JCsTools.JCQ.IcqInterface.DataTypes</RootNamespace>
+    <RootNamespace>Jcq.IcqProtocol.DataTypes</RootNamespace>
     <AssemblyName>Jcq.IcqProtocol.DataTypes</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

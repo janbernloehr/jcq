@@ -24,9 +24,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     public abstract class Service : IService
     {

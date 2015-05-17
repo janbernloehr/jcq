@@ -28,9 +28,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts.Collections;
 
-namespace JCsTools.Core
+namespace Jcq.Core.Collections
 {
     public class KeyedNotifiyingCollection<TKey, TValue> : KeyedCollection<TKey, TValue>, INotifyingCollection<TValue>
     {

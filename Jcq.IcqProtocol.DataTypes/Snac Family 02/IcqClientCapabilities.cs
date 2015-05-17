@@ -26,7 +26,7 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public static class IcqClientCapabilities
     {

@@ -30,12 +30,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using JCsTools.Core;
-using JCsTools.Core.Interfaces;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.Core.Collections;
+using Jcq.Core.Contracts;
+using Jcq.Core.Contracts.Collections;
+using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqStorageService : ContextService, IStorageService
     {

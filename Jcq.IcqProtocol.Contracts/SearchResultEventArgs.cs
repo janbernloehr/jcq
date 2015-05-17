@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
     public class SearchResultEventArgs : EventArgs
     {

@@ -24,7 +24,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public enum MessageSenderRole
     {

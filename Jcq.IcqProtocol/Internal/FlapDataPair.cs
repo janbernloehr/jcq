@@ -26,9 +26,9 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public class FlapDataPair
     {

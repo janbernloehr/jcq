@@ -26,6 +26,7 @@
 
 using System;
 using System.IO;
+using Jcq.IdentityManager.Contracts;
 using JCsTools.IdentityManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

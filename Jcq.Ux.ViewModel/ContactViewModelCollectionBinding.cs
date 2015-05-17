@@ -26,10 +26,10 @@
 
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core.Collections;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class ContactViewModelCollectionBinding : NotifyingCollectionBinding<ContactViewModel>
     {

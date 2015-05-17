@@ -28,11 +28,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
 using Newtonsoft.Json;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqContact : BaseStorageItem, IContact //, IComparable, IComparable<IcqContact>, INotifyPropertyChanged
     {

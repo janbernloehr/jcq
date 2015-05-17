@@ -24,10 +24,19 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.Core.Interfaces
+namespace Jcq.Core.Contracts
 {
+    /// <summary>
+    /// Defines a contract for a service which can obtain implementations for a given service contract.
+    /// </summary>
+    /// <typeparam name="TS"></typeparam>
     public interface IServiceProvider<in TS> : IService where TS : IService
     {
+        /// <summary>
+        /// Gets a implementation for the given service contract. If no implementation is found, a ServiceNotFoundException is thrown.
+        /// </summary>
+        /// <typeparam name="T">The type of the service contract.</typeparam>
+        /// <returns>An instance of an implementation of the service contract.</returns>
         T GetService<T>() where T : TS;
     }
 }

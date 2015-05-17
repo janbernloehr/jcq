@@ -25,16 +25,15 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
 using System.Linq;
+using Jcq.Core;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
 using Jcq.IcqProtocol.Internal;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class TransferWindowViewModel : INotifyPropertyChanged
+    public class TransferWindowViewModel : ViewModelBase
     {
         private string _message;
 
@@ -54,12 +53,9 @@ namespace JCsTools.JCQ.ViewModel
             set
             {
                 _message = value;
-
-                OnPropertyChanged("Message");
+                OnPropertyChanged();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnSignOut(object sender, DisconnectedEventArgs e)
         {
@@ -112,13 +108,6 @@ namespace JCsTools.JCQ.ViewModel
             {
                 Kernel.Exceptions.PublishException(ex);
             }
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged == null) return;
-
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

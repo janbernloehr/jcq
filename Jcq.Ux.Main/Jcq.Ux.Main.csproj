@@ -57,39 +57,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ChatWindow.xaml.cs">
+    <Compile Include="Services\TextMessageEntity.cs" />
+    <Compile Include="Views\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Code\WindowStyle.cs" />
-    <Compile Include="ContactInformationWindow.xaml.cs">
+    <Compile Include="Views\ContactInformationWindow.xaml.cs">
       <DependentUpon>ContactInformationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ContactsPage.xaml.cs">
+    <Compile Include="Views\ContactsPage.xaml.cs">
       <DependentUpon>ContactsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CreateIdentityPage.xaml.cs">
+    <Compile Include="Views\CreateIdentityPage.xaml.cs">
       <DependentUpon>CreateIdentityPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditIcqIdentityPage.xaml.cs">
+    <Compile Include="Views\EditIcqIdentityPage.xaml.cs">
       <DependentUpon>EditIcqIdentityPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExceptionWindow.xaml.cs">
+    <Compile Include="Views\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HistoryWindow.xaml.cs">
+    <Compile Include="Views\HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs" />
-    <Compile Include="MessageWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs" />
+    <Compile Include="Views\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PerformanceWindow.xaml.cs">
+    <Compile Include="Views\PerformanceWindow.xaml.cs">
       <DependentUpon>PerformanceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PrivacyWindow.xaml.cs">
+    <Compile Include="Views\PrivacyWindow.xaml.cs">
       <DependentUpon>PrivacyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SearchWindow.xaml.cs">
+    <Compile Include="Views\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ContactContextMenuService.cs" />
@@ -99,18 +100,18 @@
     <Compile Include="Services\MessageFormattingService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\StatusService.cs" />
-    <Compile Include="SigningInPage.xaml.cs">
+    <Compile Include="Views\SigningInPage.xaml.cs">
       <DependentUpon>SigningInPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SignInPage.xaml.cs">
+    <Compile Include="Views\SignInPage.xaml.cs">
       <DependentUpon>SignInPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StatusToImageConverter.cs" />
-    <Compile Include="Theme\WindowStateToVisibilityConverter.cs" />
+    <Compile Include="Converters\StatusToImageConverter.cs" />
+    <Compile Include="Converters\WindowStateToVisibilityConverter.cs" />
     <Compile Include="Theme\WindowTheme.xaml.cs">
       <DependentUpon>WindowTheme.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TransferWindow.xaml.cs">
+    <Compile Include="Views\TransferWindow.xaml.cs">
       <DependentUpon>TransferWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowSettings.Designer.cs">
@@ -118,19 +119,19 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>WindowSettings.settings</DependentUpon>
     </Compile>
-    <Page Include="ChatWindow.xaml">
+    <Page Include="Views\ChatWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ContactInformationWindow.xaml">
+    <Page Include="Views\ContactInformationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ContactsPage.xaml">
+    <Page Include="Views\ContactsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="CreateIdentityPage.xaml">
+    <Page Include="Views\CreateIdentityPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -138,44 +139,44 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Code\StringFormatConverter.cs" />
-    <Page Include="EditIcqIdentityPage.xaml">
+    <Compile Include="Converters\StringFormatConverter.cs" />
+    <Page Include="Views\EditIcqIdentityPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ExceptionWindow.xaml">
+    <Page Include="Views\ExceptionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="HistoryWindow.xaml">
+    <Page Include="Views\HistoryWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MessageWindow.xaml">
+    <Page Include="Views\MessageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="PerformanceWindow.xaml">
+    <Page Include="Views\PerformanceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="PrivacyWindow.xaml">
+    <Page Include="Views\PrivacyWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SearchWindow.xaml">
+    <Page Include="Views\SearchWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SigningInPage.xaml">
+    <Page Include="Views\SigningInPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SignInPage.xaml">
+    <Page Include="Views\SignInPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -187,7 +188,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TransferWindow.xaml">
+    <Page Include="Views\TransferWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

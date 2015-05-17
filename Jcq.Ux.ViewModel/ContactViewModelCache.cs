@@ -25,9 +25,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class ContactViewModelCache
     {

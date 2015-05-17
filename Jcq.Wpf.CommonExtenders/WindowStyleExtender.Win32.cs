@@ -30,7 +30,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace JCsTools.Wpf.Extenders
+namespace Jcq.Wpf.CommonExtenders
 {
     public partial class WindowResizeExtender
     {
@@ -50,7 +50,7 @@ namespace JCsTools.Wpf.Extenders
             _source = HwndSource.FromHwnd(_handle);
 
             // Add a hook to process window messages
-            _source.AddHook(WndProc);
+            if (_source != null) _source.AddHook(WndProc);
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -63,29 +63,30 @@ namespace JCsTools.Wpf.Extenders
                     // Enable Max/Min Size support.
 
                     var minmax = new MinMaxInfo();
-                    Matrix trans;
-                    Point maxSize;
-                    Point minSize;
-                    Point workArea;
 
-                    trans = _source.CompositionTarget.TransformToDevice;
+                    if (_source == null)
+                    {
+                        handled = true;
+                        break;
+                    }
+
+                    var trans = _source.CompositionTarget.TransformToDevice;
 
                     Marshal.PtrToStructure(lParam, minmax);
 
-                    workArea =
-                        trans.Transform(new Point(SystemParameters.WorkArea.Width, SystemParameters.WorkArea.Height));
+                    var workArea = trans.Transform(new Point(SystemParameters.WorkArea.Width, SystemParameters.WorkArea.Height));
 
                     minmax.ptMaxSize.x = (int) workArea.X;
                     minmax.ptMaxSize.y = (int) workArea.Y;
 
-                    maxSize = trans.Transform(new Point(_window.MaxWidth, _window.MaxHeight));
+                    var maxSize = trans.Transform(new Point(_window.MaxWidth, _window.MaxHeight));
 
                     if (_window.MaxWidth < double.PositiveInfinity)
                         minmax.ptMaxTrackSize.x = (int) maxSize.X;
                     if (_window.MaxHeight < double.PositiveInfinity)
                         minmax.ptMaxTrackSize.y = (int) maxSize.Y;
 
-                    minSize = trans.Transform(new Point(_window.MinWidth, _window.MinHeight));
+                    var minSize = trans.Transform(new Point(_window.MinWidth, _window.MinHeight));
 
                     if (_window.MinWidth > 0)
                         minmax.ptMinTrackSize.x = (int) minSize.X;

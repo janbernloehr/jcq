@@ -25,9 +25,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     /// <summary>
     ///     Provides the state for an authentication cookie request.

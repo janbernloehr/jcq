@@ -25,15 +25,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.ViewModel;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.Main.Views;
+using Jcq.Ux.ViewModel;
+using Jcq.Ux.ViewModel.Contracts;
+using JCsTools.JCQ.Ux;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Services
 {
     public class ContactWindowViewModelService : ContextService, IContactWindowViewModelService
     {
-        private readonly Dictionary<ContactViewModel, MessageWindow> _Windows =
+        private readonly Dictionary<ContactViewModel, MessageWindow> _windows =
             new Dictionary<ContactViewModel, MessageWindow>();
 
         public ContactWindowViewModelService(IContext context) : base(context)
@@ -42,30 +45,30 @@ namespace JCsTools.JCQ.Ux
 
         public MessageWindowViewModel GetMessageWindowViewModel(ContactViewModel contact)
         {
-            lock (_Windows)
+            lock (_windows)
             {
-                if (!_Windows.ContainsKey(contact))
+                if (!_windows.ContainsKey(contact))
                 {
-                    _Windows.Add(contact, new MessageWindow(contact));
+                    _windows.Add(contact, new MessageWindow(contact));
                 }
 
-                return _Windows[contact].ViewModel;
+                return _windows[contact].ViewModel;
             }
         }
 
         public bool IsMessageWindowViewModelAvailable(ContactViewModel contact)
         {
-            lock (_Windows)
+            lock (_windows)
             {
-                return _Windows.ContainsKey(contact);
+                return _windows.ContainsKey(contact);
             }
         }
 
         public void RemoveMessageWindowViewModel(ContactViewModel contact)
         {
-            lock (_Windows)
+            lock (_windows)
             {
-                _Windows.Remove(contact);
+                _windows.Remove(contact);
             }
         }
     }

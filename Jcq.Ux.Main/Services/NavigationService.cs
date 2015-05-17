@@ -25,11 +25,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Windows;
+using Jcq.Core;
+using Jcq.Ux.Main.Views;
 using Jcq.Ux.ViewModel;
-using JCsTools.Core;
-using JCsTools.JCQ.ViewModel;
+using Jcq.Ux.ViewModel.Contracts;
+using JCsTools.JCQ.Ux;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Services
 {
     public class NavigationService : Service, INavigationService
     {

@@ -34,11 +34,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Jcq.IcqProtocol.Internal;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public class BaseConnector : ContextService, IIcqDataTranferService
     {

@@ -28,9 +28,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts.Collections;
 
-namespace JCsTools.Core
+namespace Jcq.Core.Collections
 {
     public class NotifyingCollection<T> : Collection<T>, INotifyingCollection<T>
     {

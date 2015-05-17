@@ -26,7 +26,7 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvAwayMessageString : Tlv
     {

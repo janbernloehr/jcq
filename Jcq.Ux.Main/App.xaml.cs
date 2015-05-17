@@ -29,10 +29,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.ViewModel;
+using Jcq.Core;
+using Jcq.Ux.Main.Views;
+using Jcq.Ux.ViewModel;
+using JCsTools.JCQ.Ux;
+using WindowStyle = Jcq.Ux.Main.Code.WindowStyle;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main
 {
     /// <summary>
     ///     Interaction logic for App.xaml

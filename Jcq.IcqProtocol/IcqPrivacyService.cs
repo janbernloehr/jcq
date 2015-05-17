@@ -26,10 +26,11 @@
 
 using System;
 using System.Threading.Tasks;
-using JCsTools.Core.Interfaces;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core.Contracts;
+using Jcq.Core.Contracts.Collections;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqPrivacyService : ContextService, IPrivacyService
     {

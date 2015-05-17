@@ -25,7 +25,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol.Internal
 {

@@ -24,7 +24,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class DeleteOfflineMessagesRequest : MetaRequest
     {

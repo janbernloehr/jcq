@@ -27,11 +27,11 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class ShortUserInformationRequestManager
     {

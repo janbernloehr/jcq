@@ -26,7 +26,7 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     [Flags]
     public enum UserClass

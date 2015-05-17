@@ -30,12 +30,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class SearchWindowViewModel : DispatcherObject, INotifyPropertyChanged
+    public class SearchWindowViewModel : ViewModelBase
     {
         public SearchWindowViewModel()
         {
@@ -45,7 +46,6 @@ namespace JCsTools.JCQ.ViewModel
         }
 
         public Collection<ContactViewModel> SearchResult { get; private set; }
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnSearchResult(object sender, SearchResultEventArgs e)
         {
@@ -79,13 +79,6 @@ namespace JCsTools.JCQ.ViewModel
             {
                 menu.Items.Add(x);
             }
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged == null) return;
-
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

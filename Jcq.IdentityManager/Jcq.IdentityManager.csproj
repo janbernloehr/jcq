@@ -7,7 +7,7 @@
     <ProjectGuid>{35B6186A-A870-4E76-9F7C-8311D7692D1A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JCsTools.IdentityManager</RootNamespace>
+    <RootNamespace>Jcq.IdentityManager</RootNamespace>
     <AssemblyName>Jcq.IdentityManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

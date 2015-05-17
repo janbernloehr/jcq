@@ -27,7 +27,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     [Serializable]
     public class ConfigSectionNotFoundException : ApplicationException

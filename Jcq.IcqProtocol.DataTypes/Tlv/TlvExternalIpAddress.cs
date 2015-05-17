@@ -26,7 +26,7 @@
 
 using System.Net;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvExternalIpAddress : Tlv
     {

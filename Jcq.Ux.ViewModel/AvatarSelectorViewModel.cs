@@ -24,67 +24,59 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using JCsTools.IdentityManager;
+using Jcq.IdentityManager.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class AvatarSelectorViewModel
+    public class AvatarSelectorViewModel : ViewModelBase
     {
-        private readonly IIdentity _Identity;
+        private readonly IIdentity _identity;
 
         public AvatarSelectorViewModel(IIdentity identity)
         {
             ImageSelector = new ImageSelectorViewModel(ApplicationService.Current.DataStorageDirectory);
-            _Identity = identity;
+            _identity = identity;
         }
 
         public ImageSelectorViewModel ImageSelector { get; private set; }
 
         public void SelectImageFile()
         {
-            FileInfo imageFile;
-
-            BitmapImage sourceBitmap;
-            Image visual;
-            RenderTargetBitmap targetBitmap;
-            JpegBitmapEncoder encoder;
-
-            imageFile = new FileInfo(ImageSelector.SelectedImageFile);
+            var imageFile = new FileInfo(ImageSelector.SelectedImageFile);
 
             if (imageFile.Exists)
             {
-                sourceBitmap = new BitmapImage(new Uri(imageFile.FullName));
-
-                visual = new Image();
-                visual.Source = sourceBitmap;
-                visual.Arrange(new Rect(0, 0, 48, 48));
-
-                targetBitmap = new RenderTargetBitmap(48, 48, 96, 96, PixelFormats.Default);
-
-                targetBitmap.Render(visual);
-
-                encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(targetBitmap));
-
                 var newfile = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
-                    string.Format("{0}.[default].jpg", _Identity.Identifier));
+                    string.Format("{0}.[default].jpg", _identity.Identifier));
 
-                using (var fs = new FileStream(newfile, FileMode.Create, FileAccess.Write))
-                {
-                    encoder.Save(fs);
-                }
+                AvatarImageService.CreateAvatarImageFromFile(imageFile.FullName, newfile);
+                //var sourceBitmap = new BitmapImage(new Uri(imageFile.FullName));
 
-                _Identity.ImageUrl = newfile;
+                //var visual = new Image();
+                //visual.Source = sourceBitmap;
+                //visual.Arrange(new Rect(0, 0, 48, 48));
+
+                //var targetBitmap = new RenderTargetBitmap(48, 48, 96, 96, PixelFormats.Default);
+
+                //targetBitmap.Render(visual);
+
+                //var encoder = new JpegBitmapEncoder();
+                //encoder.Frames.Add(BitmapFrame.Create(targetBitmap));
+
+                //var newfile = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
+                //    string.Format("{0}.[default].jpg", _identity.Identifier));
+
+                //using (var fs = new FileStream(newfile, FileMode.Create, FileAccess.Write))
+                //{
+                //    encoder.Save(fs);
+                //}
+
+                _identity.ImageUrl = newfile;
             }
             else
             {
-                _Identity.ImageUrl = null;
+                _identity.ImageUrl = null;
             }
         }
     }

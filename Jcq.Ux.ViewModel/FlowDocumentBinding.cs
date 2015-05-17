@@ -31,7 +31,7 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Documents;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class FlowDocumentBinding : DependencyObject
     {
@@ -74,17 +74,13 @@ namespace JCsTools.JCQ.ViewModel
                     break;
                 default:
                     throw new NotImplementedException();
-                    break;
             }
         }
 
         private static void AppendItemToDocument(FlowDocument document, object item)
         {
-            DataTemplate template;
-            Paragraph paragraph;
-
-            template = DataTemplateSelector.SelectTemplate(item, document);
-            paragraph = (Paragraph) template.LoadContent();
+            var template = DataTemplateSelector.SelectTemplate(item, document);
+            var paragraph = (Paragraph) template.LoadContent();
             paragraph.DataContext = item;
 
             document.Blocks.Add(paragraph);

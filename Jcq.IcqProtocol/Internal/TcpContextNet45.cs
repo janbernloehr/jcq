@@ -32,10 +32,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.Internal;
+using Jcq.Core;
+using Jcq.IcqProtocol.Internal;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class TcpContextNet45 : ITcpContext, IDisposable
     {

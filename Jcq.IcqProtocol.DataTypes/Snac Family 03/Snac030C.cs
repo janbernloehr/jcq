@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac030C : Snac
     {

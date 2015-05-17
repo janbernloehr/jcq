@@ -25,12 +25,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using NotificationType = JCsTools.JCQ.IcqInterface.Interfaces.NotificationType;
+using Jcq.Core;
+using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Contracts;
+using NotificationType = Jcq.IcqProtocol.Contracts.NotificationType;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqNotificationService : ContextService, INotificationService
     {

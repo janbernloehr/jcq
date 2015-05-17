@@ -29,12 +29,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.ViewModel;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.ViewModel;
+using Jcq.Ux.ViewModel.Contracts;
+using JCsTools.JCQ.Ux;
 using Newtonsoft.Json;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Services
 {
     public class ContactHistoryService : ContextService, IContactHistoryService
     {
@@ -170,13 +172,5 @@ namespace JCsTools.JCQ.Ux
                 }
             }
         }
-    }
-
-    public class TextMessageEntity
-    {
-        public DateTime Date { get; set; }
-        public string Text { get; set; }
-        public string SenderIdentifier { get; set; }
-        public string RecipientIdentifier { get; set; }
     }
 }

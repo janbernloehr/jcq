@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public abstract class Snac : ISerializable
     {

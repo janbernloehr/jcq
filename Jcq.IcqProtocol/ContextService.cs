@@ -24,10 +24,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public abstract class ContextService : Service, IContextService
     {

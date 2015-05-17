@@ -24,7 +24,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.IdentityManager
+using Jcq.IdentityManager.Contracts;
+
+namespace Jcq.IdentityManager
 {
     public class Identity : IIdentity
     {

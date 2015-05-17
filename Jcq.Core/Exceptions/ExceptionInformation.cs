@@ -25,9 +25,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.Core.Interfaces.Exceptions;
+using Jcq.Core.Contracts.Exceptions;
 
-namespace JCsTools.Core.Exceptions
+namespace Jcq.Core.Exceptions
 {
     public class ExceptionInformation : IExceptionInformation
     {

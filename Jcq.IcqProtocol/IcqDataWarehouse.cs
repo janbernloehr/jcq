@@ -27,11 +27,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqDataWarehouse : ContextService, IDataWarehouseService
     {

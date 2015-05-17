@@ -26,7 +26,7 @@
 
 using System.Windows.Media;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class MessageColors
     {

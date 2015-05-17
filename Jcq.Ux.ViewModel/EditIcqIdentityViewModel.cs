@@ -28,14 +28,15 @@ using System;
 using System.IO;
 using System.Windows;
 using Jcq.Ux.ViewModel;
-using JCsTools.Core;
+using Jcq.Core;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     /// <summary>
     ///     This ViewModel features identity editing.
     /// </summary>
-    public class EditIcqIdentityViewModel
+    public class EditIcqIdentityViewModel : ViewModelBase
     {
         public EditIcqIdentityViewModel(IcqIdentity identity)
         {
@@ -43,12 +44,10 @@ namespace JCsTools.JCQ.ViewModel
 
             ImageSelector = new ImageSelectorViewModel(ApplicationService.Current.DataStorageDirectory);
 
-            //TODO: Make this work.
-            //if (Identity.HasAttribute(IdentityAttributes.ImageOriginalFilePathAttribute))
-            //{
-            //    ImageSelector.SelectedImageFile =
-            //        Identity.GetAttribute(IdentityAttributes.ImageOriginalFilePathAttribute);
-            //}
+            if (!string.IsNullOrEmpty(identity.ImageOriginalFilePathAttribute))
+            {
+                ImageSelector.SelectedImageFile = identity.ImageOriginalFilePathAttribute;
+            }
         }
 
         /// <summary>

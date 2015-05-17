@@ -24,10 +24,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core.Interfaces;
-using JCsTools.Core.Interfaces.Exceptions;
+using Jcq.Core.Contracts;
+using Jcq.Core.Contracts.Exceptions;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     public static class Kernel
     {
@@ -36,32 +36,32 @@ namespace JCsTools.Core
         private static readonly ILoggingService _Logger = Services.GetService<ILoggingService>();
 
         /// <summary>
-        ///     Provides services derived from IService.
+        /// Gets the default IServiceProvider implementation.
         /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
         public static IServiceProvider<IService> Services
         {
             get { return _ServiceProvider; }
         }
 
         /// <summary>
-        ///     Provides exception handling.
+        /// Gets the default IExceptionService implementation.
         /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
         public static IExceptionService Exceptions
         {
             get { return Services.GetService<IExceptionService>(); }
         }
 
+        /// <summary>
+        /// Gets the default ILoggingService implementation.
+        /// </summary>
         public static ILoggingService Logger
         {
             get { return _Logger; }
         }
 
+        /// <summary>
+        /// Gets the default IMapper implementation.
+        /// </summary>
         public static IMapper Mapper
         {
             get { return _Mapper; }

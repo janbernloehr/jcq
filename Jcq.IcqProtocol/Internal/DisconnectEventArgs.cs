@@ -26,7 +26,7 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public class DisconnectEventArgs : EventArgs
     {

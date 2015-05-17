@@ -24,14 +24,23 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines an abstract authentication credential.
+    /// </summary>
     public interface ICredential
     {
     }
 
+    /// <summary>
+    /// Defines a password credential.
+    /// </summary>
     public interface IPasswordCredential : ICredential
     {
+        /// <summary>
+        /// Gets the password.
+        /// </summary>
         string Password { get; }
     }
 }

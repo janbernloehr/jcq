@@ -28,7 +28,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace JCsTools.IdentityManager
+namespace Jcq.IdentityManager
 {
     public class JsonIdentityProvider : IdentityProvider
     {

@@ -27,9 +27,9 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts.Collections;
 
-namespace JCsTools.Core
+namespace Jcq.Core.Collections
 {
     public class ReadOnlyNotifyingCollection<T> : ReadOnlyCollection<T>, IReadOnlyNotifyingCollection<T>
     {

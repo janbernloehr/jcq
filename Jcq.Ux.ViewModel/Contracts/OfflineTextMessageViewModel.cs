@@ -26,9 +26,9 @@
 
 using System;
 using System.Windows.Media;
-using JCsTools.JCQ.IcqInterface;
+using Jcq.IcqProtocol;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class OfflineTextMessageViewModel : TextMessageViewModel
     {

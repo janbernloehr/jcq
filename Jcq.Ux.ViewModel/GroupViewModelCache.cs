@@ -25,28 +25,28 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class GroupViewModelCache
     {
-        private static readonly Dictionary<IGroup, GroupViewModel> _Cache = new Dictionary<IGroup, GroupViewModel>();
+        private static readonly Dictionary<IGroup, GroupViewModel> Cache = new Dictionary<IGroup, GroupViewModel>();
 
-        public static GroupViewModel GetViewModel(IGroup @group)
+        public static GroupViewModel GetViewModel(IGroup group)
         {
             GroupViewModel vm;
 
-            lock (_Cache)
+            lock (Cache)
             {
-                if (_Cache.ContainsKey(@group))
+                if (Cache.ContainsKey(group))
                 {
-                    vm = _Cache[@group];
+                    vm = Cache[group];
                 }
                 else
                 {
-                    vm = new GroupViewModel(@group);
-                    _Cache.Add(@group, vm);
+                    vm = new GroupViewModel(group);
+                    Cache.Add(group, vm);
                 }
             }
 

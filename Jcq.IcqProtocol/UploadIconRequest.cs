@@ -27,7 +27,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class UploadIconRequest
     {

@@ -24,9 +24,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqStatusCodes
     {

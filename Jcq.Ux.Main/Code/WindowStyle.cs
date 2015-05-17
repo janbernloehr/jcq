@@ -25,9 +25,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Windows;
-using JCsTools.Wpf.Extenders;
+using Jcq.Wpf.CommonExtenders;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Code
 {
     public class WindowStyle
     {

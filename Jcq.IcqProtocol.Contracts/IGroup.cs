@@ -24,13 +24,23 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts.Collections;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines a group of contacts.
+    /// </summary>
     public interface IGroup : IStorageItem
     {
+        /// <summary>
+        /// Gets the contacts contained in this group.
+        /// </summary>
         IReadOnlyNotifyingCollection<IContact> Contacts { get; }
+
+        /// <summary>
+        /// Gets the subgroups contained in this group.
+        /// </summary>
         IReadOnlyNotifyingCollection<IGroup> Groups { get; }
     }
 }

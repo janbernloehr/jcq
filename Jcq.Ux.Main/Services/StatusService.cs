@@ -26,12 +26,12 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.ViewModel;
+using Jcq.Core;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Services
 {
     public class StatusService : ContextService, IStatusService
     {

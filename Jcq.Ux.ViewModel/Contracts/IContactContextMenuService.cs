@@ -26,12 +26,20 @@
 
 using System.Collections.Generic;
 using System.Windows.Controls;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel.Contracts
 {
+    /// <summary>
+    /// Defines a service contract to create the context menu for a contact.
+    /// </summary>
     public interface IContactContextMenuService : IContextService
     {
+        /// <summary>
+        /// Create a list of menu items for the given contact.
+        /// </summary>
+        /// <param name="contact">The contact.</param>
+        /// <returns></returns>
         IEnumerable<MenuItem> GetMenuItems(ContactViewModel contact);
     }
 }

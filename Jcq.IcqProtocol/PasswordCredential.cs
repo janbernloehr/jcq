@@ -24,9 +24,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class PasswordCredential : IPasswordCredential
     {

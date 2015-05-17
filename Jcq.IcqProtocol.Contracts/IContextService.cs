@@ -24,10 +24,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines a service contract associated to an IContext.
+    /// </summary>
     public interface IContextService : IService, IContextObject
     {
     }

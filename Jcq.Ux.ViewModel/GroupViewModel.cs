@@ -28,20 +28,21 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class GroupViewModel : DispatcherObject, INotifyPropertyChanged
+    public class GroupViewModel : ViewModelBase
     {
-        private ObservableCollection<ContactViewModel> _Contacts;
-        private ContactViewModelCollectionBinding _ContactsBinding;
-        private CollectionView _ContactsView;
-        private ObservableCollection<GroupViewModel> _Groups;
-        private GroupViewModelCollectionBinding _GroupsBinding;
-        private CollectionView _GroupsView;
+        private ObservableCollection<ContactViewModel> _contacts;
+        private ContactViewModelCollectionBinding _contactsBinding;
+        private CollectionView _contactsView;
+        private ObservableCollection<GroupViewModel> _groups;
+        private GroupViewModelCollectionBinding _groupsBinding;
+        private CollectionView _groupsView;
 
         public GroupViewModel(IGroup model)
         {
@@ -56,18 +57,18 @@ namespace JCsTools.JCQ.ViewModel
         {
             get
             {
-                if (_Contacts == null)
+                if (_contacts == null)
                 {
                     lock (Model.Contacts)
                     {
-                        _Contacts =
+                        _contacts =
                             new ObservableCollection<ContactViewModel>(
                                 (from c in Model.Contacts select ContactViewModelCache.GetViewModel(c)).ToList());
-                        _ContactsBinding = new ContactViewModelCollectionBinding(Model.Contacts, _Contacts);
+                        _contactsBinding = new ContactViewModelCollectionBinding(Model.Contacts, _contacts);
                     }
                 }
 
-                return _Contacts;
+                return _contacts;
             }
         }
 
@@ -75,18 +76,18 @@ namespace JCsTools.JCQ.ViewModel
         {
             get
             {
-                if (_Groups == null)
+                if (_groups == null)
                 {
                     lock (Model.Groups)
                     {
-                        _Groups =
+                        _groups =
                             new ObservableCollection<GroupViewModel>(
                                 (from g in Model.Groups select GroupViewModelCache.GetViewModel(g)).ToList());
-                        _GroupsBinding = new GroupViewModelCollectionBinding(Model.Groups, _Groups);
+                        _groupsBinding = new GroupViewModelCollectionBinding(Model.Groups, _groups);
                     }
                 }
 
-                return _Groups;
+                return _groups;
             }
         }
 
@@ -94,13 +95,13 @@ namespace JCsTools.JCQ.ViewModel
         {
             get
             {
-                if (_GroupsView == null)
+                if (_groupsView == null)
                 {
-                    _GroupsView = (CollectionView) CollectionViewSource.GetDefaultView(Groups);
-                    _GroupsView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+                    _groupsView = (CollectionView)CollectionViewSource.GetDefaultView(Groups);
+                    _groupsView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
                 }
 
-                return _GroupsView;
+                return _groupsView;
             }
         }
 
@@ -108,24 +109,19 @@ namespace JCsTools.JCQ.ViewModel
         {
             get
             {
-                if (_ContactsView == null)
+                if (_contactsView == null)
                 {
-                    _ContactsView = (CollectionView) CollectionViewSource.GetDefaultView(Contacts);
+                    _contactsView = (CollectionView)CollectionViewSource.GetDefaultView(Contacts);
 
-                    _ContactsView.SortDescriptions.Add(new SortDescription("StatusFlag",
+                    _contactsView.SortDescriptions.Add(new SortDescription("StatusFlag",
                         ListSortDirection.Ascending));
-                    _ContactsView.SortDescriptions.Add(new SortDescription("Name",
+                    _contactsView.SortDescriptions.Add(new SortDescription("Name",
                         ListSortDirection.Ascending));
                 }
 
-                return _ContactsView;
+                return _contactsView;
             }
         }
-
-        //public Hashtable Attributes
-        //{
-        //    get { return Model.Attributes; }
-        //}
 
         public string Identifier
         {
@@ -137,33 +133,19 @@ namespace JCsTools.JCQ.ViewModel
             get { return Model.Name; }
         }
 
-        //Protected Sub XO(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
-        //    Debug.WriteLine(String.Format("Changed: {0}", e.PropertyName), "XO")
-        //End Sub
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         internal void OnContactPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var c = (ContactViewModel) sender;
+            var c = (ContactViewModel)sender;
 
             if (e.PropertyName == "StatusFlag" | e.PropertyName == "Name")
             {
-                Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(ContactsView.Refresh));
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(ContactsView.Refresh));
             }
         }
 
         protected void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, new Action<PropertyChangedEventArgs>(OnPropertyChanged), e);
-        }
-
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, e);
-            }
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action<PropertyChangedEventArgs>(OnPropertyChanged), e);
         }
     }
 }

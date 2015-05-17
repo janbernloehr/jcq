@@ -25,10 +25,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Linq;
-using JCsTools.Core;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Collections;
+using Jcq.Core.Contracts.Collections;
+using Jcq.IdentityManager.Contracts;
 
-namespace JCsTools.IdentityManager
+namespace Jcq.IdentityManager
 {
     public abstract class IdentityProvider : IIdentityProvider
     {

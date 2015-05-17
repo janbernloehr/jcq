@@ -26,8 +26,11 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines a Status Code.
+    /// </summary>
     public interface IStatusCode : IComparable
     {
         string DisplayName { get; }

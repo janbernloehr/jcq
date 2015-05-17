@@ -24,31 +24,19 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.ComponentModel;
-
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class ActivityStatusPageViewModel : INotifyPropertyChanged
+    public class ActivityStatusPageViewModel : ViewModelBase
     {
-        private string _ActivityMessage;
+        private string _activityMessage;
 
         public string ActivityMessage
         {
-            get { return _ActivityMessage; }
+            get { return _activityMessage; }
             set
             {
-                _ActivityMessage = value;
-                OnPropertyChanged("ActivityMessage");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                _activityMessage = value;
+                OnPropertyChanged();
             }
         }
     }

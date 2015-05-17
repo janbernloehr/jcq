@@ -24,11 +24,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core;
-using JCsTools.Core.Interfaces;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core.Collections;
+using Jcq.Core.Contracts.Collections;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqGroup : BaseStorageItem, IGroup
     {

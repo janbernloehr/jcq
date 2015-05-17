@@ -30,12 +30,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.IcqInterface.Internal;
+using Jcq.Core;
+using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.Internal;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     /// <summary>
     ///     Provides the state for an authentication cookie request.

@@ -25,13 +25,25 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    /// Defines the service contract of an IServiceProvider associated to an identity.
+    /// </summary>
     public interface IContext : IServiceProvider<IContextService>
     {
+        /// <summary>
+        /// Gets the identity this context is associated to.
+        /// </summary>
         IContact Identity { get; }
+
+        /// <summary>
+        /// Sets the status of the identity.
+        /// </summary>
+        /// <param name="statusCode">The new status code.</param>
+        /// <returns></returns>
         Task SetMyStatus(IStatusCode statusCode);
     }
 }

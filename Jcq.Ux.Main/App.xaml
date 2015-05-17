@@ -21,10 +21,12 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 -->
-<Application x:Class="JCsTools.JCQ.Ux.App"
+<Application x:Class="Jcq.Ux.Main.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ux="clr-namespace:JCsTools.JCQ.Ux"
+             xmlns:code="clr-namespace:Jcq.Ux.Main.Code"
+             xmlns:converters="clr-namespace:Jcq.Ux.Main.Converters"
              ShutdownMode="OnMainWindowClose"
              Exit="App_Exit"
              DispatcherUnhandledException="App_DispatcherUnhandledException"
@@ -35,7 +37,7 @@
                 <ResourceDictionary Source="Theme\WindowTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <ux:StringFormatConverter x:Key="sfc" />
+            <converters:StringFormatConverter x:Key="sfc" />
 
             <VisualBrush x:Key="vbrOnline">
                 <VisualBrush.Visual>

@@ -28,9 +28,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jcq.IcqProtocol.Internal;
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public interface IIcqDataTranferService
     {

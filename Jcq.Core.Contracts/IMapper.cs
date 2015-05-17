@@ -26,20 +26,62 @@
 
 using System;
 
-namespace JCsTools.Core.Interfaces
+namespace Jcq.Core.Contracts
 {
     /// <summary>
-    ///     Provides contract to implementation mapping. Mappings can either be configured by the
-    ///     Microkernel ConfigurationSection or using the AddImplementationMapping method at runtime.
+    /// Defines a contract for an contract to implementation mapper.
     /// </summary>
     public interface IMapper
     {
-        Type GetImplementationType<I>();
-        Type GetImplementationType(Type interfaceType);
-        I CreateImplementation<I>(params Object[] args);
-        object CreateImplementation(Type interfaceType, params Object[] args);
-        bool ExistsImplementation<I>();
-        bool ExistsImplementation(Type interfaceType);
-        void AddImplementationMapping(Type contractType, Type implementationType);
+        /// <summary>
+        /// Returns the type of the implementation registered for the given contract.
+        /// </summary>
+        /// <typeparam name="TC">The type of the contract.</typeparam>
+        /// <returns>The type of the implementation.</returns>
+        Type GetImplementationType<TC>();
+
+        /// <summary>
+        /// Returns the type of the implementation registered for the given contract.
+        /// </summary>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <returns>The type of the implementation.</returns>
+        Type GetImplementationType(Type contractType);
+        
+        /// <summary>
+        /// Returns an instance of the implementation registered for the given contract.
+        /// </summary>
+        /// <typeparam name="TC">The type of the contract.</typeparam>
+        /// <param name="args">The constructor arguments to pass to the implementation.</param>
+        /// <returns>An implementation instance of the contract.</returns>
+        TC CreateImplementation<TC>(params Object[] args);
+
+        /// <summary>
+        /// Returns an instance of the implementation registered for the given contract.
+        /// </summary>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <param name="args">The constructor arguments to pass to the implementation.</param>
+        /// <returns>An implementation instance of the contract.</returns>
+        object CreateImplementation(Type contractType, params Object[] args);
+
+        /// <summary>
+        /// Gets a value indicating whether an implementation has been registered for the given contract.
+        /// </summary>
+        /// <typeparam name="TC">The type of the contract.</typeparam>
+        /// <returns>True if an implementation has been registered. Otherwise false.</returns>
+        bool ExistsContractImplementation<TC>();
+
+        /// <summary>
+        /// Gets a value indicating whether an implementation has been registered for the given contract.
+        /// </summary>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <returns>True if an implementation has been registered. Otherwise false.</returns>
+        bool ExistsContractImplementation(Type contractType);
+
+        /// <summary>
+        /// Registers the given type as an implementation for the given contract.
+        /// </summary>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <param name="implementationType">The type of the implementation.</param>
+        void RegisterContractImplementation(Type contractType, Type implementationType);
     }
 }

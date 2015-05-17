@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvMessageData : Tlv
     {

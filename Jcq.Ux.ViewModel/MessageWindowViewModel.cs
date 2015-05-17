@@ -29,20 +29,18 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class MessageWindowViewModel : INotifyPropertyChanged
     {
         private readonly ObservableCollection<MessageViewModel> _messages;
         private readonly CountDownTimer _typingNotificationTimer;
-        //private ImageSource _ContactImage;
-        //private bool _ContactImageCreated;
         private string _statusText;
-        //private DispatcherTimer _textChangedTimer;
 
         public MessageWindowViewModel(ContactViewModel contact)
         {
@@ -151,14 +149,6 @@ namespace JCsTools.JCQ.ViewModel
             }
         }
 
-        //private MessageSenderRole GetSenderRole(IMessage message)
-        //{
-        //    if (message.Sender.Identifier == ApplicationService.Current.Context.Identity.Identifier)
-        //    {
-        //        return MessageSenderRole.ContextIdentity;
-        //    }
-        //    return MessageSenderRole.FirstAtt;
-        //}
 
         private void DisplayMessage(TextMessageViewModel message)
         {

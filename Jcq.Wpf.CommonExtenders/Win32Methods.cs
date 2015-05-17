@@ -27,7 +27,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace JCsTools.Wpf.Extenders
+namespace Jcq.Wpf.CommonExtenders
 {
     internal class Win32Methods
     {

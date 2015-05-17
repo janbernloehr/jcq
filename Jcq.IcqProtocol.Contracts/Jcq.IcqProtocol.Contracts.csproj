@@ -7,7 +7,7 @@
     <ProjectGuid>{2F8FA080-7FB1-4F65-8ADE-380F08DA430B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JCsTools.JCQ.IcqInterface.Interfaces</RootNamespace>
+    <RootNamespace>Jcq.IcqProtocol.Contracts</RootNamespace>
     <AssemblyName>Jcq.IcqProtocol.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisconnectedEventArgs.cs" />
-    <Compile Include="IAvatarService.cs" />
+    <Compile Include="IIconService.cs" />
     <Compile Include="IConnector.cs" />
     <Compile Include="IContact.cs" />
     <Compile Include="IContactListInfo.cs" />

@@ -27,9 +27,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using JCsTools.Core;
+using Jcq.Core;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class RateClass : ISerializable
     {
