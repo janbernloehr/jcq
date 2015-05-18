@@ -404,6 +404,15 @@ namespace Jcq.IcqProtocol.Internal
 
                     try
                     {
+                        if (dataItem.Flap.Channel == FlapChannel.SnacData)
+                        {
+                            var s = (Snac)dataItem.Flap.DataItems.First();
+                            int wait = Context.GetService<IRateLimitsService>().Calculate(s.ServiceId, s.SubtypeId);
+
+                            if (wait > 0)
+                                Thread.Sleep(wait);
+                        }
+
                         context.SendData(dataItem.Data);
 
                         if (FlapSent != null)
@@ -414,6 +423,8 @@ namespace Jcq.IcqProtocol.Internal
                         //TODO: For the moment we want it in this way so that this thread can continue to send without being disturbed
                         // by what happens on the other threads
                         Task.Run(() => dataItem.TaskCompletionSource.SetResult(dataItem.Flap.DatagramSequenceNumber));
+
+                        Thread.Sleep(10); //TODO: Implement proper throtteling
                     }
                     catch (Exception sendException)
                     {

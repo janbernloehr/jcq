@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TransferWindow.xaml.cs" company="Jan-Cornelius Molnar">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IRateLimitsService.cs" company="Jan-Cornelius Molnar">
 // The MIT License (MIT)
 // 
 // Copyright (c) 2015 Jan-Cornelius Molnar
@@ -26,36 +26,34 @@
 
 using System;
 using System.ComponentModel;
-using System.Windows;
-using System.Windows.Threading;
-using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
+using Jcq.Core.Contracts.Collections;
 
-namespace Jcq.Ux.Main.Views
+namespace Jcq.IcqProtocol.Contracts
 {
-    public partial class TransferWindow : Window
+    public interface IRateLimitsService : IContextService
     {
-        public TransferWindow()
-        {
-            ViewModel = new TransferWindowViewModel();
+        IReadOnlyNotifyingCollection<IRateLimitsClass> RateLimits { get; }
 
-            ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        event EventHandler RateLimitsReceived;
 
-            DataContext = ViewModel;
+        int Calculate(int serviceTypeId, int subTypeId);
+        void EmergencyThrottle();
+    }
 
-            InitializeComponent();
+    public interface IRateLimitsClass : INotifyPropertyChanged
+    {
+        long ClassId { get; }
+        long WindowSize { get; }
+        long ClearLevel { get; }
+        long AlertLevel { get; }
+        long LimitLevel { get; }
+        long DisconnectLevel { get; }
+        long CurrentLevel { get; }
+        long MaxLevel { get; }
+        long LastTime { get; }
+        byte CurrentState { get; }
 
-            App.DefaultWindowStyle.Attach(this);
-        }
-
-        public TransferWindowViewModel ViewModel { get; private set; }
-
-        protected void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Message")
-            {
-                Dispatcher.Invoke(DispatcherPriority.Normal, new Action(MessageTextBox.ScrollToEnd));
-            }
-        }
+        long Computed { get; }
+        long LocalLastTime { get; }
     }
 }

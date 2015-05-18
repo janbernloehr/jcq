@@ -26,7 +26,6 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Jcq.IcqProtocol.Annotations;
 
 namespace Jcq.Ux.ViewModel
 {
@@ -34,7 +33,6 @@ namespace Jcq.Ux.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));

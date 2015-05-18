@@ -50,6 +50,8 @@ namespace Jcq.IcqProtocol
             GetService<IIconService>();
 
             GetService<IDataWarehouseService>();
+
+            GetService<IRateLimitsService>();
         }
 
         public C GetService<C>() where C : IContextService

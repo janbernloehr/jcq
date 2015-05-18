@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\RateLimitsConverter.cs" />
     <Compile Include="Services\TextMessageEntity.cs" />
     <Compile Include="Views\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
@@ -89,6 +90,9 @@
     </Compile>
     <Compile Include="Views\PrivacyWindow.xaml.cs">
       <DependentUpon>PrivacyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RateLimitsWindow.xaml.cs">
+      <DependentUpon>RateLimitsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
@@ -167,6 +171,10 @@
     <Page Include="Views\PrivacyWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RateLimitsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SearchWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

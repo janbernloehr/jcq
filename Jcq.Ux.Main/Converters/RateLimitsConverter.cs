@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TransferWindow.xaml.cs" company="Jan-Cornelius Molnar">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RateLimitsConverter.cs" company="Jan-Cornelius Molnar">
 // The MIT License (MIT)
 // 
 // Copyright (c) 2015 Jan-Cornelius Molnar
@@ -25,37 +25,35 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Threading;
-using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
+using System.Globalization;
+using System.Windows.Data;
+using System.Windows.Media;
+using Jcq.IcqProtocol.Contracts;
 
-namespace Jcq.Ux.Main.Views
+namespace Jcq.Ux.Main.Converters
 {
-    public partial class TransferWindow : Window
+    public class RateLimitsConverter : IValueConverter
     {
-        public TransferWindow()
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ViewModel = new TransferWindowViewModel();
+            var rate = value as IRateLimitsClass;
 
-            ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+            if (rate == null)
+                return null;
 
-            DataContext = ViewModel;
+            if (rate.CurrentLevel > rate.ClearLevel)
+                return Brushes.DarkGreen;
+            if (rate.CurrentLevel > rate.AlertLevel)
+                return Brushes.Black;
+            if (rate.CurrentLevel > rate.LimitLevel)
+                return Brushes.DarkOrange;
 
-            InitializeComponent();
-
-            App.DefaultWindowStyle.Attach(this);
+            return Brushes.DarkRed;
         }
 
-        public TransferWindowViewModel ViewModel { get; private set; }
-
-        protected void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (e.PropertyName == "Message")
-            {
-                Dispatcher.Invoke(DispatcherPriority.Normal, new Action(MessageTextBox.ScrollToEnd));
-            }
+            throw new NotImplementedException();
         }
     }
 }

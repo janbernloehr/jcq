@@ -32,8 +32,8 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0107 : Snac
     {
-        private readonly List<RateClass> _RateClasses = new List<RateClass>();
-        private readonly List<RateGroup> _RateGroups = new List<RateGroup>();
+        private readonly List<RateClass> _rateClasses = new List<RateClass>();
+        private readonly List<RateGroup> _rateGroups = new List<RateGroup>();
 
         public Snac0107() : base(0x1, 0x7)
         {
@@ -41,12 +41,12 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public List<RateClass> RateClasses
         {
-            get { return _RateClasses; }
+            get { return _rateClasses; }
         }
 
         public List<RateGroup> RateGroups
         {
-            get { return _RateGroups; }
+            get { return _rateGroups; }
         }
 
         public override void Deserialize(List<byte> data)
@@ -62,11 +62,10 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (classIndex < classCount)
             {
-                RateClass cls;
-                cls = new RateClass();
+                var cls = new RateClass();
                 cls.Deserialize(data.GetRange(index, data.Count - index));
 
-                _RateClasses.Add(cls);
+                _rateClasses.Add(cls);
 
                 index += cls.TotalSize;
                 classIndex += 1;
@@ -74,13 +73,12 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (index + 4 <= data.Count)
             {
-                RateGroup @group;
-                @group = new RateGroup();
-                @group.Deserialize(data.GetRange(index, data.Count - index));
+                var rateGroup = new RateGroup();
+                rateGroup.Deserialize(data.GetRange(index, data.Count - index));
 
-                _RateGroups.Add(@group);
+                _rateGroups.Add(rateGroup);
 
-                index += @group.TotalSize;
+                index += rateGroup.TotalSize;
             }
 
             TotalSize = index;
@@ -93,7 +91,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            return 2 + _RateClasses.Sum(x => x.CalculateTotalSize()) + _RateGroups.Sum(x => x.CalculateTotalSize());
+            return 2 + _rateClasses.Sum(x => x.CalculateTotalSize()) + _rateGroups.Sum(x => x.CalculateTotalSize());
         }
     }
 }

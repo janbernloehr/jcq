@@ -41,6 +41,9 @@ namespace Jcq.Ux.Main.Services
 
             var w1 = new PrivacyWindow();
             w1.Show();
+
+            var w2 = new RateLimitsWindow();
+            w2.Show();
         }
 
         void INavigationService.NavigateToCreateIdentityPage()

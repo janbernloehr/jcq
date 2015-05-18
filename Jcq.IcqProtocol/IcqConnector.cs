@@ -63,6 +63,7 @@ namespace Jcq.IcqProtocol
         public event EventHandler SignInCompleted;
         public event EventHandler<SignInFailedEventArgs> SignInFailed;
         public event EventHandler<DisconnectedEventArgs> Disconnected;
+        public event EventHandler<ServerErrorEventArgs> ServerError;
 
         public async Task<bool> SignInAsync(ICredential credential)
         {
@@ -160,6 +161,14 @@ namespace Jcq.IcqProtocol
             }
         }
 
+        private void OnServerError(string message)
+        {
+            if (ServerError != null)
+            {
+                ServerError(this, new ServerErrorEventArgs(message));
+            }
+        }
+
         private void OnSignInCompleted()
         {
             if (SignInCompleted != null)
@@ -170,19 +179,27 @@ namespace Jcq.IcqProtocol
 
         private void AnalyseSnac0101(Snac0101 dataIn)
         {
-            if (!_isSigningIn)
-                return;
-
             try
             {
-                OnSignInFailed(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode,
-                    dataIn.SubError.ErrorSubCode));
+                OnServerError(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode, dataIn.SubError.ErrorSubCode));
+
+                if (dataIn.ErrorCode == ErrorCode.ServerRateLimitExceeded & !_isSigningIn)
+                {
+                    //var s = new Snac0106();
+
+                    //Send(s); // request rates limits...
+
+                    //Context.GetService<IRateLimitsService>().EmergencyThrottle();
+
+                }
 
                 throw new IcqException(dataIn.ServiceId, dataIn.ErrorCode, dataIn.SubError.ErrorSubCode);
             }
             catch (Exception ex)
             {
-                _signInTaskCompletionSource.SetException(ex);
+                if (_isSigningIn)
+                    _signInTaskCompletionSource.SetException(ex);
+
                 Kernel.Exceptions.PublishException(ex);
             }
         }
@@ -384,7 +401,7 @@ namespace Jcq.IcqProtocol
 
             // The user is not idle so set the idle time to zero.
 
-            var setIdleTime = new Snac0111 {IdleTime = TimeSpan.FromSeconds(0)};
+            var setIdleTime = new Snac0111 { IdleTime = TimeSpan.FromSeconds(0) };
 
             // This is used to tell the server the understood services.
             // Since this is an Icq Client only icq services are listed.

@@ -56,6 +56,7 @@
     <Compile Include="IOfflineMessageService.cs" />
     <Compile Include="IPasswordCredential.cs" />
     <Compile Include="IPrivacyService.cs" />
+    <Compile Include="IRateLimitsService.cs" />
     <Compile Include="ISearchService.cs" />
     <Compile Include="IStatusCode.cs" />
     <Compile Include="IStorageItem.cs" />

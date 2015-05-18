@@ -50,6 +50,11 @@ namespace Jcq.IcqProtocol.Contracts
         event EventHandler<DisconnectedEventArgs> Disconnected;
 
         /// <summary>
+        /// Occurs when the server reports an error.
+        /// </summary>
+        event EventHandler<ServerErrorEventArgs> ServerError;
+
+        /// <summary>
         /// Sign out of the network.
         /// </summary>
         void SignOut();
@@ -60,5 +65,20 @@ namespace Jcq.IcqProtocol.Contracts
         /// <param name="credential">The credentials used to sign in.</param>
         /// <returns></returns>
         Task<bool> SignInAsync(ICredential credential);
+    }
+
+    public class ServerErrorEventArgs : EventArgs
+    {
+        private readonly string _errorMessage;
+
+        public ServerErrorEventArgs(string errorMessage)
+        {
+            _errorMessage = errorMessage;
+        }
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+        }
     }
 }
