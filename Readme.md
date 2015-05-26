@@ -4,6 +4,8 @@
 
 Jcq is an OSCAR (Icq/Aim) Client written in C#/WPF.
 
+This project was previously hosted on [CodePlex](https://jcq.codeplex.com).
+
 ## Implemented Features
 - Logon on Icq Servers
 - Downloading Contact Lists (including Contact Details and Avatars)
