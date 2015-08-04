@@ -32,11 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisconnectedEventArgs.cs" />
@@ -75,10 +71,6 @@
     <ProjectReference Include="..\Jcq.Core.Contracts\Jcq.Core.Contracts.csproj">
       <Project>{5314e942-5051-44d1-b8cc-7cd785f1ad63}</Project>
       <Name>Jcq.Core.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Jcq.Core\Jcq.Core.csproj">
-      <Project>{e5bb29c3-3e30-464d-b8c4-9500d9a334fb}</Project>
-      <Name>Jcq.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
