@@ -1,6 +1,10 @@
 # Jcq
 
+[![Build status](https://ci.appveyor.com/api/projects/status/o3gubp3g9hlraqyg/branch/master?svg=true)](https://ci.appveyor.com/project/janmolnar/jcq/branch/master)
+
 Jcq is an OSCAR (Icq/Aim) Client written in C#/WPF.
+
+This project was previously hosted on [CodePlex](https://jcq.codeplex.com).
 
 ## Implemented Features
 - Logon on Icq Servers
