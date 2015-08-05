@@ -214,6 +214,7 @@
     <Compile Include="Snac Family 13\TlvPersonalBuddyAlerts.cs" />
     <Compile Include="Snac Family 13\TlvPrivacySetting.cs" />
     <Compile Include="Snac Family 13\TlvSSIInnerItems.cs" />
+    <Compile Include="Snac Family 15\Snac1501.cs" />
     <Compile Include="Snac Family 15\Snac1502.cs" />
     <Compile Include="Snac Family 15\Snac1503.cs" />
     <Compile Include="Snac.cs" />

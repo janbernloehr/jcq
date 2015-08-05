@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Jcq.Core.Collections;
 using Jcq.Core.Contracts.Collections;
@@ -37,7 +38,7 @@ namespace Jcq.IcqProtocol
 {
     public class IcqRateLimitsService : ContextService, IRateLimitsService
     {
-        private Dictionary<Tuple<int, int>, long> _mappings;
+        private readonly Dictionary<Tuple<int, int>, long> _mappings;
 
         public IcqRateLimitsService(IContext context)
             : base(context)
@@ -126,6 +127,9 @@ namespace Jcq.IcqProtocol
 
             foreach (var rateGroup in snac.RateGroups)
             {
+                var cls = RateLimits.Where(l => l.ClassId == rateGroup.GroupId).FirstOrDefault();
+
+
                 foreach (var pair in rateGroup.ServiceFamilyIdSubTypeIdPairs)
                 {
                     var key = new Tuple<int, int>(pair.FamilyId, pair.SubtypeId);
@@ -134,6 +138,9 @@ namespace Jcq.IcqProtocol
                         continue;
 
                     _mappings.Add(key, rateGroup.GroupId);
+
+                    if (cls != null)
+                        cls.AddFamily(pair.FamilyId, pair.SubtypeId);
                 }
             }
 
@@ -211,6 +218,21 @@ namespace Jcq.IcqProtocol
         private long _localLastTime;
         private long _dataLastUpdatedFromServer;
         private int _waitTime;
+
+        private List<Tuple<int, int>> _families = new List<Tuple<int, int>>();
+
+        public void AddFamily(int serviceId , int subId)
+        {
+            _families.Add(new Tuple<int,int>(serviceId, subId));
+        }
+
+        public string Families
+        {
+            get
+            {
+                return string.Join(" ", _families.Select(f => string.Format("{0:X},{1:X}", f.Item1, f.Item2)).ToArray());
+            }
+        }
 
         public long ClassId
         {

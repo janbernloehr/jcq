@@ -33,21 +33,24 @@
     mc:Ignorable="d" d:DesignHeight="436.96" d:DesignWidth="441.6"
     d:DataContext="{d:DesignInstance viewModel:SignInPageViewModel}">
     <Page.Resources>
+        <SolidColorBrush x:Key="TextColor" Color="Black"></SolidColorBrush>
+        
+        
         <DataTemplate DataType="{x:Type identity:Identity}">
             <DockPanel>
                 <Image DockPanel.Dock="Left" Source="{Binding Path=ImageUrl}" Margin="4" Width="48" Height="48" />
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="{Binding Path=Identifier}" FontWeight="Bold" />
-                    <TextBlock Text="{Binding Path=Description}" Foreground="#ccc" />
+                    <TextBlock Text="{Binding Path=Description}" />
                 </StackPanel>
             </DockPanel>
         </DataTemplate>
 
         <Style TargetType="{x:Type ListViewItem}">
-            <Setter Property="Background" Value="Transparent" />
+            <!--<Setter Property="Background" Value="Transparent" />-->
             <Setter Property="Padding" Value="2" />
-            <Setter Property="Foreground" Value="#bbb" />
-            <Setter Property="Template">
+            <!--<Setter Property="Foreground" Value="#bbb" />-->
+            <!--<Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListViewItem}">
                         <Border SnapsToDevicePixels="true" x:Name="Bd" Background="{TemplateBinding Background}"
@@ -104,7 +107,7 @@
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
-            </Setter>
+            </Setter>-->
             <EventSetter Event="MouseDoubleClick" Handler="OnIdentityDoubleClick" />
         </Style>
     </Page.Resources>
@@ -120,19 +123,19 @@
         </Grid.RowDefinitions>
 
 
-        <TextBlock Text="Please select your identity to sign in" Foreground="White" Margin="6" />
+        <TextBlock Text="Please select your identity to sign in" Foreground="{StaticResource TextColor}" Margin="6" />
 
         <ListView Grid.Row="1" IsSynchronizedWithCurrentItem="True" Padding="0" Margin="0,0,0,6"
                   ItemsSource="{Binding Path=Identities}" BorderBrush="{x:Null}"
-                  Foreground="#FFE7E7E7">
-            <ListView.Background>
+                  >
+            <!--<ListView.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF3B3B3B" Offset="0.009" />
                     <GradientStop Color="#FF101010" Offset="0.964" />
                     <GradientStop Color="#FF161616" Offset="0" />
                     <GradientStop Color="#FF000000" Offset="1" />
                 </LinearGradientBrush>
-            </ListView.Background>
+            </ListView.Background>-->
         </ListView>
 
         <DockPanel LastChildFill="False" Grid.Row="2">

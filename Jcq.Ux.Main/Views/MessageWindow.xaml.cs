@@ -181,7 +181,7 @@ namespace Jcq.Ux.Main.Views
                 ViewModel.SendTypingNotification(string.IsNullOrEmpty(txtMessage.Text)
                     ? TextChangedAction.Cleared
                     : TextChangedAction.Changed);
-                Debug.WriteLine("Text changed to : {0}", txtMessage.Text);
+                //Debug.WriteLine("Text changed to : {0}", txtMessage.Text);
             }
             catch (Exception ex)
             {

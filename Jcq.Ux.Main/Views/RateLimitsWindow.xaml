@@ -38,6 +38,7 @@
                     <GridViewColumn Header="LocalLastTime" DisplayMemberBinding="{Binding LocalLastTime}" />
                     <GridViewColumn Header="ServerLastTime" DisplayMemberBinding="{Binding DataLastUpdatedFromServer}" />
                     <GridViewColumn Header="WaitTime" DisplayMemberBinding="{Binding WaitTime}" />
+                    <GridViewColumn Header="Families" DisplayMemberBinding="{Binding Families}" />
                 </GridView>
             </ListView.View>
             

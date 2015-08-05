@@ -135,6 +135,8 @@ namespace Jcq.Ux.Main
                 //avatarSelWindow = New TestAvatarSelector
                 //avatarSelWindow.Show()
 
+                EmojiHelper.Initialize();
+
                 MainWindow = hostWindow;
             }
             catch (Exception ex)

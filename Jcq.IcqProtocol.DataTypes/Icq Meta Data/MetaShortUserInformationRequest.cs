@@ -53,7 +53,12 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override void Deserialize(List<byte> data)
         {
-            throw new NotImplementedException();
+            base.Deserialize(data);
+
+            int index = SizeFixPart + 2;
+
+            SearchUin = (int)ByteConverter.ToUInt32LE(data.GetRange(index, 4));
+            index += 4;
         }
     }
 }

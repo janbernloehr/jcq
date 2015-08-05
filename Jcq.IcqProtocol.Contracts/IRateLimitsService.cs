@@ -42,6 +42,8 @@ namespace Jcq.IcqProtocol.Contracts
 
     public interface IRateLimitsClass : INotifyPropertyChanged
     {
+        string Families { get; }
+
         long ClassId { get; }
         long WindowSize { get; }
         long ClearLevel { get; }

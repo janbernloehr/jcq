@@ -89,7 +89,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public static string GetKey(Snac snac)
         {
-            return string.Format("{0:X2},{1:X2}", snac.SubtypeId == 1 ? 1 : snac.ServiceId, snac.SubtypeId);
+            return string.Format("{0:X2},{1:X2}", snac.ServiceId, snac.SubtypeId);
         }
     }
 }

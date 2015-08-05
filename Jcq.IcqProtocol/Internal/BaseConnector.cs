@@ -28,15 +28,15 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Jcq.IcqProtocol.Internal;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol.Internal
 {
@@ -272,7 +272,12 @@ namespace Jcq.IcqProtocol.Internal
                     FlapReceived(this, new FlapTransportEventArgs(flap));
                 }
 
-                if (flap.Channel != FlapChannel.SnacData) return;
+                WriteInFlapLog(flapData, flap);
+
+                if (flap.Channel != FlapChannel.SnacData)
+                {
+                    return;
+                }
 
                 Task.Run(() =>
                 {
@@ -295,6 +300,44 @@ namespace Jcq.IcqProtocol.Internal
                 // the analyze loop should still continue.
                 Kernel.Exceptions.PublishException(ex);
             }
+        }
+
+        private void WriteFlapLog(string modifier, List<byte> flapData, Flap flap)
+        {
+            try
+            {
+                var path = string.Format("jcq/dumps/{0}/{3}/{1}_{2}.json", TcpContext.Id, flap.DatagramSequenceNumber,
+                        flap.Channel == FlapChannel.SnacData & flap.DataItems.Any()
+                            ? flap.DataItems.First().GetType().Name
+                            : Enum.GetName(typeof(FlapChannel), flap.Channel),
+                        modifier);
+
+                var file = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), path));
+
+                if (!file.Directory.Exists)
+                {
+                    file.Directory.Create();
+                }
+
+                using (var sw = new StreamWriter(file.FullName))
+                {
+                    sw.Write(BitConverter.ToString(flapData.ToArray()));
+                }
+            }
+            catch (Exception ex)
+            {
+                Kernel.Exceptions.PublishException(ex);
+            }
+        }
+
+        private void WriteInFlapLog(List<byte> flapData, Flap flap)
+        {
+            WriteFlapLog("in", flapData, flap);
+        }
+
+        private void WriteOutFlapLog(List<byte> flapData, Flap flap)
+        {
+            WriteFlapLog("out", flapData, flap);
         }
 
         //private void OnTcpContextDataReceived(object sender, DataReceivedEventArgs e)
@@ -406,8 +449,8 @@ namespace Jcq.IcqProtocol.Internal
                     {
                         if (dataItem.Flap.Channel == FlapChannel.SnacData)
                         {
-                            var s = (Snac)dataItem.Flap.DataItems.First();
-                            int wait = Context.GetService<IRateLimitsService>().Calculate(s.ServiceId, s.SubtypeId);
+                            var s = (Snac) dataItem.Flap.DataItems.First();
+                            var wait = Context.GetService<IRateLimitsService>().Calculate(s.ServiceId, s.SubtypeId);
 
                             if (wait > 0)
                                 Thread.Sleep(wait);
@@ -496,6 +539,8 @@ namespace Jcq.IcqProtocol.Internal
 
             _sendBuffer.Post(pair);
 
+            WriteOutFlapLog(pair.Data, flap);
+
             return pair.TaskCompletionSource.Task;
         }
 
@@ -518,6 +563,8 @@ namespace Jcq.IcqProtocol.Internal
             foreach (var pair in pairs)
             {
                 _sendBuffer.Post(pair);
+
+                WriteOutFlapLog(pair.Data, pair.Flap);
 
                 tasks.Add(pair.TaskCompletionSource.Task);
             }

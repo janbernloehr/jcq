@@ -28,8 +28,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Jcq.Ux.ViewModel
 {
@@ -39,20 +43,20 @@ namespace Jcq.Ux.ViewModel
         {
             if (e.OldValue != null)
             {
-                var collection = (INotifyCollectionChanged) e.OldValue;
+                var collection = (INotifyCollectionChanged)e.OldValue;
 
                 collection.CollectionChanged -= OnCollectionChanged;
             }
 
             if (e.NewValue != null)
             {
-                var collection = (INotifyCollectionChanged) e.NewValue;
+                var collection = (INotifyCollectionChanged)e.NewValue;
 
                 lookup.Add(collection, d);
 
-                var document = (FlowDocument) d;
+                var document = (FlowDocument)d;
 
-                foreach (var item in (IEnumerable) collection)
+                foreach (var item in (IEnumerable)collection)
                 {
                     AppendItemToDocument(document, item);
                 }
@@ -67,8 +71,8 @@ namespace Jcq.Ux.ViewModel
             {
                 case NotifyCollectionChangedAction.Add:
                     var item = e.NewItems[0];
-                    var collection = (INotifyCollectionChanged) sender;
-                    var document = (FlowDocument) lookup[collection];
+                    var collection = (INotifyCollectionChanged)sender;
+                    var document = (FlowDocument)lookup[collection];
 
                     AppendItemToDocument(document, item);
                     break;
@@ -79,16 +83,27 @@ namespace Jcq.Ux.ViewModel
 
         private static void AppendItemToDocument(FlowDocument document, object item)
         {
-            var template = DataTemplateSelector.SelectTemplate(item, document);
-            var paragraph = (Paragraph) template.LoadContent();
-            paragraph.DataContext = item;
+            var msg = item as TextMessageViewModel;
+
+            Paragraph paragraph;
+
+            if (msg != null)
+            {
+                paragraph = MessageToParagraph(msg);
+            }
+            else
+            {
+                var template = DataTemplateSelector.SelectTemplate(item, document);
+                paragraph = (Paragraph)template.LoadContent();
+                paragraph.DataContext = item;
+            }
 
             document.Blocks.Add(paragraph);
         }
 
         public static INotifyCollectionChanged GetCollection(DependencyObject obj)
         {
-            return (INotifyCollectionChanged) obj.GetValue(CollectionProperty);
+            return (INotifyCollectionChanged)obj.GetValue(CollectionProperty);
         }
 
         public static void SetCollection(DependencyObject obj, INotifyCollectionChanged value)
@@ -97,10 +112,61 @@ namespace Jcq.Ux.ViewModel
         }
 
         public static readonly DependencyProperty CollectionProperty = DependencyProperty.RegisterAttached(
-            "Collection", typeof (INotifyCollectionChanged), typeof (FlowDocumentBinding),
+            "Collection", typeof(INotifyCollectionChanged), typeof(FlowDocumentBinding),
             new FrameworkPropertyMetadata(null, OnThisPropertyChanged));
 
         private static readonly Dictionary<INotifyCollectionChanged, DependencyObject> lookup =
             new Dictionary<INotifyCollectionChanged, DependencyObject>();
+
+        private static Paragraph MessageToParagraph(TextMessageViewModel vm)
+        {
+            var p = new Paragraph()
+            {
+                Margin = new Thickness(0)
+            };
+
+            var r1 = new Run() { Foreground = vm.Foreground, Text = String.Format("{0:t} ~ {1}: ", vm.DateCreated, vm.Sender.Name) };
+            //var r2 = new Run() { Foreground = vm.Foreground, Text = vm.Message };
+
+            p.Inlines.Add(r1);
+            //          p.Inlines.Add(r2);
+
+            string message = vm.Message;
+
+            int index = 0;
+
+            foreach (Match m in EmojiHelper.EmojiRegex.Matches(vm.Message))
+            {
+                if (m.Index > index)
+                {
+                    p.Inlines.Add(new Run() { Text = message.Substring(index, m.Index - index) });
+                }
+
+                var key = message.Substring(m.Index, m.Length);
+                var value = EmojiHelper.EmojiMappings[key];
+
+                //p.Inlines.Add(new Run() { Foreground = new SolidColorBrush(Colors.BlueViolet), Text = value });
+
+                var emojiPath = string.Format("pack://application:,,,/Jcq.Ux.Main;component/resources/emoji/png/{0}.png", value);
+
+                Image image = new Image();
+                var z = (new ImageSourceConverter()).ConvertFromString(emojiPath);
+                image.Source = (ImageSource) z;
+                image.Width = 16;
+                image.Height = 16;
+                image.Stretch = Stretch.UniformToFill;
+
+                InlineUIContainer container = new InlineUIContainer(image);
+                
+                p.Inlines.Add(container);
+
+                index = m.Index + m.Length;
+            }
+
+            if (index < message.Length)
+                p.Inlines.Add(new Run() { Text = message.Substring(index) });
+
+            return p;
+        }
     }
 }

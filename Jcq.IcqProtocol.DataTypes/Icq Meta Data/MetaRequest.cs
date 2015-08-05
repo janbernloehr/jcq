@@ -62,32 +62,30 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = new List<byte>();
 
-            data.AddRange(ByteConverter.GetBytesLE((ushort) (CalculateDataSize() + SizeFixPart - 2)));
-            data.AddRange(ByteConverter.GetBytesLE((uint) ClientUin));
-            data.AddRange(ByteConverter.GetBytesLE((ushort) RequestType));
-            data.AddRange(ByteConverter.GetBytesLE((ushort) RequestSequenceNumber));
+            data.AddRange(ByteConverter.GetBytesLE((ushort)(CalculateDataSize() + SizeFixPart - 2)));
+            data.AddRange(ByteConverter.GetBytesLE((uint)ClientUin));
+            data.AddRange(ByteConverter.GetBytesLE((ushort)RequestType));
+            data.AddRange(ByteConverter.GetBytesLE((ushort)RequestSequenceNumber));
 
             return data;
         }
 
         public virtual void Deserialize(List<byte> data)
         {
-            //Dim index As Integer
+            int index = 0;
 
-            //_DataSize = ByteConverter.ToUInt16LE(data.GetRange(index, 2)) - (SizeFixPart - 2)
-            //index += 2
+            DataSize = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
 
-            //_ClientUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4))
-            //index += 4
+            index += 2;
 
-            //_RequestType = DirectCast(CInt(ByteConverter.ToUInt16LE(data.GetRange(index, 2))), MetaRequestType)
-            //index += 2
+            ClientUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4));
+            index += 4;
 
-            //_RequestSequenceNumber = ByteConverter.ToUInt16LE(data.GetRange(index, 2)) - (SizeFixPart - 2)
-            //index += 2
+            RequestType = (MetaRequestType)ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            index += 2;
 
-            //_HasData = True
-            throw new NotImplementedException();
+            RequestSequenceNumber = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            index += 2;
         }
 
         public static int GetNextSequenceNumber()

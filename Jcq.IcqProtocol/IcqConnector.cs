@@ -56,7 +56,7 @@ namespace Jcq.IcqProtocol
             RegisterSnacHandler<Snac0118>(0x1, 0x18, AnalyseSnac0118);
 
             RegisterSnacHandler<Snac1306>(0x13, 0x6, AnalyseSnac1306);
-
+            
             InternalDisconnected += BaseInternalDisconnected;
         }
 

@@ -63,7 +63,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             if (MetaData.MetaRequest is MetaShortUserInformationRequest)
             {
-                return string.Format("Search: {0}", ((MetaShortUserInformationRequest) MetaData.MetaRequest).SearchUin);
+                return string.Format("Snac1502 Search: {0}", ((MetaShortUserInformationRequest) MetaData.MetaRequest).SearchUin);
             }
             return base.ToString();
         }

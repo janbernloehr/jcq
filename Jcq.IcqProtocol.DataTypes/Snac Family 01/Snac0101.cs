@@ -70,6 +70,10 @@ namespace Jcq.IcqProtocol.DataTypes
                 {
                     _subError.Deserialize(data.GetRange(index, desc.TotalSize));
                 }
+                else if (desc.TypeId == 0x21)
+                {
+                    
+                }
 
                 index += desc.TotalSize;
             }
@@ -80,6 +84,11 @@ namespace Jcq.IcqProtocol.DataTypes
         public override int CalculateDataSize()
         {
             return 2 + 6;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} :: {1} {2}", base.ToString(), ErrorCode, SubError != null ? SubError.ErrorSubCode.ToString() : "-");
         }
     }
 }

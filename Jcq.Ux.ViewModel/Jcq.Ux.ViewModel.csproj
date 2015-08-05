@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivityStatusPageViewModel.cs" />
+    <Compile Include="EmojiHelper.cs" />
     <Compile Include="Services\ApplicationService.cs" />
     <Compile Include="Services\AvatarImageService.cs" />
     <Compile Include="AvatarSelectorViewModel.cs" />

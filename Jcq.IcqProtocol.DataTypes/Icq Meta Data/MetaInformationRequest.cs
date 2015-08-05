@@ -50,7 +50,14 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override void Deserialize(List<byte> data)
         {
-            throw new NotImplementedException();
+            base.Deserialize(data);
+
+            int index = SizeFixPart;
+
+            RequestSubType = (MetaRequestSubType)ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            index += 2;
+
+
         }
     }
 }

@@ -37,7 +37,8 @@ namespace Jcq.IcqProtocol
     {
         private readonly IcqContact _contact;
         private readonly IContext _context;
-        private readonly int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
+        private int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
+        private int _retryDue2Millisecond = Convert.ToInt32(TimeSpan.FromMinutes(5).TotalMilliseconds);
         private bool _requestSucceeded;
         private int _retryIteration;
         private Timer _retryTimer;
@@ -130,6 +131,11 @@ namespace Jcq.IcqProtocol
             SendRequest();
 
             _retryTimer = new Timer(OnTimerCallback, null, 0, _retryDueMillisecond);
+        }
+
+        public void ServerRateLimitExceeded()
+        {
+            _retryTimer.Change(_retryDue2Millisecond, _retryDue2Millisecond);
         }
     }
 }

@@ -48,10 +48,11 @@ namespace Jcq.IcqProtocol
             if (connector == null)
                 throw new InvalidCastException("Context Connector Service must be of Type IcqConnector");
 
-            connector.RegisterSnacHandler(0x1, 0xf, new Action<Snac010F>(AnalyseSnac010F));
-            connector.RegisterSnacHandler(0x3, 0xb, new Action<Snac030B>(AnalyseSnac030B));
-            connector.RegisterSnacHandler(0x3, 0xc, new Action<Snac030C>(AnalyseSnac030C));
-            connector.RegisterSnacHandler(0x15, 0x3, new Action<Snac1503>(AnalyseSnac1503));
+            connector.RegisterSnacHandler<Snac010F>(0x1, 0xf, AnalyseSnac010F);
+            connector.RegisterSnacHandler<Snac030B>(0x3, 0xb, AnalyseSnac030B);
+            connector.RegisterSnacHandler<Snac030C>(0x3, 0xc, AnalyseSnac030C);
+            connector.RegisterSnacHandler<Snac1501>(0x15, 0x1, AnalyseSnac1501);
+            connector.RegisterSnacHandler<Snac1503>(0x15, 0x3, AnalyseSnac1503);
         }
 
         public void RequestShortUserInfo(IContact contact)
@@ -94,13 +95,28 @@ namespace Jcq.IcqProtocol
 
                 // sleep for 1 second to avoid server spaming
                 // which may result in a disconnect.
-                Thread.Sleep(1000);
+                Thread.Sleep(ComputeSleepInterval());
             }
 
             if (RequestShortUserInfoForAllUsersCompleted != null)
             {
                 RequestShortUserInfoForAllUsersCompleted(this, EventArgs.Empty);
             }
+        }
+
+        private DateTime _lastRateLimitExcession = DateTime.MinValue;
+
+
+        private TimeSpan ComputeSleepInterval()
+        {
+            var diff = _lastRateLimitExcession.AddMinutes(5) - DateTime.Now;
+
+            if (diff.TotalSeconds < 1)
+                 diff = TimeSpan.FromSeconds(1);
+
+            Debug.WriteLine("IcqUserInformationService: Sleep Interval is {0}", diff);
+
+            return diff;
         }
 
         public event EventHandler RequestShortUserInfoForAllUsersCompleted;
@@ -247,6 +263,40 @@ namespace Jcq.IcqProtocol
                 var c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
 
                 c.Status = IcqStatusCodes.GetStatusCode(UserStatus.Offline);
+            }
+        }
+
+        private void AnalyseSnac1501(Snac1501 dataIn)
+        {
+            try
+            {
+                _lastRateLimitExcession = DateTime.Now;
+
+                //OnServerError(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode, dataIn.SubError.ErrorSubCode));
+
+                if (dataIn.ErrorCode == ErrorCode.ServerRateLimitExceeded)
+                {
+                    lock (PendingRequests)
+                    {
+                        if (PendingRequests.ContainsKey(dataIn.RequestId))
+                        {
+                            PendingRequests[dataIn.RequestId].ServerRateLimitExceeded();
+                        }
+                        else
+                        {
+                            Kernel.Logger.Log("IcqUserInformationService", TraceEventType.Error,
+                                "No Request Manager for request {0}", dataIn.RequestId);
+                        }
+                    }
+
+                    //Context.GetService<IRateLimitsService>().EmergencyThrottle();
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Kernel.Exceptions.PublishException(ex);
             }
         }
 
