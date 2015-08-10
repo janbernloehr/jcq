@@ -27,7 +27,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Jcq.Core;
 using Jcq.IcqProtocol;
@@ -57,7 +60,7 @@ namespace Jcq.Ux.ViewModel
             _typingNotificationTimer.Tick += OnTypingNotificationTimer_Tick;
         }
 
-        public ContactViewModel Contact { get; private set; }
+        public ContactViewModel Contact { get; }
         public ReadOnlyObservableCollection<MessageViewModel> Messages { get; private set; }
 
         public string StatusText
@@ -104,6 +107,15 @@ namespace Jcq.Ux.ViewModel
 
         public void SendMessage(string text)
         {
+            foreach (Match m in EmojiHelper.EmojiRegex.Matches(text))
+            {
+                string key1 = m.Value;
+                string key2 = EmojiHelper.EmojiMappings[key1].ToUpper();
+                string value = EmojiHelper.EmojiToUnicodeMappings[key2];
+
+                text = text.Replace(m.Value, value);
+            }
+
             var msg = new IcqMessage
             {
                 Sender = ApplicationService.Current.Context.Identity,
@@ -148,7 +160,6 @@ namespace Jcq.Ux.ViewModel
                     break;
             }
         }
-
 
         private void DisplayMessage(TextMessageViewModel message)
         {
