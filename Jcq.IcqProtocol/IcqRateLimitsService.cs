@@ -26,9 +26,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Jcq.Core.Collections;
 using Jcq.Core.Contracts.Collections;
 using Jcq.IcqProtocol.Contracts;
@@ -127,7 +125,7 @@ namespace Jcq.IcqProtocol
 
             foreach (var rateGroup in snac.RateGroups)
             {
-                var cls = RateLimits.Where(l => l.ClassId == rateGroup.GroupId).FirstOrDefault();
+                var cls = RateLimits.FirstOrDefault(l => l.ClassId == rateGroup.GroupId);
 
 
                 foreach (var pair in rateGroup.ServiceFamilyIdSubTypeIdPairs)
@@ -198,188 +196,6 @@ namespace Jcq.IcqProtocol
                 limit.Computed = limit.DisconnectLevel + 1;
                 limit.CurrentLevel = limit.DisconnectLevel + 1;
                 limit.DataLastUpdatedFromServer = Environment.TickCount;
-            }
-        }
-    }
-
-    public class IcqRateLimitsClass : IRateLimitsClass
-    {
-        private long _alertLevel;
-        private long _classId;
-        private long _clearLevel;
-        private long _currentLevel;
-        private byte _currentState;
-        private long _disconnectLevel;
-        private long _lastTime;
-        private long _limitLevel;
-        private long _maxLevel;
-        private long _windowSize;
-        private long _computed;
-        private long _localLastTime;
-        private long _dataLastUpdatedFromServer;
-        private int _waitTime;
-
-        private List<Tuple<int, int>> _families = new List<Tuple<int, int>>();
-
-        public void AddFamily(int serviceId , int subId)
-        {
-            _families.Add(new Tuple<int,int>(serviceId, subId));
-        }
-
-        public string Families
-        {
-            get
-            {
-                return string.Join(" ", _families.Select(f => string.Format("{0:X},{1:X}", f.Item1, f.Item2)).ToArray());
-            }
-        }
-
-        public long ClassId
-        {
-            get { return _classId; }
-            set
-            {
-                _classId = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long WindowSize
-        {
-            get { return _windowSize; }
-            set
-            {
-                _windowSize = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long ClearLevel
-        {
-            get { return _clearLevel; }
-            set
-            {
-                _clearLevel = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long AlertLevel
-        {
-            get { return _alertLevel; }
-            set
-            {
-                _alertLevel = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long LimitLevel
-        {
-            get { return _limitLevel; }
-            set
-            {
-                _limitLevel = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long DisconnectLevel
-        {
-            get { return _disconnectLevel; }
-            set
-            {
-                _disconnectLevel = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long CurrentLevel
-        {
-            get { return _currentLevel; }
-            set
-            {
-                _currentLevel = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long MaxLevel
-        {
-            get { return _maxLevel; }
-            set
-            {
-                _maxLevel = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long LastTime
-        {
-            get { return _lastTime; }
-            set
-            {
-                _lastTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public byte CurrentState
-        {
-            get { return _currentState; }
-            set
-            {
-                _currentState = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
-        public long Computed
-        {
-            get { return _computed; }
-            set
-            {
-                _computed = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long LocalLastTime
-        {
-            get { return _localLastTime; }
-            set
-            {
-                _localLastTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public long DataLastUpdatedFromServer
-        {
-            get { return _dataLastUpdatedFromServer; }
-            set
-            {
-                _dataLastUpdatedFromServer = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int WaitTime
-        {
-            get { return _waitTime; }
-            set
-            {
-                _waitTime = value;
-                OnPropertyChanged();
             }
         }
     }

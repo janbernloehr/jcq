@@ -30,19 +30,14 @@ namespace Jcq.IcqProtocol.Internal
 {
     public class DisconnectEventArgs : EventArgs
     {
-        private readonly bool _isExpected;
-
         public DisconnectEventArgs(bool expected)
         {
-            _isExpected = expected;
+            IsExpected = expected;
         }
 
         /// <summary>
         ///     Gets a value indicating whether the disconnection event was expected.
         /// </summary>
-        public bool IsExpected
-        {
-            get { return _isExpected; }
-        }
+        public bool IsExpected { get; }
     }
 }

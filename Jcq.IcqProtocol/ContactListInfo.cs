@@ -37,7 +37,8 @@ namespace Jcq.IcqProtocol
             DateChanged = dateChanged;
         }
 
-        public DateTime DateChanged { get; private set; }
-        public int ItemCount { get; private set; }
+        public DateTime DateChanged { get; }
+
+        public int ItemCount { get; }
     }
 }

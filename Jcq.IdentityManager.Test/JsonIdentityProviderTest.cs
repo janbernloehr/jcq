@@ -27,7 +27,7 @@
 using System.IO;
 using System.Linq;
 using Jcq.IdentityManager.Contracts;
-using JCsTools.IdentityManager;
+using Jcq.IdentityManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jcq.IdentityManager.Test

@@ -92,10 +92,7 @@ namespace Jcq.IcqProtocol
                         break;
                 }
 
-                if (TypingNotification != null)
-                {
-                    TypingNotification(this, new TypingNotificationEventArgs(contact, type));
-                }
+                TypingNotification?.Invoke(this, new TypingNotificationEventArgs(contact, type));
             }
             catch (Exception ex)
             {

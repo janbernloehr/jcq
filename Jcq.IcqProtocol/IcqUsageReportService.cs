@@ -73,11 +73,8 @@ namespace Jcq.IcqProtocol
                 Kernel.Logger.Log("IcqUsageReportService", TraceEventType.Information, "Minimum report intervall: {0}",
                     data.MinimumReportIntervall);
 
-                if (MinimumUsageReportIntervallReceived != null)
-                {
-                    MinimumUsageReportIntervallReceived(this,
-                        new IntervallReceivedEventArgs(data.MinimumReportIntervall));
-                }
+                MinimumUsageReportIntervallReceived?.Invoke(this,
+                    new IntervallReceivedEventArgs(data.MinimumReportIntervall));
             }
             catch (Exception ex)
             {
@@ -91,10 +88,7 @@ namespace Jcq.IcqProtocol
             {
                 Kernel.Logger.Log("IcqUsageReportService", TraceEventType.Information, "Usage report accepted.");
 
-                if (UsageReportAccepted != null)
-                {
-                    UsageReportAccepted(this, EventArgs.Empty);
-                }
+                UsageReportAccepted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {

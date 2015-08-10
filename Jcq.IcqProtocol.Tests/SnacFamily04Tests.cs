@@ -24,7 +24,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jcq.IcqProtocol.Tests

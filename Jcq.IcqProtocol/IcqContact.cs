@@ -86,10 +86,7 @@ namespace Jcq.IcqProtocol
 
             Kernel.Logger.Log("IcqContact", TraceEventType.Information, "Received new icon hash for {0}", Identifier);
 
-            if (IconHashReceived != null)
-            {
-                IconHashReceived(this, EventArgs.Empty);
-            }
+            IconHashReceived?.Invoke(this, EventArgs.Empty);
         }
 
         public void SetIconData(List<byte> value)
@@ -101,10 +98,7 @@ namespace Jcq.IcqProtocol
 
             Kernel.Logger.Log("IcqContact", TraceEventType.Information, "Received new icon data for {0}", Identifier);
 
-            if (IconDataReceived != null)
-            {
-                IconDataReceived(this, EventArgs.Empty);
-            }
+            IconDataReceived?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler IconDataReceived;

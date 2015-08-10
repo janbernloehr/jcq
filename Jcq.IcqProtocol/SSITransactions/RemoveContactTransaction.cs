@@ -31,17 +31,12 @@ namespace Jcq.IcqProtocol
 {
     public class RemoveContactTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _contact;
-
         public RemoveContactTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _contact = contact;
+            Contact = contact;
         }
 
-        public IcqContact Contact
-        {
-            get { return _contact; }
-        }
+        public IcqContact Contact { get; }
 
         public override Snac CreateSnac()
         {

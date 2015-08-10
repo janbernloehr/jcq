@@ -35,29 +35,21 @@ namespace Jcq.IcqProtocol
 {
     public class ShortUserInformationRequestManager
     {
-        private readonly IcqContact _contact;
-        private readonly IContext _context;
-        private int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
-        private int _retryDue2Millisecond = Convert.ToInt32(TimeSpan.FromMinutes(5).TotalMilliseconds);
+        private readonly int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
+        private readonly int _retryDue2Millisecond = Convert.ToInt32(TimeSpan.FromMinutes(5).TotalMilliseconds);
         private bool _requestSucceeded;
         private int _retryIteration;
         private Timer _retryTimer;
 
         public ShortUserInformationRequestManager(IContext context, IcqContact contact)
         {
-            _context = context;
-            _contact = contact;
+            Context = context;
+            Contact = contact;
         }
 
-        public IcqContact Contact
-        {
-            get { return _contact; }
-        }
+        public IcqContact Contact { get; }
 
-        public IContext Context
-        {
-            get { return _context; }
-        }
+        public IContext Context { get; }
 
         public long RequestId { get; private set; }
 
@@ -114,13 +106,13 @@ namespace Jcq.IcqProtocol
             var req = new MetaShortUserInformationRequest
             {
                 RequestSequenceNumber = MetaRequest.GetNextSequenceNumber(),
-                ClientUin = long.Parse(_context.Identity.Identifier),
+                ClientUin = long.Parse(Context.Identity.Identifier),
                 SearchUin = int.Parse(Contact.Identifier)
             };
 
             dataOut.MetaData.MetaRequest = req;
 
-            var transfer = (IIcqDataTranferService) _context.GetService<IConnector>();
+            var transfer = (IIcqDataTranferService) Context.GetService<IConnector>();
             transfer.Send(dataOut);
 
             RequestId = dataOut.RequestId;

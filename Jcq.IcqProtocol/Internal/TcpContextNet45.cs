@@ -39,15 +39,15 @@ namespace Jcq.IcqProtocol
 {
     public class TcpContextNet45 : ITcpContext, IDisposable
     {
-        private readonly string _id;
-        private readonly BufferBlock<List<byte>> _receivedDataBuffer = new BufferBlock<List<byte>>();
         private readonly object _sendLock = new object();
         private TcpClient _client;
         private NetworkStream _stream;
 
         public TcpContextNet45()
         {
-            _id = Guid.NewGuid().ToString();
+            Id = Guid.NewGuid().ToString();
+
+            ReceivedDataBuffer = new BufferBlock<List<byte>>();
 
             //mylog += string.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), _id);
         }
@@ -60,10 +60,7 @@ namespace Jcq.IcqProtocol
         public long BytesReceived { get; private set; }
         public long BytesSent { get; private set; }
 
-        public string Id
-        {
-            get { return _id; }
-        }
+        public string Id { get; }
 
         public bool ConnectionCloseExpected { get; private set; }
 
@@ -88,7 +85,7 @@ namespace Jcq.IcqProtocol
             ConnectionState = TcpConnectionState.Closed;
             _client.Close();
             OnDisconnected(ConnectionCloseExpected);
-            _receivedDataBuffer.Complete();
+            ReceivedDataBuffer.Complete();
         }
 
         public void SendData(List<byte> data)
@@ -116,7 +113,7 @@ namespace Jcq.IcqProtocol
                 {
                     ConnectionState = TcpConnectionState.Faulted;
                     OnDisconnected(ConnectionCloseExpected);
-                    _receivedDataBuffer.Complete();
+                    ReceivedDataBuffer.Complete();
                 }
 
                 throw;
@@ -137,10 +134,7 @@ namespace Jcq.IcqProtocol
         public event EventHandler<DisconnectEventArgs> Disconnected;
         public TcpConnectionState ConnectionState { get; private set; }
 
-        public BufferBlock<List<byte>> ReceivedDataBuffer
-        {
-            get { return _receivedDataBuffer; }
-        }
+        public BufferBlock<List<byte>> ReceivedDataBuffer { get; } 
 
         //public event EventHandler<DataReceivedEventArgs> DataReceived;
 
@@ -160,10 +154,10 @@ namespace Jcq.IcqProtocol
                         {
                             ConnectionState = TcpConnectionState.Closed;
                             OnDisconnected(ConnectionCloseExpected);
-                            _receivedDataBuffer.Complete();
+                            ReceivedDataBuffer.Complete();
                         }
 
-                        Debug.WriteLine("ReadTask ended since no data was read.", _id);
+                        Debug.WriteLine("ReadTask ended since no data was read.", Id);
                         break;
                     }
 
@@ -180,7 +174,7 @@ namespace Jcq.IcqProtocol
 
                     BytesReceived += result.Count;
 
-                    _receivedDataBuffer.Post(result);
+                    ReceivedDataBuffer.Post(result);
 
                     //OnDataReceived(result);
                 }
@@ -193,7 +187,7 @@ namespace Jcq.IcqProtocol
                 {
                     ConnectionState = TcpConnectionState.Faulted;
                     OnDisconnected(ConnectionCloseExpected);
-                    _receivedDataBuffer.Complete();
+                    ReceivedDataBuffer.Complete();
                 }
 
                 //TODO: Close client

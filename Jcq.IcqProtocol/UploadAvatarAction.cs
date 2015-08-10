@@ -34,18 +34,14 @@ namespace Jcq.IcqProtocol
     {
         private static int _referenceCounter;
         private readonly byte[] _avatarBytes;
-        private readonly IcqIconService _service;
 
         public UploadAvatarAction(IcqIconService service, byte[] avatar)
         {
-            _service = service;
+            Service = service;
             _avatarBytes = avatar;
         }
 
-        public IcqIconService Service
-        {
-            get { return _service; }
-        }
+        public IcqIconService Service { get; }
 
         void IAvatarServiceAction.Execute()
         {

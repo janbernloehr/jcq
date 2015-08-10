@@ -31,16 +31,11 @@ namespace Jcq.IcqProtocol
 {
     public abstract class ContextService : Service, IContextService
     {
-        private readonly IContext _context;
-
         protected ContextService(IContext context)
         {
-            _context = context;
+            Context = context;
         }
 
-        public IContext Context
-        {
-            get { return _context; }
-        }
+        public IContext Context { get; }
     }
 }

@@ -70,7 +70,7 @@ namespace Jcq.IcqProtocol
             var password = credential as IPasswordCredential;
 
             if (password == null)
-                throw new ArgumentException(@"Credential musst be of Type IPasswordCredential", "credential");
+                throw new ArgumentException(@"Credential musst be of Type IPasswordCredential", nameof(credential));
 
             try
             {
@@ -147,34 +147,22 @@ namespace Jcq.IcqProtocol
 
         private void OnDisconnected(string message, bool expected)
         {
-            if (Disconnected != null)
-            {
-                Disconnected(this, new DisconnectedEventArgs(message, expected));
-            }
+            Disconnected?.Invoke(this, new DisconnectedEventArgs(message, expected));
         }
 
         private void OnSignInFailed(string message)
         {
-            if (SignInFailed != null)
-            {
-                SignInFailed(this, new SignInFailedEventArgs(message));
-            }
+            SignInFailed?.Invoke(this, new SignInFailedEventArgs(message));
         }
 
         private void OnServerError(string message)
         {
-            if (ServerError != null)
-            {
-                ServerError(this, new ServerErrorEventArgs(message));
-            }
+            ServerError?.Invoke(this, new ServerErrorEventArgs(message));
         }
 
         private void OnSignInCompleted()
         {
-            if (SignInCompleted != null)
-            {
-                SignInCompleted(this, EventArgs.Empty);
-            }
+            SignInCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         private void AnalyseSnac0101(Snac0101 dataIn)

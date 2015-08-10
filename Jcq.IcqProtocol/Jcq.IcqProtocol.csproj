@@ -47,7 +47,6 @@
     <Compile Include="BaseStorageItem.cs" />
     <Compile Include="ContactListInfo.cs" />
     <Compile Include="ContextService.cs" />
-    <Compile Include="FormatTarget.cs" />
     <Compile Include="IAvatarServiceAction.cs" />
     <Compile Include="IcqConnector.cs" />
     <Compile Include="IcqContact.cs" />
@@ -60,6 +59,7 @@
     <Compile Include="IcqMessageService.cs" />
     <Compile Include="IcqNotificationService.cs" />
     <Compile Include="IcqPrivacyService.cs" />
+    <Compile Include="IcqRateLimitsClass.cs" />
     <Compile Include="IcqRateLimitsService.cs" />
     <Compile Include="IcqSearchService.cs" />
     <Compile Include="IcqStatusCode.cs" />
@@ -75,14 +75,12 @@
     <Compile Include="Internal\FlapDataPair.cs" />
     <Compile Include="Internal\FlapTransportEventArgs.cs" />
     <Compile Include="Internal\ITcpContext.cs" />
-    <Compile Include="Internal\ReceiveInfo.cs" />
-    <Compile Include="Internal\TcpContextOld.cs" />
     <Compile Include="IcqOfflineMessage.cs" />
     <Compile Include="Internal\TcpContextNet45.cs" />
     <Compile Include="PasswordCredential.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestAuthenticationCookieState.cs" />
-    <Compile Include="RequestAuthenticationCookieTask.cs" />
+    <Compile Include="RequestAuthenticationCookieUnitOfWork.cs" />
     <Compile Include="RequestAvatarAction.cs" />
     <Compile Include="ShortUserInformationRequestManager.cs" />
     <Compile Include="ShortUserInformationTransportEventArgs.cs" />

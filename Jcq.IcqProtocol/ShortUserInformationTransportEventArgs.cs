@@ -31,23 +31,14 @@ namespace Jcq.IcqProtocol
 {
     public class ShortUserInformationTransportEventArgs : EventArgs
     {
-        private readonly MetaShortUserInformationResponse _metaResponse;
-        private readonly long _requestId;
-
         public ShortUserInformationTransportEventArgs(long requestId, MetaShortUserInformationResponse response)
         {
-            _requestId = requestId;
-            _metaResponse = response;
+            RequestId = requestId;
+            MetaResponse = response;
         }
 
-        public MetaShortUserInformationResponse MetaResponse
-        {
-            get { return _metaResponse; }
-        }
+        public MetaShortUserInformationResponse MetaResponse { get; }
 
-        public long RequestId
-        {
-            get { return _requestId; }
-        }
+        public long RequestId { get; }
     }
 }

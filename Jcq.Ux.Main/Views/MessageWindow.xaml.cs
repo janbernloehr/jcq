@@ -25,13 +25,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Jcq.Core;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -55,7 +53,7 @@ namespace Jcq.Ux.Main.Views
             txtMessage.Focus();
         }
 
-        public MessageWindowViewModel ViewModel { get; private set; }
+        public MessageWindowViewModel ViewModel { get; }
 
         private void OnShowRequested(object sender, EventArgs e)
         {
@@ -71,11 +69,9 @@ namespace Jcq.Ux.Main.Views
 
         private void OnConatctInformationWindowRequested(object sender, EventArgs e)
         {
-            ContactInformationWindow wnd;
-
             try
             {
-                wnd = new ContactInformationWindow(ViewModel.Contact);
+                var wnd = new ContactInformationWindow(ViewModel.Contact);
                 wnd.Show();
             }
             catch (Exception ex)
@@ -86,11 +82,9 @@ namespace Jcq.Ux.Main.Views
 
         private void OnContactHistoryWindowRequested(object sender, EventArgs e)
         {
-            HistoryWindow wnd;
-
             try
             {
-                wnd = new HistoryWindow(ViewModel.Contact);
+                var wnd = new HistoryWindow(ViewModel.Contact);
                 wnd.Show();
             }
             catch (Exception ex)
@@ -125,11 +119,9 @@ namespace Jcq.Ux.Main.Views
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {
-            string messageText;
-
             try
             {
-                messageText = txtMessage.Text;
+                var messageText = txtMessage.Text;
 
                 ViewModel.SendMessage(messageText);
 
@@ -142,8 +134,7 @@ namespace Jcq.Ux.Main.Views
             }
         }
 
-        private void // ERROR: Handles clauses are not supported in C#
-            MessageWindow_Activated(object sender, EventArgs e)
+        private void MessageWindow_Activated(object sender, EventArgs e)
         {
             try
             {
@@ -155,8 +146,7 @@ namespace Jcq.Ux.Main.Views
             }
         }
 
-        private void // ERROR: Handles clauses are not supported in C#
-            MessageWindow_Closed(object sender, EventArgs e)
+        private void MessageWindow_Closed(object sender, EventArgs e)
         {
             try
             {
@@ -173,15 +163,13 @@ namespace Jcq.Ux.Main.Views
             Dispatcher.Invoke(DispatcherPriority.Normal, new Action(MessagesRichTextBox.ScrollToEnd));
         }
 
-        private void // ERROR: Handles clauses are not supported in C#
-            txtMessage_TextChanged(object sender, TextChangedEventArgs e)
+        private void txtMessage_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
                 ViewModel.SendTypingNotification(string.IsNullOrEmpty(txtMessage.Text)
                     ? TextChangedAction.Cleared
                     : TextChangedAction.Changed);
-                //Debug.WriteLine("Text changed to : {0}", txtMessage.Text);
             }
             catch (Exception ex)
             {

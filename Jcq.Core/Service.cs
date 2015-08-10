@@ -30,9 +30,6 @@ namespace Jcq.Core
 {
     public abstract class Service : IService
     {
-        public virtual string Name
-        {
-            get { return GetType().Name; }
-        }
+        public virtual string Name => GetType().Name;
     }
 }

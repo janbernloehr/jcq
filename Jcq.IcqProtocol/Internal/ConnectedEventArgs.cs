@@ -31,19 +31,14 @@ namespace Jcq.IcqProtocol.Internal
 {
     public class ConnectedEventArgs : EventArgs
     {
-        private readonly IPEndPoint _endPoint;
-
         public ConnectedEventArgs(IPEndPoint endPoint)
         {
-            _endPoint = endPoint;
+            EndPoint = endPoint;
         }
 
         /// <summary>
         ///     Gets the IPEndPoint to which the connection was established.
         /// </summary>
-        public IPEndPoint EndPoint
-        {
-            get { return _endPoint; }
-        }
+        public IPEndPoint EndPoint { get; }
     }
 }

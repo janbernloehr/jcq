@@ -98,10 +98,7 @@ namespace Jcq.IcqProtocol
                 Thread.Sleep(ComputeSleepInterval());
             }
 
-            if (RequestShortUserInfoForAllUsersCompleted != null)
-            {
-                RequestShortUserInfoForAllUsersCompleted(this, EventArgs.Empty);
-            }
+            RequestShortUserInfoForAllUsersCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         private DateTime _lastRateLimitExcession = DateTime.MinValue;
@@ -311,11 +308,8 @@ namespace Jcq.IcqProtocol
                     {
                         var resp = (MetaShortUserInformationResponse) dataIn.MetaData.MetaResponse;
 
-                        if (ShortUserInformationReceived != null)
-                        {
-                            ShortUserInformationReceived(this,
-                                new ShortUserInformationTransportEventArgs(dataIn.RequestId, resp));
-                        }
+                        ShortUserInformationReceived?.Invoke(this,
+                            new ShortUserInformationTransportEventArgs(dataIn.RequestId, resp));
 
                         lock (PendingRequests)
                         {

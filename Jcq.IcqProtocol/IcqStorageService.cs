@@ -55,7 +55,6 @@ namespace Jcq.IcqProtocol
             new KeyedNotifiyingCollection<string, IcqContact>(c => c.Identifier);
 
         private SSIActionResultCode _codeSsiAkk;
-        private bool _isFreshContactList = true;
         private int _maxSsiItemId;
         private SemaphoreSlim _transactionSemaphore;
 
@@ -64,15 +63,15 @@ namespace Jcq.IcqProtocol
         {
             _visibleList = new NotifyingCollection<IContact>();
 
-            _readOnlyVisibleList = new ReadOnlyNotifyingCollection<IContact>(_visibleList);
+            VisibleList = new ReadOnlyNotifyingCollection<IContact>(_visibleList);
             _invisibleList = new NotifyingCollection<IContact>();
 
-            _readOnlyInvisibleList =
+            InvisibleList =
                 new ReadOnlyNotifyingCollection<IContact>(_invisibleList);
 
             _ignoreList = new NotifyingCollection<IContact>();
 
-            _readOnlyIgnoreList =
+            IgnoreList =
                 new ReadOnlyNotifyingCollection<IContact>(_ignoreList);
 
 
@@ -97,7 +96,7 @@ namespace Jcq.IcqProtocol
         public void RegisterLocalContactList(int itemCount, DateTime dateChanged)
         {
             Info = new ContactListInfo(itemCount, dateChanged);
-            _isFreshContactList = false;
+            IsFreshContactList = false;
         }
 
         public IContactListInfo Info { get; private set; }
@@ -107,10 +106,7 @@ namespace Jcq.IcqProtocol
             get { return Info != null; }
         }
 
-        public bool IsFreshContactList
-        {
-            get { return _isFreshContactList; }
-        }
+        public bool IsFreshContactList { get; private set; } = true;
 
         public event EventHandler ContactListActivated;
         public event EventHandler<StatusChangedEventArgs> ContactStatusChanged;
@@ -145,7 +141,7 @@ namespace Jcq.IcqProtocol
             var icqContact = contact as IcqContact;
 
             if (icqContact == null)
-                throw new ArgumentException("Argument of type IcqContact required", "contact");
+                throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             return IsContactStored(icqContact);
         }
@@ -156,10 +152,10 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqContact == null)
-                throw new ArgumentException("Argument of type IcqContact required", "contact");
+                throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", "group");
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
 
             return AddContact(icqContact, icqGroup);
         }
@@ -170,10 +166,10 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqContact == null)
-                throw new ArgumentException("Argument of type IcqContact required", "contact");
+                throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", "group");
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
 
             AttachContact(icqContact, icqGroup, stored);
         }
@@ -184,10 +180,10 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqContact == null)
-                throw new ArgumentException("Argument of type IcqContact required", "contact");
+                throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", "group");
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
 
             return RemoveContact(icqContact, icqGroup);
         }
@@ -197,7 +193,7 @@ namespace Jcq.IcqProtocol
             var icqContact = contact as IcqContact;
 
             if (icqContact == null)
-                throw new ArgumentException("Argument of type IcqContact required", "contact");
+                throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             return UpdateContact(icqContact);
         }
@@ -207,7 +203,7 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", "group");
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
 
             return AddGroup(icqGroup);
         }
@@ -217,7 +213,7 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", "group");
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
 
             return RemoveGroup(icqGroup);
         }
@@ -227,7 +223,7 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", "group");
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
 
             return UpdateGroup(icqGroup);
         }
@@ -514,10 +510,7 @@ namespace Jcq.IcqProtocol
 
                 Info = new ContactListInfo(dataIn.ItemCount, dataIn.LastChange);
 
-                if (ContactListActivated != null)
-                {
-                    ContactListActivated(this, EventArgs.Empty);
-                }
+                ContactListActivated?.Invoke(this, EventArgs.Empty);
 
                 Kernel.Logger.Log("IcqStorageService", TraceEventType.Verbose, "Contact list activated.");
             }
@@ -533,10 +526,7 @@ namespace Jcq.IcqProtocol
             {
                 Info = new ContactListInfo(dataIn.NumberOfItems, dataIn.ModificationDate);
 
-                if (ContactListActivated != null)
-                {
-                    ContactListActivated(this, EventArgs.Empty);
-                }
+                ContactListActivated?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
@@ -682,40 +672,22 @@ namespace Jcq.IcqProtocol
 
             var args = new StatusChangedEventArgs(contact.Status, contact);
 
-            if (ContactStatusChanged != null)
-            {
-                ContactStatusChanged(this, args);
-            }
+            ContactStatusChanged?.Invoke(this, args);
         }
 
         #region  Privacy Lists
 
         private readonly NotifyingCollection<IContact> _visibleList;
 
-        private readonly ReadOnlyNotifyingCollection<IContact> _readOnlyVisibleList;
-
-        public ReadOnlyNotifyingCollection<IContact> VisibleList
-        {
-            get { return _readOnlyVisibleList; }
-        }
+        public ReadOnlyNotifyingCollection<IContact> VisibleList { get; }
 
         private readonly NotifyingCollection<IContact> _invisibleList;
 
-        private readonly ReadOnlyNotifyingCollection<IContact> _readOnlyInvisibleList;
-
-        public ReadOnlyNotifyingCollection<IContact> InvisibleList
-        {
-            get { return _readOnlyInvisibleList; }
-        }
+        public ReadOnlyNotifyingCollection<IContact> InvisibleList { get; }
 
         private readonly NotifyingCollection<IContact> _ignoreList;
 
-        private readonly ReadOnlyNotifyingCollection<IContact> _readOnlyIgnoreList;
-
-        public ReadOnlyNotifyingCollection<IContact> IgnoreList
-        {
-            get { return _readOnlyIgnoreList; }
-        }
+        public ReadOnlyNotifyingCollection<IContact> IgnoreList { get; }
 
         #endregion
     }

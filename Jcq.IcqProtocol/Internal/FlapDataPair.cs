@@ -32,46 +32,23 @@ namespace Jcq.IcqProtocol.Internal
 {
     public class FlapDataPair
     {
-        private readonly List<byte> _data;
-        private readonly Flap _flap;
-        //private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0, 1);
-        private readonly TaskCompletionSource<int> _taskCompletionSource = new TaskCompletionSource<int>();
-
         public FlapDataPair(Flap f)
         {
-            _flap = f;
-            _data = f.Serialize();
+            Flap = f;
+            Data = f.Serialize();
+            TaskCompletionSource = new TaskCompletionSource<int>();
         }
 
         /// <summary>
         ///     Gets the Flap.
         /// </summary>
-        public Flap Flap
-        {
-            get { return _flap; }
-        }
+        public Flap Flap { get; }
 
         /// <summary>
         ///     Gets the Serialization of the Flap.
         /// </summary>
-        public List<byte> Data
-        {
-            get { return _data; }
-        }
-
-        //public void Release()
-        //{
-        //    _semaphore.Release();
-        //}
-        //public Task WaitAsync()
-        //{
-        //    return _semaphore.WaitAsync();
-        //}
-
-
-        public TaskCompletionSource<int> TaskCompletionSource
-        {
-            get { return _taskCompletionSource; }
-        }
+        public List<byte> Data { get; }
+        
+        public TaskCompletionSource<int> TaskCompletionSource { get; }
     }
 }
