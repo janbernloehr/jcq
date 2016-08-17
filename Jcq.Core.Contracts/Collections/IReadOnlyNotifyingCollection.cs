@@ -31,7 +31,8 @@ using System.ComponentModel;
 namespace Jcq.Core.Contracts.Collections
 {
     /// <summary>
-    /// Represents a collection that cannot be changed externally and that provides notifications when items get added, removed, or when the whole list is refreshed
+    ///     Represents a collection that cannot be changed externally and that provides notifications when items get added,
+    ///     removed, or when the whole list is refreshed
     /// </summary>
     /// <typeparam name="T">The type of object in the collection.</typeparam>
     public interface IReadOnlyNotifyingCollection<out T> : IEnumerable<T>, INotifyCollectionChanged,

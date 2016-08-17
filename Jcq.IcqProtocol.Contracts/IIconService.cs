@@ -27,18 +27,18 @@
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a service contract to request a users's contact icon and upload an own contact icon.
+    ///     Defines a service contract to request a users's contact icon and upload an own contact icon.
     /// </summary>
     public interface IIconService : IContextService
     {
         /// <summary>
-        /// Requests a download of the ContactIcon of the given contact.
+        ///     Requests a download of the ContactIcon of the given contact.
         /// </summary>
         /// <param name="contact">The contact whose icon should be downloaded.</param>
         void RequestContactIcon(IContact contact);
 
         /// <summary>
-        /// Uploads a new icon for the IContextService.Identity.
+        ///     Uploads a new icon for the IContextService.Identity.
         /// </summary>
         /// <param name="icon">A byte representation of the icon to upload.</param>
         void UploadIcon(byte[] icon);

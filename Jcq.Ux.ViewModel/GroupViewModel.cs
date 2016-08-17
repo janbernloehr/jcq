@@ -51,7 +51,7 @@ namespace Jcq.Ux.ViewModel
             Model.PropertyChanged += HandlePropertyChanged;
         }
 
-        public IGroup Model { get; private set; }
+        public IGroup Model { get; }
 
         public ObservableCollection<ContactViewModel> Contacts
         {
@@ -97,7 +97,7 @@ namespace Jcq.Ux.ViewModel
             {
                 if (_groupsView == null)
                 {
-                    _groupsView = (CollectionView)CollectionViewSource.GetDefaultView(Groups);
+                    _groupsView = (CollectionView) CollectionViewSource.GetDefaultView(Groups);
                     _groupsView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
                 }
 
@@ -111,7 +111,7 @@ namespace Jcq.Ux.ViewModel
             {
                 if (_contactsView == null)
                 {
-                    _contactsView = (CollectionView)CollectionViewSource.GetDefaultView(Contacts);
+                    _contactsView = (CollectionView) CollectionViewSource.GetDefaultView(Contacts);
 
                     _contactsView.SortDescriptions.Add(new SortDescription("StatusFlag",
                         ListSortDirection.Ascending));
@@ -135,17 +135,19 @@ namespace Jcq.Ux.ViewModel
 
         internal void OnContactPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var c = (ContactViewModel)sender;
+            var c = (ContactViewModel) sender;
 
             if (e.PropertyName == "StatusFlag" | e.PropertyName == "Name")
             {
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(ContactsView.Refresh));
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                    new Action(ContactsView.Refresh));
             }
         }
 
         protected void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action<PropertyChangedEventArgs>(OnPropertyChanged), e);
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal,
+                new Action<PropertyChangedEventArgs>(OnPropertyChanged), e);
         }
     }
 }

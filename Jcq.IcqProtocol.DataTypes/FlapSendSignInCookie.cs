@@ -31,20 +31,15 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class FlapSendSignInCookie : Flap
     {
-        private readonly TlvAuthorizationCookie _authorizationCookie = new TlvAuthorizationCookie();
-
         public FlapSendSignInCookie() : base(FlapChannel.NewConnectionNegotiation)
         {
         }
 
-        public TlvAuthorizationCookie AuthorizationCookie
-        {
-            get { return _authorizationCookie; }
-        }
+        public TlvAuthorizationCookie AuthorizationCookie { get; } = new TlvAuthorizationCookie();
 
         public override int CalculateDataSize()
         {
-            return 4 + _authorizationCookie.CalculateTotalSize();
+            return 4 + AuthorizationCookie.CalculateTotalSize();
         }
 
         public override List<byte> Serialize()
@@ -53,7 +48,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
             data.AddRange(ByteConverter.GetBytes((uint) 1));
 
-            data.AddRange(_authorizationCookie.Serialize());
+            data.AddRange(AuthorizationCookie.Serialize());
 
             return data;
         }

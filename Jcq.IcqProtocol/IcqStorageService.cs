@@ -32,10 +32,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jcq.Core;
 using Jcq.Core.Collections;
-using Jcq.Core.Contracts;
 using Jcq.Core.Contracts.Collections;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {
@@ -155,7 +154,7 @@ namespace Jcq.IcqProtocol
                 throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(group));
 
             return AddContact(icqContact, icqGroup);
         }
@@ -169,7 +168,7 @@ namespace Jcq.IcqProtocol
                 throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(group));
 
             AttachContact(icqContact, icqGroup, stored);
         }
@@ -183,7 +182,7 @@ namespace Jcq.IcqProtocol
                 throw new ArgumentException("Argument of type IcqContact required", nameof(contact));
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(group));
 
             return RemoveContact(icqContact, icqGroup);
         }
@@ -203,7 +202,7 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(group));
 
             return AddGroup(icqGroup);
         }
@@ -213,7 +212,7 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(group));
 
             return RemoveGroup(icqGroup);
         }
@@ -223,7 +222,7 @@ namespace Jcq.IcqProtocol
             var icqGroup = group as IcqGroup;
 
             if (icqGroup == null)
-                throw new ArgumentException("Argument of type IcqGroup required", nameof(@group));
+                throw new ArgumentException("Argument of type IcqGroup required", nameof(group));
 
             return UpdateGroup(icqGroup);
         }
@@ -385,7 +384,7 @@ namespace Jcq.IcqProtocol
 
             // Create the transaction data
             var beginTransaction = new Snac1311();
-            var item = transaction.CreateSnac();
+            Snac item = transaction.CreateSnac();
             var endTransaction = new Snac1312();
 
             //_transactionCompletionSource = new TaskCompletionSource<SSIActionResultCode>();
@@ -425,7 +424,7 @@ namespace Jcq.IcqProtocol
                 _transactionSemaphore.Release();
             }
 
-            foreach (var code in dataIn.ActionResultCodes)
+            foreach (SSIActionResultCode code in dataIn.ActionResultCodes)
             {
                 Debug.WriteLine(string.Format("SSI Change Akk: {0}", code), "IcqStorageService");
             }
@@ -437,9 +436,9 @@ namespace Jcq.IcqProtocol
             {
                 _maxSsiItemId = Math.Max(_maxSsiItemId, dataIn.MaxItemId);
 
-                foreach (var ssiGroup in dataIn.GroupRecords)
+                foreach (SSIGroupRecord ssiGroup in dataIn.GroupRecords)
                 {
-                    var identifier = ssiGroup.ItemName;
+                    string identifier = ssiGroup.ItemName;
 
                     var group = new IcqGroup(identifier, ssiGroup.GroupId);
 
@@ -453,22 +452,22 @@ namespace Jcq.IcqProtocol
                     }
                 }
 
-                foreach (var x in _groups)
+                foreach (IcqGroup x in _groups)
                 {
                     MasterGroup.Groups.Add(x);
                 }
 
-                foreach (var ssiContact in dataIn.BuddyRecords)
+                foreach (SSIBuddyRecord ssiContact in dataIn.BuddyRecords)
                 {
-                    var identifier = ssiContact.ItemName;
-                    var group = GetGroupByGroupId(ssiContact.GroupId);
+                    string identifier = ssiContact.ItemName;
+                    IcqGroup group = GetGroupByGroupId(ssiContact.GroupId);
 
                     int identifierId;
 
                     if (!int.TryParse(identifier, out identifierId))
                         continue;
 
-                    var contact = GetContactByIdentifier(identifier);
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     if (contact.LastShortUserInfoRequest <= DateTime.MinValue)
                         contact.Name = ssiContact.LocalScreenName.LocalScreenName;
@@ -478,30 +477,30 @@ namespace Jcq.IcqProtocol
                     AttachContact(contact, group, true);
                 }
 
-                foreach (var record in dataIn.DenyRecords)
+                foreach (SSIDenyRecord record in dataIn.DenyRecords)
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
+                    string identifier = record.ItemName;
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     contact.DenyRecordItemId = record.ItemId;
 
                     _invisibleList.Add(contact);
                 }
 
-                foreach (var record in dataIn.PermitRecords)
+                foreach (SSIPermitRecord record in dataIn.PermitRecords)
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
+                    string identifier = record.ItemName;
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     contact.PermitRecordItemId = record.ItemId;
 
                     _visibleList.Add(contact);
                 }
 
-                foreach (var record in dataIn.IgnoreListRecords)
+                foreach (SSIIgnoreListRecord record in dataIn.IgnoreListRecords)
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
+                    string identifier = record.ItemName;
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     contact.IgnoreRecordItemId = record.ItemId;
 
@@ -539,26 +538,26 @@ namespace Jcq.IcqProtocol
             // Sever informs the client that items have beend added to the SSI Store.
             try
             {
-                foreach (var ssiGroup in dataIn.GroupRecords)
+                foreach (SSIGroupRecord ssiGroup in dataIn.GroupRecords)
                 {
-                    var identifier = ssiGroup.ItemName;
+                    string identifier = ssiGroup.ItemName;
 
                     var group = new IcqGroup(identifier, ssiGroup.GroupId);
 
                     _groups.Add(group);
                 }
 
-                foreach (var ssiContact in dataIn.BuddyRecords)
+                foreach (SSIBuddyRecord ssiContact in dataIn.BuddyRecords)
                 {
-                    var identifier = ssiContact.ItemName;
-                    var group = GetGroupByGroupId(ssiContact.GroupId);
+                    string identifier = ssiContact.ItemName;
+                    IcqGroup group = GetGroupByGroupId(ssiContact.GroupId);
 
                     int identifierId;
 
                     if (!int.TryParse(identifier, out identifierId))
                         continue;
 
-                    var contact = GetContactByIdentifier(identifier);
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     if (contact.LastShortUserInfoRequest <= DateTime.MinValue)
                         contact.Name = ssiContact.LocalScreenName.LocalScreenName;
@@ -568,30 +567,30 @@ namespace Jcq.IcqProtocol
                     AttachContact(contact, group, true);
                 }
 
-                foreach (var record in dataIn.DenyRecords)
+                foreach (SSIDenyRecord record in dataIn.DenyRecords)
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
+                    string identifier = record.ItemName;
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     contact.DenyRecordItemId = record.ItemId;
 
                     _invisibleList.Add(contact);
                 }
 
-                foreach (var record in dataIn.PermitRecords)
+                foreach (SSIPermitRecord record in dataIn.PermitRecords)
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
+                    string identifier = record.ItemName;
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     contact.PermitRecordItemId = record.ItemId;
 
                     _visibleList.Add(contact);
                 }
 
-                foreach (var record in dataIn.IgnoreListRecords)
+                foreach (SSIIgnoreListRecord record in dataIn.IgnoreListRecords)
                 {
-                    var identifier = record.ItemName;
-                    var contact = GetContactByIdentifier(identifier);
+                    string identifier = record.ItemName;
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     contact.IgnoreRecordItemId = record.ItemId;
 
@@ -610,14 +609,17 @@ namespace Jcq.IcqProtocol
 
             try
             {
-                foreach (var contact in dataIn.DenyRecords.Select(record => GetContactByIdentifier(record.ItemName)))
+                foreach (
+                    IcqContact contact in dataIn.DenyRecords.Select(record => GetContactByIdentifier(record.ItemName)))
                 {
                     contact.DenyRecordItemId = 0;
 
                     _invisibleList.Remove(contact);
                 }
 
-                foreach (var contact in dataIn.PermitRecords.Select(record => GetContactByIdentifier(record.ItemName)))
+                foreach (
+                    IcqContact contact in dataIn.PermitRecords.Select(record => GetContactByIdentifier(record.ItemName))
+                    )
                 {
                     contact.PermitRecordItemId = 0;
 
@@ -625,31 +627,32 @@ namespace Jcq.IcqProtocol
                 }
 
                 foreach (
-                    var contact in dataIn.IgnoreListRecords.Select(record => GetContactByIdentifier(record.ItemName)))
+                    IcqContact contact in
+                        dataIn.IgnoreListRecords.Select(record => GetContactByIdentifier(record.ItemName)))
                 {
                     contact.IgnoreRecordItemId = 0;
 
                     _ignoreList.Remove(contact);
                 }
 
-                foreach (var ssiContact in dataIn.BuddyRecords)
+                foreach (SSIBuddyRecord ssiContact in dataIn.BuddyRecords)
                 {
-                    var identifier = ssiContact.ItemName;
-                    var group = GetGroupByGroupId(ssiContact.GroupId);
+                    string identifier = ssiContact.ItemName;
+                    IcqGroup group = GetGroupByGroupId(ssiContact.GroupId);
 
                     int identifierId;
 
                     if (!int.TryParse(identifier, out identifierId))
                         continue;
 
-                    var contact = GetContactByIdentifier(identifier);
+                    IcqContact contact = GetContactByIdentifier(identifier);
 
                     DetachContact(contact, group);
                 }
 
-                foreach (var ssiGroup in dataIn.GroupRecords)
+                foreach (SSIGroupRecord ssiGroup in dataIn.GroupRecords)
                 {
-                    var identifier = ssiGroup.ItemName;
+                    string identifier = ssiGroup.ItemName;
 
                     var group = new IcqGroup(identifier, ssiGroup.GroupId);
 

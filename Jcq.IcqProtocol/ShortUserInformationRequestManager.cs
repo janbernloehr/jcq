@@ -28,15 +28,15 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {
     public class ShortUserInformationRequestManager
     {
-        private readonly int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
         private readonly int _retryDue2Millisecond = Convert.ToInt32(TimeSpan.FromMinutes(5).TotalMilliseconds);
+        private readonly int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
         private bool _requestSucceeded;
         private int _retryIteration;
         private Timer _retryTimer;

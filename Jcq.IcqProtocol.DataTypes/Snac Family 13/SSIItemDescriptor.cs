@@ -53,7 +53,7 @@ namespace Jcq.IcqProtocol.DataTypes
         private void Deserialize(int offset, List<byte> bytes)
         {
             var data = bytes.GetRange(offset, bytes.Count - offset);
-            var index = 0;
+            int index = 0;
 
             ItemName = ByteConverter.ToStringFromUInt16Index(index, data);
             index += ItemName.Length + 2;

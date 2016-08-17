@@ -31,16 +31,11 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac030B : Snac
     {
-        private readonly List<UserInfo> _UserInfos = new List<UserInfo>();
-
         public Snac030B() : base(0x3, 0xb)
         {
         }
 
-        public List<UserInfo> UserInfos
-        {
-            get { return _UserInfos; }
-        }
+        public List<UserInfo> UserInfos { get; } = new List<UserInfo>();
 
         public override int CalculateDataSize()
         {
@@ -56,7 +51,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
@@ -65,7 +60,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 info = new UserInfo();
                 index += info.Deserialize(index, data);
 
-                _UserInfos.Add(info);
+                UserInfos.Add(info);
             }
 
             TotalSize = index;

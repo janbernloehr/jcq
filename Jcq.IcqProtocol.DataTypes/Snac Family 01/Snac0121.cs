@@ -46,7 +46,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             if (data.Count > index + 2 && (data[index] == 0 & data[index + 1] == 6))
             {
@@ -54,7 +54,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
                 index += 2;
 
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 index += desc.TotalSize;
             }

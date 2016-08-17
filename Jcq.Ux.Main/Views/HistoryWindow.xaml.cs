@@ -26,7 +26,6 @@
 
 using System.Windows;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -43,6 +42,6 @@ namespace Jcq.Ux.Main.Views
             App.DefaultWindowStyle.Attach(this);
         }
 
-        public HistoryWindowViewModel ViewModel { get; private set; }
+        public HistoryWindowViewModel ViewModel { get; }
     }
 }

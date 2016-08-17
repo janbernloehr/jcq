@@ -29,30 +29,30 @@ using Jcq.Core.Contracts.Collections;
 namespace Jcq.IdentityManager.Contracts
 {
     /// <summary>
-    /// Defines a service contract to create, delete, and store identities.
+    ///     Defines a service contract to create, delete, and store identities.
     /// </summary>
     public interface IIdentityProvider
     {
         /// <summary>
-        /// Gets a list of identities.
+        ///     Gets a list of identities.
         /// </summary>
         INotifyingCollection<IIdentity> Identities { get; }
 
         /// <summary>
-        /// Returns the identity with the given identifier.
+        ///     Returns the identity with the given identifier.
         /// </summary>
         /// <param name="identifier">The identifier.</param>
         /// <returns>Returns the identity with the given identifier. If none exists, null is returned.</returns>
         IIdentity GetIdentityByIdentifier(string identifier);
 
         /// <summary>
-        /// Creates the given identity in the store.
+        ///     Creates the given identity in the store.
         /// </summary>
         /// <param name="identity">The identity.</param>
         void CreateIdentity(IIdentity identity);
 
         /// <summary>
-        /// Deletes the given identity from the store.
+        ///     Deletes the given identity from the store.
         /// </summary>
         /// <param name="identity">The identity.</param>
         void DeleteIdentity(IIdentity identity);

@@ -27,22 +27,22 @@
 namespace Jcq.IdentityManager.Contracts
 {
     /// <summary>
-    /// Defines an identity.
+    ///     Defines an identity.
     /// </summary>
     public interface IIdentity
     {
         /// <summary>
-        /// Gets or sets the unique identifier of this identity.
+        ///     Gets or sets the unique identifier of this identity.
         /// </summary>
         string Identifier { get; set; }
 
         /// <summary>
-        /// Gets or sets the description of this identity.
+        ///     Gets or sets the description of this identity.
         /// </summary>
         string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the image url of this identity.
+        ///     Gets or sets the image url of this identity.
         /// </summary>
         string ImageUrl { get; set; }
     }

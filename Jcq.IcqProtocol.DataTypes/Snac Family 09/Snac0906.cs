@@ -52,7 +52,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (var uin in UsersToRemove)
+            foreach (string uin in UsersToRemove)
             {
                 data.Add((byte) uin.Length);
                 data.AddRange(ByteConverter.GetBytes(uin));

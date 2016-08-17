@@ -29,20 +29,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Media;
 using Jcq.IcqProtocol;
 using Jcq.IcqProtocol.Contracts;
 using Jcq.Ux.ViewModel;
 using Jcq.Ux.ViewModel.Contracts;
-using JCsTools.JCQ.Ux;
 using Newtonsoft.Json;
 
 namespace Jcq.Ux.Main.Services
 {
     public class ContactHistoryService : ContextService, IContactHistoryService
     {
-        private static readonly DirectoryInfo _StorageLocation =
-            new DirectoryInfo(Path.Combine(App.DataStorageDirectoryPath, "history"));
-
         private readonly Dictionary<ContactViewModel, ContactHistory> _cache;
 
         public ContactHistoryService(IContext context)
@@ -51,10 +48,8 @@ namespace Jcq.Ux.Main.Services
             _cache = new Dictionary<ContactViewModel, ContactHistory>();
         }
 
-        private static DirectoryInfo StorageLocation
-        {
-            get { return _StorageLocation; }
-        }
+        private static DirectoryInfo StorageLocation { get; } =
+            new DirectoryInfo(Path.Combine(App.DataStorageDirectoryPath, "history"));
 
         void IContactHistoryService.AppendMessage(ContactViewModel contact, MessageViewModel message)
         {
@@ -99,9 +94,9 @@ namespace Jcq.Ux.Main.Services
             if (!StorageLocation.Exists)
                 return;
 
-            foreach (var historyFile in StorageLocation.GetFiles("*.json"))
+            foreach (FileInfo historyFile in StorageLocation.GetFiles("*.json"))
             {
-                var identifier = Path.GetFileNameWithoutExtension(historyFile.Name);
+                string identifier = Path.GetFileNameWithoutExtension(historyFile.Name);
 
                 // IcqStorageService always returns an IcqContact for any identifier. (If not existing it is created)
 
@@ -109,24 +104,24 @@ namespace Jcq.Ux.Main.Services
                     ApplicationService.Current.Context.GetService<IStorageService>()
                         .GetContactByIdentifier(id));
 
-                var contact = ContactViewModelCache.GetViewModel(
+                ContactViewModel contact = ContactViewModelCache.GetViewModel(
                     ApplicationService.Current.Context.GetService<IStorageService>()
                         .GetContactByIdentifier(identifier));
 
                 using (var reader = new StreamReader(historyFile.FullName))
                 {
-                    var json = reader.ReadToEnd();
+                    string json = reader.ReadToEnd();
 
                     var messages = JsonConvert.DeserializeObject<TextMessageEntity[]>(json);
 
                     var history = new ContactHistory(contact.Model);
 
-                    foreach (var message in messages)
+                    foreach (TextMessageEntity message in messages)
                     {
-                        var sender = getContact(message.SenderIdentifier);
-                        var recipient = getContact(message.RecipientIdentifier);
+                        ContactViewModel sender = getContact(message.SenderIdentifier);
+                        ContactViewModel recipient = getContact(message.RecipientIdentifier);
 
-                        var foreground = sender.Identifier == ApplicationService.Current.Context.Identity.Identifier
+                        Brush foreground = sender.Identifier == ApplicationService.Current.Context.Identity.Identifier
                             ? MessageColors.IdentityColor
                             : MessageColors.Contact1Color;
 
@@ -166,7 +161,7 @@ namespace Jcq.Ux.Main.Services
                             RecipientIdentifier = textMessage.Recipient.Identifier
                         }).ToList();
 
-                    var json = JsonConvert.SerializeObject(list.ToArray());
+                    string json = JsonConvert.SerializeObject(list.ToArray());
 
                     writer.Write(json);
                 }

@@ -30,37 +30,37 @@ using System.Threading.Tasks;
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a service contract for establishing a connection to the network.
+    ///     Defines a service contract for establishing a connection to the network.
     /// </summary>
     public interface IConnector : IContextService
     {
         /// <summary>
-        /// Occurs when the sign in to the network has been completed successfully.
+        ///     Occurs when the sign in to the network has been completed successfully.
         /// </summary>
         event EventHandler SignInCompleted;
 
         /// <summary>
-        /// Occurs when the sign in to the network has failed.
+        ///     Occurs when the sign in to the network has failed.
         /// </summary>
         event EventHandler<SignInFailedEventArgs> SignInFailed;
 
         /// <summary>
-        /// Occurs when the connection to the network was interrupted.
+        ///     Occurs when the connection to the network was interrupted.
         /// </summary>
         event EventHandler<DisconnectedEventArgs> Disconnected;
 
         /// <summary>
-        /// Occurs when the server reports an error.
+        ///     Occurs when the server reports an error.
         /// </summary>
         event EventHandler<ServerErrorEventArgs> ServerError;
 
         /// <summary>
-        /// Sign out of the network.
+        ///     Sign out of the network.
         /// </summary>
         void SignOut();
 
         /// <summary>
-        /// Sign in to the network.
+        ///     Sign in to the network.
         /// </summary>
         /// <param name="credential">The credentials used to sign in.</param>
         /// <returns></returns>
@@ -69,16 +69,11 @@ namespace Jcq.IcqProtocol.Contracts
 
     public class ServerErrorEventArgs : EventArgs
     {
-        private readonly string _errorMessage;
-
         public ServerErrorEventArgs(string errorMessage)
         {
-            _errorMessage = errorMessage;
+            ErrorMessage = errorMessage;
         }
 
-        public string ErrorMessage
-        {
-            get { return _errorMessage; }
-        }
+        public string ErrorMessage { get; }
     }
 }

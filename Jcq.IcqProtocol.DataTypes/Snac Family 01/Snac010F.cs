@@ -31,28 +31,23 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac010F : Snac
     {
-        private readonly List<UserInfo> _UserInfos = new List<UserInfo>();
-
         public Snac010F() : base(0x1, 0xf)
         {
         }
 
-        public List<UserInfo> UserInfos
-        {
-            get { return _UserInfos; }
-        }
+        public List<UserInfo> UserInfos { get; } = new List<UserInfo>();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
                 var info = new UserInfo();
                 info.Deserialize(index, data);
-                _UserInfos.Add(info);
+                UserInfos.Add(info);
 
                 index += info.TotalSize;
             }

@@ -41,7 +41,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             IdleTime = TimeSpan.FromSeconds(ByteConverter.ToUInt32(data.GetRange(index, 4)));
             index += 4;

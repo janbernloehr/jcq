@@ -79,8 +79,8 @@ namespace Jcq.IcqProtocol
         {
             return;
 
-            var newIcon = default(Snac1308);
-            var editIcon = default(Snac1309);
+            Snac1308 newIcon = default(Snac1308);
+            Snac1309 editIcon = default(Snac1309);
 
             if (_uploadIconRequest != null && !_uploadIconRequest.IsCompleted)
                 return;
@@ -113,9 +113,9 @@ namespace Jcq.IcqProtocol
 
                 var parts = dataIn.ServerAddress.ServerAddress.Split(':');
 
-                var ip = IPAddress.Parse(parts[0]);
-                var port = 0;
-                var endpoint = default(IPEndPoint);
+                IPAddress ip = IPAddress.Parse(parts[0]);
+                int port = 0;
+                IPEndPoint endpoint = default(IPEndPoint);
 
                 if (parts.Length > 1)
                 {
@@ -137,7 +137,7 @@ namespace Jcq.IcqProtocol
                 RegisterSnacHandler(0x10, 0x3, new Action<Snac1003>(AnalyseSnac1003));
                 RegisterSnacHandler(0x10, 0x5, new Action<Snac1005>(AnalyseSnac1005));
 
-                var flap = default(FlapSendSignInCookie);
+                FlapSendSignInCookie flap = default(FlapSendSignInCookie);
 
                 flap = new FlapSendSignInCookie();
                 flap.AuthorizationCookie.AuthorizationCookie.AddRange(dataIn.AuthorizationCookie.AuthorizationCookie);
@@ -200,7 +200,7 @@ namespace Jcq.IcqProtocol
 
                 if (dataIn.Notification.Type == ExtendedStatusNotificationType.UploadIconRequest)
                 {
-                    var notification = default(UploadIconNotification);
+                    UploadIconNotification notification = default(UploadIconNotification);
 
                     notification = (UploadIconNotification) dataIn.Notification;
 
@@ -208,7 +208,7 @@ namespace Jcq.IcqProtocol
                     {
                         Debug.WriteLine("Icon upload requested.", "IcqIconService");
 
-                        var action = default(UploadAvatarAction);
+                        UploadAvatarAction action = default(UploadAvatarAction);
 
                         action = new UploadAvatarAction(this, _uploadIconRequest.IconData);
 
@@ -312,7 +312,7 @@ namespace Jcq.IcqProtocol
 
             try
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(dataIn.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(dataIn.Uin);
 
                 if (dataIn.IconData.Count > 0)
                 {
@@ -361,7 +361,7 @@ namespace Jcq.IcqProtocol
                 if (_uploadIconRequest.RequestId != dataIn.RequestId)
                     return;
 
-                var code = dataIn.ActionResultCodes.FirstOrDefault();
+                SSIActionResultCode code = dataIn.ActionResultCodes.FirstOrDefault();
 
                 if (code == SSIActionResultCode.Success)
                 {
@@ -489,7 +489,7 @@ namespace Jcq.IcqProtocol
             {
                 var infos = new List<string>();
 
-                foreach (var x in e.Flap.DataItems)
+                foreach (ISerializable x in e.Flap.DataItems)
                 {
                     infos.Add(x.ToString());
                 }
@@ -509,7 +509,7 @@ namespace Jcq.IcqProtocol
             {
                 var infos = new List<string>();
 
-                foreach (var x in e.Flap.DataItems)
+                foreach (ISerializable x in e.Flap.DataItems)
                 {
                     infos.Add(x.ToString());
                 }

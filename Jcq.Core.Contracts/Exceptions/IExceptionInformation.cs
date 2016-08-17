@@ -31,17 +31,17 @@ namespace Jcq.Core.Contracts.Exceptions
     public interface IExceptionInformation
     {
         /// <summary>
-        /// Gets the Exception.
+        ///     Gets the Exception.
         /// </summary>
         Exception Exception { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the Exception was displayed to the user.
+        ///     Gets or sets a value indicating whether the Exception was displayed to the user.
         /// </summary>
         bool Displayed { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the Exception was handled by user code.
+        ///     Gets or sets a value indicating whether the Exception was handled by user code.
         /// </summary>
         bool Handled { get; set; }
     }

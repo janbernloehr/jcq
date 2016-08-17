@@ -26,8 +26,8 @@
 
 using System;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 using NotificationType = Jcq.IcqProtocol.Contracts.NotificationType;
 
 namespace Jcq.IcqProtocol
@@ -76,7 +76,7 @@ namespace Jcq.IcqProtocol
             {
                 NotificationType type;
 
-                var contact = Context.GetService<IStorageService>().GetContactByIdentifier(snac.ScreenName);
+                IContact contact = Context.GetService<IStorageService>().GetContactByIdentifier(snac.ScreenName);
 
                 switch (snac.NotificationType)
                 {

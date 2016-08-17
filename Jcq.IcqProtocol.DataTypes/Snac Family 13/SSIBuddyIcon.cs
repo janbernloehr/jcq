@@ -30,24 +30,15 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class SSIBuddyIcon : SSIRecord
     {
-        private readonly TlvBuddyIcon _BuddyIcon = new TlvBuddyIcon();
-        private readonly TlvLocalScreenName _LocalScreenName = new TlvLocalScreenName();
-
         public SSIBuddyIcon() : base(SSIItemType.OwnIconAvatarInfo)
         {
             ItemName = "1";
             //ItemId = &H4DC8
         }
 
-        public TlvBuddyIcon BuddyIcon
-        {
-            get { return _BuddyIcon; }
-        }
+        public TlvBuddyIcon BuddyIcon { get; } = new TlvBuddyIcon();
 
-        public TlvLocalScreenName LocalScreenName
-        {
-            get { return _LocalScreenName; }
-        }
+        public TlvLocalScreenName LocalScreenName { get; } = new TlvLocalScreenName();
 
         public override int CalculateDataSize()
         {
@@ -58,16 +49,16 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0xd5:
-                        _BuddyIcon.Deserialize(data.GetRange(index, desc.TotalSize));
+                        BuddyIcon.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

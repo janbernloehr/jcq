@@ -44,7 +44,7 @@ namespace Jcq.Ux.ViewModel
         /// <summary>
         ///     Gets the ImageSelectorViewModel which allows to pick an identity image.
         /// </summary>
-        public ImageSelectorViewModel ImageSelector { get; private set; }
+        public ImageSelectorViewModel ImageSelector { get; }
 
         /// <summary>
         ///     Creates an Identity with the specified FullName, Uin, Password and the selected image. All four properties
@@ -59,7 +59,7 @@ namespace Jcq.Ux.ViewModel
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentNullException("password");
 
-            var avatarPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
+            string avatarPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
                 string.Format("{0}.[default].jpg", fullname));
 
             AvatarImageService.CreateAvatarImageFromFile(ImageSelector.SelectedImageFile, avatarPath);

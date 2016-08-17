@@ -26,8 +26,8 @@
 
 using System;
 using System.Collections;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {
@@ -42,14 +42,14 @@ namespace Jcq.IcqProtocol
             _sortIndex = sortIndex;
         }
 
-        public UserStatus UserStatus { get; private set; }
+        public UserStatus UserStatus { get; }
 
         public int CompareTo(IcqStatusCode other)
         {
             return Comparer.Default.Compare(_sortIndex, other._sortIndex);
         }
 
-        public string DisplayName { get; private set; }
+        public string DisplayName { get; }
 
         int IComparable.CompareTo(object obj)
         {

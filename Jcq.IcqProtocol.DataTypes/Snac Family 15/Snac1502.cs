@@ -31,20 +31,15 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1502 : Snac
     {
-        private readonly TlvMetaRequestData _MetaData = new TlvMetaRequestData();
-
         public Snac1502() : base(0x15, 0x2)
         {
         }
 
-        public TlvMetaRequestData MetaData
-        {
-            get { return _MetaData; }
-        }
+        public TlvMetaRequestData MetaData { get; } = new TlvMetaRequestData();
 
         public override int CalculateDataSize()
         {
-            return _MetaData.CalculateTotalSize();
+            return MetaData.CalculateTotalSize();
         }
 
         public override void Deserialize(List<byte> data)
@@ -55,7 +50,7 @@ namespace Jcq.IcqProtocol.DataTypes
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
-            data.AddRange(_MetaData.Serialize());
+            data.AddRange(MetaData.Serialize());
             return data;
         }
 
@@ -63,7 +58,8 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             if (MetaData.MetaRequest is MetaShortUserInformationRequest)
             {
-                return string.Format("Snac1502 Search: {0}", ((MetaShortUserInformationRequest) MetaData.MetaRequest).SearchUin);
+                return string.Format("Snac1502 Search: {0}",
+                    ((MetaShortUserInformationRequest) MetaData.MetaRequest).SearchUin);
             }
             return base.ToString();
         }

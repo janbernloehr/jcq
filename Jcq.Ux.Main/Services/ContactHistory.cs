@@ -27,7 +27,6 @@
 using System.Collections.Generic;
 using Jcq.IcqProtocol.Contracts;
 using Jcq.Ux.ViewModel;
-using Newtonsoft.Json;
 
 namespace Jcq.Ux.Main.Services
 {

@@ -32,20 +32,15 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac040A : Snac
     {
-        private readonly List<MissedMessageInfo> _MissedMessageInfos = new List<MissedMessageInfo>();
-
         public Snac040A() : base(0x4, 0xa)
         {
         }
 
-        public List<MissedMessageInfo> MissedMessageInfos
-        {
-            get { return _MissedMessageInfos; }
-        }
+        public List<MissedMessageInfo> MissedMessageInfos { get; } = new List<MissedMessageInfo>();
 
         public override int CalculateDataSize()
         {
-            return _MissedMessageInfos.Sum(x => x.CalculateTotalSize());
+            return MissedMessageInfos.Sum(x => x.CalculateTotalSize());
         }
 
         public override void Deserialize(List<byte> data)
@@ -63,7 +58,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 info = new MissedMessageInfo();
                 index += info.Deserialize(index, data);
 
-                _MissedMessageInfos.Add(info);
+                MissedMessageInfos.Add(info);
             }
 
             TotalSize = index;

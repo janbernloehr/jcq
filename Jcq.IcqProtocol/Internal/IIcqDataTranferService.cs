@@ -27,8 +27,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Jcq.IcqProtocol.Internal;
 using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Internal;
 
 namespace Jcq.IcqProtocol
 {

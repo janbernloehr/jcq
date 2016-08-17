@@ -34,7 +34,6 @@ namespace Jcq.IcqProtocol.DataTypes
     public class Flap : ISerializable
     {
         public const int SizeFixPart = 6;
-        private readonly List<ISerializable> _dataItems = new List<ISerializable>();
 
         public Flap()
         {
@@ -50,10 +49,7 @@ namespace Jcq.IcqProtocol.DataTypes
         public FlapChannel Channel { get; set; }
         public int DatagramSequenceNumber { get; set; }
 
-        public List<ISerializable> DataItems
-        {
-            get { return _dataItems; }
-        }
+        public List<ISerializable> DataItems { get; } = new List<ISerializable>();
 
         public int FlapDataSize { get; private set; }
 
@@ -76,8 +72,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public virtual int CalculateDataSize()
         {
-            var size = 0;
-            size += _dataItems.Sum(x => x.CalculateTotalSize());
+            int size = 0;
+            size += DataItems.Sum(x => x.CalculateTotalSize());
             return size;
         }
 
@@ -88,7 +84,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public virtual void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             index += 1;
 
@@ -104,8 +100,8 @@ namespace Jcq.IcqProtocol.DataTypes
             switch (Channel)
             {
                 case FlapChannel.SnacData:
-                    var descriptor = SnacDescriptor.GetDescriptor(index, data);
-                    var x = SerializationContext.DeserializeSnac(index, descriptor, data);
+                    SnacDescriptor descriptor = SnacDescriptor.GetDescriptor(index, data);
+                    Snac x = SerializationContext.DeserializeSnac(index, descriptor, data);
 
                     try
                     {
@@ -114,7 +110,7 @@ namespace Jcq.IcqProtocol.DataTypes
                                 SnacDescriptor.GetKey(descriptor)));
                         index += x.TotalSize;
 
-                        _dataItems.Add(x);
+                        DataItems.Add(x);
 
                         if (index < FlapDataSize)
                             throw new InvalidOperationException(
@@ -129,7 +125,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 case FlapChannel.CloseConnectionNegotiation:
                     while (index < FlapDataSize)
                     {
-                        var desc = TlvDescriptor.GetDescriptor(index, data);
+                        TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                         switch (desc.TypeId)
                         {
@@ -179,12 +175,12 @@ namespace Jcq.IcqProtocol.DataTypes
 
             data.AddRange(ByteConverter.GetBytes((ushort) DatagramSequenceNumber));
 
-            if (FlapDataSize > UInt16.MaxValue)
-                throw new OverflowException(string.Format("DataSize cannot exceed {0} bytes", UInt32.MaxValue));
+            if (FlapDataSize > ushort.MaxValue)
+                throw new OverflowException(string.Format("DataSize cannot exceed {0} bytes", uint.MaxValue));
 
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(FlapDataSize)));
 
-            foreach (var x in DataItems)
+            foreach (ISerializable x in DataItems)
             {
                 data.AddRange(x.Serialize());
             }

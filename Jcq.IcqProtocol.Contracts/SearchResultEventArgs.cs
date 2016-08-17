@@ -31,16 +31,11 @@ namespace Jcq.IcqProtocol.Contracts
 {
     public class SearchResultEventArgs : EventArgs
     {
-        private readonly List<IContact> _contacts;
-
         public SearchResultEventArgs(IEnumerable<IContact> contacts)
         {
-            _contacts = new List<IContact>(contacts);
+            Contacts = new List<IContact>(contacts);
         }
 
-        public List<IContact> Contacts
-        {
-            get { return _contacts; }
-        }
+        public List<IContact> Contacts { get; }
     }
 }

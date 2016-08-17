@@ -61,7 +61,7 @@ namespace Jcq.Core.Collections
 
         protected virtual void MoveItem(int oldIndex, int newIndex)
         {
-            var item = base[oldIndex];
+            T item = base[oldIndex];
             base.RemoveItem(oldIndex);
             base.InsertItem(newIndex, item);
             OnPropertyChanged("Item[]");
@@ -71,7 +71,7 @@ namespace Jcq.Core.Collections
         protected override void SetItem(int index, T item)
         {
             base.SetItem(index, item);
-            var oldItem = base[index];
+            T oldItem = base[index];
 
             OnPropertyChanged("Item[]");
             OnCollectionChanged(NotifyCollectionChangedAction.Replace, oldItem, item, index);
@@ -79,7 +79,7 @@ namespace Jcq.Core.Collections
 
         protected override void RemoveItem(int index)
         {
-            var item = base[index];
+            T item = base[index];
 
             base.RemoveItem(index);
 

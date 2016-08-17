@@ -24,7 +24,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 
 namespace Jcq.IcqProtocol.DataTypes
@@ -62,10 +61,10 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = new List<byte>();
 
-            data.AddRange(ByteConverter.GetBytesLE((ushort)(CalculateDataSize() + SizeFixPart - 2)));
-            data.AddRange(ByteConverter.GetBytesLE((uint)ClientUin));
-            data.AddRange(ByteConverter.GetBytesLE((ushort)RequestType));
-            data.AddRange(ByteConverter.GetBytesLE((ushort)RequestSequenceNumber));
+            data.AddRange(ByteConverter.GetBytesLE((ushort) (CalculateDataSize() + SizeFixPart - 2)));
+            data.AddRange(ByteConverter.GetBytesLE((uint) ClientUin));
+            data.AddRange(ByteConverter.GetBytesLE((ushort) RequestType));
+            data.AddRange(ByteConverter.GetBytesLE((ushort) RequestSequenceNumber));
 
             return data;
         }
@@ -81,7 +80,7 @@ namespace Jcq.IcqProtocol.DataTypes
             ClientUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4));
             index += 4;
 
-            RequestType = (MetaRequestType)ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            RequestType = (MetaRequestType) ByteConverter.ToUInt16LE(data.GetRange(index, 2));
             index += 2;
 
             RequestSequenceNumber = ByteConverter.ToUInt16LE(data.GetRange(index, 2));

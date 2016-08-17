@@ -53,7 +53,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = MetaRequest.SizeFixPart;
+            int index = MetaRequest.SizeFixPart;
 
             ResponseSubType = (MetaResponseSubType) ByteConverter.ToUInt16LE(data.GetRange(index, 2));
             index += 2;

@@ -57,7 +57,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             MaxContacts = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;

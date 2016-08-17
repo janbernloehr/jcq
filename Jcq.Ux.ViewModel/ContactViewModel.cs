@@ -55,7 +55,7 @@ namespace Jcq.Ux.ViewModel
             Model.IconDataReceived += OnIconDataReceived;
         }
 
-        public IContact Model { get; private set; }
+        public IContact Model { get; }
         //public Hashtable Attributes
         //{
         //    get { return Model.Attributes; }
@@ -129,11 +129,11 @@ namespace Jcq.Ux.ViewModel
         {
             get
             {
-                if ((IcqStatusCode)Status == IcqStatusCodes.Online)
+                if ((IcqStatusCode) Status == IcqStatusCodes.Online)
                 {
                     return 0;
                 }
-                if ((IcqStatusCode)Status == IcqStatusCodes.Offline)
+                if ((IcqStatusCode) Status == IcqStatusCodes.Offline)
                 {
                     return 2;
                 }
@@ -145,15 +145,15 @@ namespace Jcq.Ux.ViewModel
         {
             get
             {
-                if ((IcqStatusCode)Status == IcqStatusCodes.Online)
+                if ((IcqStatusCode) Status == IcqStatusCodes.Online)
                 {
-                    return (Brush)Application.Current.Resources["vbrOnline"];
+                    return (Brush) Application.Current.Resources["vbrOnline"];
                 }
-                if ((IcqStatusCode)Status == IcqStatusCodes.Offline)
+                if ((IcqStatusCode) Status == IcqStatusCodes.Offline)
                 {
-                    return (Brush)Application.Current.Resources["vbrOffline"];
+                    return (Brush) Application.Current.Resources["vbrOffline"];
                 }
-                return (Brush)Application.Current.Resources["vbrAway"];
+                return (Brush) Application.Current.Resources["vbrAway"];
             }
         }
 
@@ -215,7 +215,8 @@ namespace Jcq.Ux.ViewModel
             if (Model.IconData == null || Model.IconData.Count == 0) return;
 
             var ms = new MemoryStream(Model.IconData.ToArray());
-            var decoder = BitmapDecoder.Create(ms, BitmapCreateOptions.DelayCreation, BitmapCacheOption.Default);
+            BitmapDecoder decoder = BitmapDecoder.Create(ms, BitmapCreateOptions.DelayCreation,
+                BitmapCacheOption.Default);
 
             if (decoder != null)
                 _contactImage = decoder.Frames.First();

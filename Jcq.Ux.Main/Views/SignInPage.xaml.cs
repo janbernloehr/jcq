@@ -25,11 +25,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Jcq.Core;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -44,7 +44,7 @@ namespace Jcq.Ux.Main.Views
             InitializeComponent();
         }
 
-        public SignInPageViewModel ViewModel { get; private set; }
+        public SignInPageViewModel ViewModel { get; }
 
         private async void OnIdentityDoubleClick(object sender, RoutedEventArgs e)
         {
@@ -56,7 +56,7 @@ namespace Jcq.Ux.Main.Views
                 if (identity == null)
                     return;
 
-                var t = ViewModel.SignIn(identity);
+                Task t = ViewModel.SignIn(identity);
 
                 App.ShowStatusWindows();
 
@@ -78,7 +78,7 @@ namespace Jcq.Ux.Main.Views
                 if (identity == null)
                     return;
 
-                var t = ViewModel.SignIn(identity);
+                Task t = ViewModel.SignIn(identity);
 
                 App.ShowStatusWindows();
 

@@ -31,45 +31,36 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class SSIPermitDenySettings : SSIRecord
     {
-        private readonly TlvAllowOtherToSee _AllowOthersToSee = new TlvAllowOtherToSee();
-        private readonly TlvPrivacySetting _PrivacySetting = new TlvPrivacySetting();
-
         public SSIPermitDenySettings() : base(SSIItemType.PermitDenySettings)
         {
         }
 
-        public TlvPrivacySetting PrivacySetting
-        {
-            get { return _PrivacySetting; }
-        }
+        public TlvPrivacySetting PrivacySetting { get; } = new TlvPrivacySetting();
 
-        public TlvAllowOtherToSee AllowOthersToSee
-        {
-            get { return _AllowOthersToSee; }
-        }
+        public TlvAllowOtherToSee AllowOthersToSee { get; } = new TlvAllowOtherToSee();
 
         public override int CalculateDataSize()
         {
-            return _PrivacySetting.TotalSize + _AllowOthersToSee.TotalSize;
+            return PrivacySetting.TotalSize + AllowOthersToSee.TotalSize;
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0xca:
-                        _PrivacySetting.Deserialize(data.GetRange(index, desc.TotalSize));
+                        PrivacySetting.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xcc:
-                        _AllowOthersToSee.Deserialize(data.GetRange(index, desc.TotalSize));
+                        AllowOthersToSee.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

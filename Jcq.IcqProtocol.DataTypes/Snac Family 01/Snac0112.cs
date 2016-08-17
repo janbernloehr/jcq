@@ -31,44 +31,32 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0112 : Snac
     {
-        private readonly TlvAuthorizationCookie _AuthorizationCookie = new TlvAuthorizationCookie();
-        private readonly List<int> _Families = new List<int>();
-        private readonly TlvServerAddress _ServerAddress = new TlvServerAddress();
         private int _tlvsSize;
 
         public Snac0112() : base(0x1, 0x12)
         {
         }
 
-        public List<int> Families
-        {
-            get { return _Families; }
-        }
+        public List<int> Families { get; } = new List<int>();
 
-        public TlvServerAddress ServerAddress
-        {
-            get { return _ServerAddress; }
-        }
+        public TlvServerAddress ServerAddress { get; } = new TlvServerAddress();
 
-        public TlvAuthorizationCookie AuthorizationCookie
-        {
-            get { return _AuthorizationCookie; }
-        }
+        public TlvAuthorizationCookie AuthorizationCookie { get; } = new TlvAuthorizationCookie();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             int familyCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
-            var familyIndex = 0;
+            int familyIndex = 0;
 
             index += 2;
 
             while (familyIndex < familyCount)
             {
-                _Families.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
+                Families.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
 
                 index += 2;
                 familyIndex++;
@@ -76,15 +64,15 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (index + 4 <= data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x5:
-                        _ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x6:
-                        _ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 
@@ -102,7 +90,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            return 2 + 2*_Families.Count + _tlvsSize;
+            return 2 + 2*Families.Count + _tlvsSize;
         }
     }
 }

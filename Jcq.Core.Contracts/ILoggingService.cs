@@ -29,12 +29,12 @@ using System.Diagnostics;
 namespace Jcq.Core.Contracts
 {
     /// <summary>
-    /// Defines a contract for a logging service.
+    ///     Defines a contract for a logging service.
     /// </summary>
     public interface ILoggingService : IService
     {
         /// <summary>
-        /// Adds the given log entry to the log.
+        ///     Adds the given log entry to the log.
         /// </summary>
         /// <param name="category">The category of the entry.</param>
         /// <param name="severity">The severity of the entry.</param>
@@ -42,7 +42,7 @@ namespace Jcq.Core.Contracts
         void Log(string category, TraceEventType severity, string message);
 
         /// <summary>
-        /// Adds the given log entry to the log.
+        ///     Adds the given log entry to the log.
         /// </summary>
         /// <param name="category">The category of the entry.</param>
         /// <param name="severity">The severity of the entry.</param>

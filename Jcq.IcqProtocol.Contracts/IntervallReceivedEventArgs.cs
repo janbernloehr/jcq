@@ -31,16 +31,11 @@ namespace Jcq.IcqProtocol.Contracts
     [Serializable]
     public class IntervallReceivedEventArgs : EventArgs
     {
-        private readonly TimeSpan _intervall;
-
         public IntervallReceivedEventArgs(TimeSpan intervall)
         {
-            _intervall = intervall;
+            Intervall = intervall;
         }
 
-        public TimeSpan Intervall
-        {
-            get { return _intervall; }
-        }
+        public TimeSpan Intervall { get; }
     }
 }

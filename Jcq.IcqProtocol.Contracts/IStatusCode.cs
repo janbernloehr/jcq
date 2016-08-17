@@ -29,7 +29,7 @@ using System;
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a Status Code.
+    ///     Defines a Status Code.
     /// </summary>
     public interface IStatusCode : IComparable
     {

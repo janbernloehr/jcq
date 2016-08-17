@@ -30,7 +30,7 @@ using System.Collections.ObjectModel;
 namespace Jcq.Core.Contracts.Exceptions
 {
     /// <summary>
-    /// Provides an Exception publication contract.
+    ///     Provides an Exception publication contract.
     /// </summary>
     public interface IExceptionService : IService
     {

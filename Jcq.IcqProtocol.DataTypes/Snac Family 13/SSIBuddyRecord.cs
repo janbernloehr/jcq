@@ -30,42 +30,21 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class SSIBuddyRecord : SSIRecord
     {
-        private readonly TlvBuddyCommentField _Comment = new TlvBuddyCommentField();
-        private readonly TlvLocalEmailAddress _LocalEmailAddress = new TlvLocalEmailAddress();
-        private readonly TlvLocalScreenName _LocalScreenName = new TlvLocalScreenName();
-        private readonly TlvLocalSmsNumber _LocalSmsNumber = new TlvLocalSmsNumber();
-        private readonly TlvPersonalBuddyAlerts _PersonalAlerts = new TlvPersonalBuddyAlerts();
-
         public SSIBuddyRecord() : base(SSIItemType.BuddyRecord)
         {
         }
 
         public bool AwaitingAuthorization { get; set; }
 
-        public TlvLocalScreenName LocalScreenName
-        {
-            get { return _LocalScreenName; }
-        }
+        public TlvLocalScreenName LocalScreenName { get; } = new TlvLocalScreenName();
 
-        public TlvLocalEmailAddress LocalEmailAddress
-        {
-            get { return _LocalEmailAddress; }
-        }
+        public TlvLocalEmailAddress LocalEmailAddress { get; } = new TlvLocalEmailAddress();
 
-        public TlvLocalSmsNumber LocalSmsNumber
-        {
-            get { return _LocalSmsNumber; }
-        }
+        public TlvLocalSmsNumber LocalSmsNumber { get; } = new TlvLocalSmsNumber();
 
-        public TlvBuddyCommentField Comment
-        {
-            get { return _Comment; }
-        }
+        public TlvBuddyCommentField Comment { get; } = new TlvBuddyCommentField();
 
-        public TlvPersonalBuddyAlerts PersonalAlerts
-        {
-            get { return _PersonalAlerts; }
-        }
+        public TlvPersonalBuddyAlerts PersonalAlerts { get; } = new TlvPersonalBuddyAlerts();
 
         public override int CalculateDataSize()
         {
@@ -76,11 +55,11 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
@@ -88,19 +67,19 @@ namespace Jcq.IcqProtocol.DataTypes
                         AwaitingAuthorization = true;
                         break;
                     case 0x131:
-                        _LocalScreenName.Deserialize(data.GetRange(index, desc.TotalSize));
+                        LocalScreenName.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x137:
-                        _LocalEmailAddress.Deserialize(data.GetRange(index, desc.TotalSize));
+                        LocalEmailAddress.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x13a:
-                        _LocalSmsNumber.Deserialize(data.GetRange(index, desc.TotalSize));
+                        LocalSmsNumber.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x13c:
-                        _Comment.Deserialize(data.GetRange(index, desc.TotalSize));
+                        Comment.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x13d:
-                        _PersonalAlerts.Deserialize(data.GetRange(index, desc.TotalSize));
+                        PersonalAlerts.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

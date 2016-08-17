@@ -29,7 +29,6 @@ using Jcq.Core;
 using Jcq.Ux.Main.Views;
 using Jcq.Ux.ViewModel;
 using Jcq.Ux.ViewModel.Contracts;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Services
 {

@@ -55,7 +55,7 @@ namespace Jcq.IdentityManager
             var identities = JsonConvert.DeserializeObject<Identity[]>(json,
                 new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects});
 
-            foreach (var identity in identities)
+            foreach (Identity identity in identities)
             {
                 Identities.Add(identity);
             }
@@ -63,7 +63,7 @@ namespace Jcq.IdentityManager
 
         public void Save()
         {
-            var json = JsonConvert.SerializeObject(Identities.ToArray(),
+            string json = JsonConvert.SerializeObject(Identities.ToArray(),
                 new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects});
 
             if (!_jsonFile.Directory.Exists)

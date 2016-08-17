@@ -31,24 +31,15 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0909 : Snac
     {
-        private readonly TlvErrorDescriptionUrl _ErrorDescriptionUrl = new TlvErrorDescriptionUrl();
-        private readonly TlvErrorSubCode _ErrorSubCode = new TlvErrorSubCode();
-
         public Snac0909() : base(0x9, 0x9)
         {
         }
 
         public int ErrorCode { get; set; }
 
-        public TlvErrorSubCode ErrorSubCode
-        {
-            get { return _ErrorSubCode; }
-        }
+        public TlvErrorSubCode ErrorSubCode { get; } = new TlvErrorSubCode();
 
-        public TlvErrorDescriptionUrl ErrorDescriptionUrl
-        {
-            get { return _ErrorDescriptionUrl; }
-        }
+        public TlvErrorDescriptionUrl ErrorDescriptionUrl { get; } = new TlvErrorDescriptionUrl();
 
         public override int CalculateDataSize()
         {
@@ -64,22 +55,22 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             ErrorCode = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x8:
-                        _ErrorSubCode.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ErrorSubCode.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x4:
-                        _ErrorDescriptionUrl.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ErrorDescriptionUrl.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

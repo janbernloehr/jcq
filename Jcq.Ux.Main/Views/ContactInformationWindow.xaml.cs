@@ -26,7 +26,6 @@
 
 using System.Windows;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {

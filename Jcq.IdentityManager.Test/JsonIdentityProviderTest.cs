@@ -27,7 +27,6 @@
 using System.IO;
 using System.Linq;
 using Jcq.IdentityManager.Contracts;
-using Jcq.IdentityManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jcq.IdentityManager.Test
@@ -95,9 +94,9 @@ namespace Jcq.IdentityManager.Test
             Assert.AreEqual("Test String 1", id1.Description, "Description was not loaded.");
             Assert.AreEqual("D:\\Pictures\\pony.jpg", id1.ImageUrl, "ImageUrl was not loaded.");
 
-            var idx = target.GetIdentityByIdentifier("123456");
+            IIdentity idx = target.GetIdentityByIdentifier("123456");
 
-            Assert.IsInstanceOfType(idx, typeof (IcqIdentity));
+            Assert.IsInstanceOfType(idx, typeof(IcqIdentity));
 
             var idicq = (IcqIdentity) idx;
 

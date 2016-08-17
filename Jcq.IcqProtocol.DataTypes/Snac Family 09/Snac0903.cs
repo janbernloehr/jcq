@@ -31,22 +31,13 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0903 : Snac
     {
-        private readonly TlvMaxInvisibleListSize _MaxInvisibleListSize = new TlvMaxInvisibleListSize();
-        private readonly TlvMaxVisibleListSize _MaxVisibleListSize = new TlvMaxVisibleListSize();
-
         public Snac0903() : base(0x9, 0x3)
         {
         }
 
-        public TlvMaxVisibleListSize MaxVisibleListSize
-        {
-            get { return _MaxVisibleListSize; }
-        }
+        public TlvMaxVisibleListSize MaxVisibleListSize { get; } = new TlvMaxVisibleListSize();
 
-        public TlvMaxInvisibleListSize MaxInvisibleListSize
-        {
-            get { return _MaxInvisibleListSize; }
-        }
+        public TlvMaxInvisibleListSize MaxInvisibleListSize { get; } = new TlvMaxInvisibleListSize();
 
         public override int CalculateDataSize()
         {
@@ -62,19 +53,19 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _MaxVisibleListSize.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MaxVisibleListSize.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x2:
-                        _MaxInvisibleListSize.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MaxInvisibleListSize.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

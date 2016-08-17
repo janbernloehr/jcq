@@ -43,14 +43,14 @@ namespace Jcq.Core
             LoadMappings();
         }
 
-        public T CreateImplementation<T>(params Object[] args)
+        public T CreateImplementation<T>(params object[] args)
         {
-            return (T) CreateImplementation(typeof (T), args);
+            return (T) CreateImplementation(typeof(T), args);
         }
 
         public object CreateImplementation(Type contractType, params object[] args)
         {
-            var mType = GetImplementationType(contractType);
+            Type mType = GetImplementationType(contractType);
 
             if (mType == null)
                 throw new ImplementationNotFoundException(contractType);
@@ -60,7 +60,7 @@ namespace Jcq.Core
 
         public Type GetImplementationType<I>()
         {
-            return GetImplementationType(typeof (I));
+            return GetImplementationType(typeof(I));
         }
 
         public Type GetImplementationType(Type contractType)
@@ -85,7 +85,7 @@ namespace Jcq.Core
 
         public bool ExistsContractImplementation<I>()
         {
-            return ExistsContractImplementation(typeof (I));
+            return ExistsContractImplementation(typeof(I));
         }
 
         public bool ExistsContractImplementation(Type contractType)
@@ -110,8 +110,8 @@ namespace Jcq.Core
 
             foreach (MappingConfigElement element in mkSection.References)
             {
-                var interfaceType = Type.GetType(element.InterfaceType, true, true);
-                var mappingType = Type.GetType(element.MappingType, true, true);
+                Type interfaceType = Type.GetType(element.InterfaceType, true, true);
+                Type mappingType = Type.GetType(element.MappingType, true, true);
 
                 _mappings.Add(interfaceType, mappingType);
             }

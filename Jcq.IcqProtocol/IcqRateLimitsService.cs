@@ -53,7 +53,7 @@ namespace Jcq.IcqProtocol
             connector.RegisterSnacHandler(0x1, 0xA, new Action<Snac010A>(AnalyseSnac010A));
         }
 
-        public KeyedNotifiyingCollection<long, IcqRateLimitsClass> RateLimits { get; private set; }
+        public KeyedNotifiyingCollection<long, IcqRateLimitsClass> RateLimits { get; }
 
         IReadOnlyNotifyingCollection<IRateLimitsClass> IRateLimitsService.RateLimits
         {
@@ -62,11 +62,64 @@ namespace Jcq.IcqProtocol
 
         public event EventHandler RateLimitsReceived;
 
+
+        public int Calculate(int serviceTypeId, int subTypeId)
+        {
+            long classId;
+
+            if (!_mappings.TryGetValue(new Tuple<int, int>(serviceTypeId, subTypeId), out classId)) return 0;
+
+            if (!RateLimits.Contains(classId)) return 0;
+
+            IcqRateLimitsClass cls = RateLimits[classId];
+
+            long oldLevel;
+
+            if (cls.LocalLastTime > cls.DataLastUpdatedFromServer)
+            {
+                oldLevel = cls.Computed == 0 ? cls.MaxLevel : cls.Computed;
+            }
+            else
+            {
+                oldLevel = cls.CurrentLevel;
+            }
+
+            long newLevel;
+            int newTime = Environment.TickCount;
+
+            if (cls.LocalLastTime == 0)
+                newLevel = cls.MaxLevel;
+            else
+            {
+                double a = (cls.WindowSize - 1)*oldLevel/(double) cls.WindowSize;
+                double b = (newTime - cls.LocalLastTime)/(double) cls.WindowSize;
+
+                newLevel = Convert.ToInt64(a + b);
+            }
+
+            cls.LocalLastTime = newTime;
+            cls.Computed = newLevel;
+
+            cls.WaitTime = Convert.ToInt32(Math.Max(cls.WindowSize*cls.ClearLevel - (cls.WindowSize - 1)*oldLevel, 0));
+
+            return cls.WaitTime;
+        }
+
+        public void EmergencyThrottle()
+        {
+            foreach (IcqRateLimitsClass limit in RateLimits)
+            {
+                limit.Computed = limit.DisconnectLevel + 1;
+                limit.CurrentLevel = limit.DisconnectLevel + 1;
+                limit.DataLastUpdatedFromServer = Environment.TickCount;
+            }
+        }
+
         private void AnalyseSnac010A(Snac010A snac)
         {
-            foreach (var rateClass in snac.RateClasses)
+            foreach (RateClass rateClass in snac.RateClasses)
             {
-                var c = RateLimits[rateClass.ClassId];
+                IcqRateLimitsClass c = RateLimits[rateClass.ClassId];
 
                 c.AlertLevel = rateClass.AlertLevel;
                 c.ClassId = rateClass.ClassId;
@@ -83,7 +136,7 @@ namespace Jcq.IcqProtocol
 
         private void AnalyseSnac0107(Snac0107 snac)
         {
-            foreach (var rateClass in snac.RateClasses)
+            foreach (RateClass rateClass in snac.RateClasses)
             {
                 IcqRateLimitsClass c;
 
@@ -105,7 +158,7 @@ namespace Jcq.IcqProtocol
                 }
                 else
                 {
-                    c = new IcqRateLimitsClass()
+                    c = new IcqRateLimitsClass
                     {
                         AlertLevel = rateClass.AlertLevel,
                         ClassId = rateClass.ClassId,
@@ -123,12 +176,12 @@ namespace Jcq.IcqProtocol
                 }
             }
 
-            foreach (var rateGroup in snac.RateGroups)
+            foreach (RateGroup rateGroup in snac.RateGroups)
             {
-                var cls = RateLimits.FirstOrDefault(l => l.ClassId == rateGroup.GroupId);
+                IcqRateLimitsClass cls = RateLimits.FirstOrDefault(l => l.ClassId == rateGroup.GroupId);
 
 
-                foreach (var pair in rateGroup.ServiceFamilyIdSubTypeIdPairs)
+                foreach (FamilySubtypePair pair in rateGroup.ServiceFamilyIdSubTypeIdPairs)
                 {
                     var key = new Tuple<int, int>(pair.FamilyId, pair.SubtypeId);
 
@@ -144,59 +197,6 @@ namespace Jcq.IcqProtocol
 
             if (RateLimitsReceived != null)
                 RateLimitsReceived(this, EventArgs.Empty);
-        }
-
-
-        public int Calculate(int serviceTypeId, int subTypeId)
-        {
-            long classId;
-
-            if (!_mappings.TryGetValue(new Tuple<int, int>(serviceTypeId, subTypeId), out classId)) return 0;
-
-            if (!RateLimits.Contains(classId)) return 0;
-
-            var cls = RateLimits[classId];
-
-            long oldLevel;
-
-            if (cls.LocalLastTime > cls.DataLastUpdatedFromServer)
-            {
-                oldLevel = cls.Computed == 0 ? cls.MaxLevel : cls.Computed;
-            }
-            else
-            {
-                oldLevel = cls.CurrentLevel;
-            }
-
-            long newLevel;
-            var newTime = Environment.TickCount;
-
-            if (cls.LocalLastTime == 0)
-                newLevel = cls.MaxLevel;
-            else
-            {
-                var a = (cls.WindowSize - 1) * oldLevel / (double)cls.WindowSize;
-                var b = (newTime - cls.LocalLastTime) / (double)cls.WindowSize;
-
-                newLevel = Convert.ToInt64(a + b);
-            }
-
-            cls.LocalLastTime = newTime;
-            cls.Computed = newLevel;
-
-            cls.WaitTime = Convert.ToInt32(Math.Max(cls.WindowSize * cls.ClearLevel - (cls.WindowSize - 1) * oldLevel, 0));
-
-            return cls.WaitTime;
-        }
-
-        public void EmergencyThrottle()
-        {
-            foreach (var limit in RateLimits)
-            {
-                limit.Computed = limit.DisconnectLevel + 1;
-                limit.CurrentLevel = limit.DisconnectLevel + 1;
-                limit.DataLastUpdatedFromServer = Environment.TickCount;
-            }
         }
     }
 }

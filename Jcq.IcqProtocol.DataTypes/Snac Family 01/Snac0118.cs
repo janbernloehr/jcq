@@ -31,16 +31,11 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0118 : Snac
     {
-        private readonly List<FamilyVersionPair> _FamilyNameVersionPairs = new List<FamilyVersionPair>();
-
         public Snac0118() : base(0x1, 0x18)
         {
         }
 
-        public List<FamilyVersionPair> FamilyNameVersionPairs
-        {
-            get { return _FamilyNameVersionPairs; }
-        }
+        public List<FamilyVersionPair> FamilyNameVersionPairs { get; } = new List<FamilyVersionPair>();
 
         public override List<byte> Serialize()
         {
@@ -51,7 +46,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index + 4 < data.Count)
             {
@@ -63,7 +58,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 version = ByteConverter.ToUInt16(data.GetRange(index, 2));
                 index += 2;
 
-                _FamilyNameVersionPairs.Add(new FamilyVersionPair(number, version));
+                FamilyNameVersionPairs.Add(new FamilyVersionPair(number, version));
             }
 
             TotalSize = index;
@@ -71,7 +66,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            return _FamilyNameVersionPairs.Count*4;
+            return FamilyNameVersionPairs.Count*4;
         }
     }
 }

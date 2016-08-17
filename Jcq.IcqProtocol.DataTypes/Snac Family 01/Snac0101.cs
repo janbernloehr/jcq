@@ -30,25 +30,20 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0101 : Snac
     {
-        private readonly TlvErrorSubCode _subError = new TlvErrorSubCode();
-
         public Snac0101() : base(0x1, 0x1)
         {
         }
 
         public ErrorCode ErrorCode { get; set; }
 
-        public TlvErrorSubCode SubError
-        {
-            get { return _subError; }
-        }
+        public TlvErrorSubCode SubError { get; } = new TlvErrorSubCode();
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
             data.AddRange(ByteConverter.GetBytes((uint) ErrorCode));
-            data.AddRange(_subError.Serialize());
+            data.AddRange(SubError.Serialize());
 
             return data;
         }
@@ -57,22 +52,21 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             ErrorCode = (ErrorCode) (short) ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 if (desc.TypeId == 0x8)
                 {
-                    _subError.Deserialize(data.GetRange(index, desc.TotalSize));
+                    SubError.Deserialize(data.GetRange(index, desc.TotalSize));
                 }
                 else if (desc.TypeId == 0x21)
                 {
-                    
                 }
 
                 index += desc.TotalSize;
@@ -88,7 +82,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override string ToString()
         {
-            return string.Format("{0} :: {1} {2}", base.ToString(), ErrorCode, SubError != null ? SubError.ErrorSubCode.ToString() : "-");
+            return string.Format("{0} :: {1} {2}", base.ToString(), ErrorCode,
+                SubError != null ? SubError.ErrorSubCode.ToString() : "-");
         }
     }
 }

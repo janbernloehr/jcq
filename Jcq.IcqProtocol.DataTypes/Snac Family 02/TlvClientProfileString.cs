@@ -40,7 +40,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             ClientProfile = ByteConverter.ToStringFromUInt16Index(index, data);
         }

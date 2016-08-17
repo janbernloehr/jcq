@@ -45,7 +45,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             MaxNumberOfVisibleListEntries = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;

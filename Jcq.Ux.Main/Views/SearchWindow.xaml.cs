@@ -29,7 +29,6 @@ using System.Windows;
 using System.Windows.Controls;
 using Jcq.Core;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -52,7 +51,7 @@ namespace Jcq.Ux.Main.Views
             App.DefaultWindowStyle.Attach(this);
         }
 
-        public SearchWindowViewModel ViewModel { get; private set; }
+        public SearchWindowViewModel ViewModel { get; }
 
         private void OnSearchClick(object sender, RoutedEventArgs e)
         {

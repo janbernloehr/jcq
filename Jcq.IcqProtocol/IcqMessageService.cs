@@ -26,8 +26,8 @@
 
 using System;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {
@@ -93,11 +93,11 @@ namespace Jcq.IcqProtocol
         {
             try
             {
-                var senderId = snac.ScreenName;
-                var messageText = snac.MessageData.MessageText;
+                string senderId = snac.ScreenName;
+                string messageText = snac.MessageData.MessageText;
 
-                var sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
-                var recipient = Context.Identity;
+                IContact sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
+                IContact recipient = Context.Identity;
 
                 var msg = new IcqMessage(sender, recipient, messageText);
 
@@ -121,11 +121,11 @@ namespace Jcq.IcqProtocol
                     case MetaResponseType.OfflineMessageResponse:
                         var resp = (OfflineMessageResponse) snac.MetaData.MetaResponse;
 
-                        var senderId = resp.ClientUin.ToString();
-                        var messageText = resp.MessageText;
+                        string senderId = resp.ClientUin.ToString();
+                        string messageText = resp.MessageText;
 
-                        var sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
-                        var recipient = Context.Identity;
+                        IContact sender = Context.GetService<IStorageService>().GetContactByIdentifier(senderId);
+                        IContact recipient = Context.Identity;
 
                         var msg = new IcqOfflineMessage(sender, recipient, messageText, resp.DateSent);
 

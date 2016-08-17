@@ -63,7 +63,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public virtual void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             ClassId = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;

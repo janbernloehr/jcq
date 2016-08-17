@@ -47,7 +47,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             ModificationDate = ByteConverter.ToDateTimeFromUInt32FileStamp(data.GetRange(index, 4));
             index += 4;

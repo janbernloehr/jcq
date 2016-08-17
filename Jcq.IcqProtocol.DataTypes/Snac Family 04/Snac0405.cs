@@ -51,7 +51,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             Channel = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;

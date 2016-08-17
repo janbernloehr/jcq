@@ -49,7 +49,7 @@ namespace Jcq.Ux.Main.Services
             };
         }
 
-        public List<IStatusCode> AvailableStatuses { get; private set; }
+        public List<IStatusCode> AvailableStatuses { get; }
 
         public void SetIdentityStatus(IStatusCode value)
         {

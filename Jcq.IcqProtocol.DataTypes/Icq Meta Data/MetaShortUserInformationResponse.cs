@@ -57,7 +57,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart + 2;
+            int index = SizeFixPart + 2;
 
             if (data[index] == 0xa)
             {

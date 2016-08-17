@@ -28,11 +28,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Internal;
 
 namespace Jcq.IcqProtocol
@@ -56,7 +57,7 @@ namespace Jcq.IcqProtocol
             RegisterSnacHandler<Snac0118>(0x1, 0x18, AnalyseSnac0118);
 
             RegisterSnacHandler<Snac1306>(0x13, 0x6, AnalyseSnac1306);
-            
+
             InternalDisconnected += BaseInternalDisconnected;
         }
 
@@ -88,7 +89,7 @@ namespace Jcq.IcqProtocol
                 // When the task is run, we can exspect a disconnect ...
                 TcpContext.SetCloseExpected();
 
-                var authenticationCookieState = await authenticationCookieTask;
+                RequestAuthenticationCookieState authenticationCookieState = await authenticationCookieTask;
 
                 if (!authenticationCookieState.AuthenticationSucceeded)
                 {
@@ -103,7 +104,7 @@ namespace Jcq.IcqProtocol
                 // if the authentication attempt was successfull we can connect to the bos server
                 // and send the just received authentication cookie to begin the sign in procedure.
 
-                var serverEndpoint = ConvertServerAddressToEndPoint(authenticationCookieState.BosServerAddress);
+                IPEndPoint serverEndpoint = ConvertServerAddressToEndPoint(authenticationCookieState.BosServerAddress);
 
                 InnerConnect(serverEndpoint);
 
@@ -178,7 +179,6 @@ namespace Jcq.IcqProtocol
                     //Send(s); // request rates limits...
 
                     //Context.GetService<IRateLimitsService>().EmergencyThrottle();
-
                 }
 
                 throw new IcqException(dataIn.ServiceId, dataIn.ErrorCode, dataIn.SubError.ErrorSubCode);
@@ -389,7 +389,7 @@ namespace Jcq.IcqProtocol
 
             // The user is not idle so set the idle time to zero.
 
-            var setIdleTime = new Snac0111 { IdleTime = TimeSpan.FromSeconds(0) };
+            var setIdleTime = new Snac0111 {IdleTime = TimeSpan.FromSeconds(0)};
 
             // This is used to tell the server the understood services.
             // Since this is an Icq Client only icq services are listed.

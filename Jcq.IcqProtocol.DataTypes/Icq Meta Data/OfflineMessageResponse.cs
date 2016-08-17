@@ -52,7 +52,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             SenderUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4));
             index += 4;

@@ -48,7 +48,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             Uin = ByteConverter.ToStringFromByteIndex(index, data);
             index += 1 + Uin.Length;

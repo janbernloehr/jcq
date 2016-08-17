@@ -30,7 +30,6 @@ using System.Windows.Controls;
 using Jcq.Core;
 using Jcq.IcqProtocol;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -45,7 +44,7 @@ namespace Jcq.Ux.Main.Views
             InitializeComponent();
         }
 
-        public ContactsPageViewModel ViewModel { get; private set; }
+        public ContactsPageViewModel ViewModel { get; }
 
         private void OnSendMessageClick(object sender, RoutedEventArgs e)
         {

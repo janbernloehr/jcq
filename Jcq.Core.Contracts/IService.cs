@@ -27,12 +27,12 @@
 namespace Jcq.Core.Contracts
 {
     /// <summary>
-    /// Defines a service contract.
+    ///     Defines a service contract.
     /// </summary>
     public interface IService
     {
         /// <summary>
-        /// Gets the name of the service.
+        ///     Gets the name of the service.
         /// </summary>
         string Name { get; }
     }

@@ -30,7 +30,6 @@ using System.Windows.Threading;
 using Jcq.IcqProtocol;
 using Jcq.IcqProtocol.Contracts;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -60,9 +59,9 @@ namespace Jcq.Ux.Main.Views
             long bytesSent = 0;
             long bytesReceived = 0;
 
-            var memoryLoad = _process.WorkingSet64;
-            var cpuTime = _process.TotalProcessorTime.TotalMilliseconds;
-            var threadCount = _process.Threads.Count;
+            long memoryLoad = _process.WorkingSet64;
+            double cpuTime = _process.TotalProcessorTime.TotalMilliseconds;
+            int threadCount = _process.Threads.Count;
 
             if (ApplicationService.Current.Context != null)
             {

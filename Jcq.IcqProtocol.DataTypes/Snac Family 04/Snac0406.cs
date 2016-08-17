@@ -31,8 +31,6 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0406 : Snac
     {
-        private readonly TlvMessageData _MessageData = new TlvMessageData();
-
         public Snac0406() : base(0x4, 0x6)
         {
         }
@@ -41,17 +39,14 @@ namespace Jcq.IcqProtocol.DataTypes
         public MessageChannel Channel { get; set; }
         public string ScreenName { get; set; }
 
-        public TlvMessageData MessageData
-        {
-            get { return _MessageData; }
-        }
+        public TlvMessageData MessageData { get; } = new TlvMessageData();
 
         public bool RequestAnAckFromServer { get; set; }
         public bool StoreMessageIfRecipientIsOffline { get; set; }
 
         public override int CalculateDataSize()
         {
-            return 8 + 2 + 1 + ScreenName.Length + _MessageData.CalculateTotalSize() + (RequestAnAckFromServer
+            return 8 + 2 + 1 + ScreenName.Length + MessageData.CalculateTotalSize() + (RequestAnAckFromServer
                 ? 4
                 : 0) + (StoreMessageIfRecipientIsOffline ? 4 : 0);
         }
@@ -73,16 +68,16 @@ namespace Jcq.IcqProtocol.DataTypes
             data.Add((byte) ScreenName.Length);
             data.AddRange(ByteConverter.GetBytes(ScreenName));
 
-            data.AddRange(_MessageData.Serialize());
+            data.AddRange(MessageData.Serialize());
 
             if (RequestAnAckFromServer)
             {
-                data.AddRange((new TlvRequestAckFromServer()).Serialize());
+                data.AddRange(new TlvRequestAckFromServer().Serialize());
             }
 
             if (StoreMessageIfRecipientIsOffline)
             {
-                data.AddRange((new TlvStoreMessageIfRecipientOffline()).Serialize());
+                data.AddRange(new TlvStoreMessageIfRecipientOffline().Serialize());
             }
 
             return data;

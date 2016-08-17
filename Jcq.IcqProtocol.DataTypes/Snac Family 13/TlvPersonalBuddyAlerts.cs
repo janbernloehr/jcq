@@ -54,7 +54,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             AlertType = (BuddyAlertType) data[index];
             Alert = (BuddyAlert) data[index + 1];

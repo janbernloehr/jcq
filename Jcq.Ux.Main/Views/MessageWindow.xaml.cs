@@ -121,7 +121,7 @@ namespace Jcq.Ux.Main.Views
         {
             try
             {
-                var messageText = txtMessage.Text;
+                string messageText = txtMessage.Text;
 
                 ViewModel.SendMessage(messageText);
 

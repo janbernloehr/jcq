@@ -29,13 +29,14 @@ using System.Collections.Generic;
 namespace Jcq.Core.Contracts.Collections
 {
     /// <summary>
-    /// Represents a dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed
+    ///     Represents a dynamic data collection that provides notifications when items get added, removed, or when the whole
+    ///     list is refreshed
     /// </summary>
     /// <typeparam name="T">The type of object in the collection.</typeparam>
     public interface INotifyingCollection<T> : IReadOnlyNotifyingCollection<T>, ICollection<T>
     {
         /// <summary>
-        /// Move an element within the collection.
+        ///     Move an element within the collection.
         /// </summary>
         /// <param name="oldIndex">The current index of the element.</param>
         /// <param name="newIndex">The index the element will be moved to.</param>

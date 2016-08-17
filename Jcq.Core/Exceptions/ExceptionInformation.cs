@@ -42,7 +42,7 @@ namespace Jcq.Core.Exceptions
             Handled = handled;
         }
 
-        public Exception Exception { get; private set; }
+        public Exception Exception { get; }
         public bool Displayed { get; set; }
         public bool Handled { get; set; }
     }

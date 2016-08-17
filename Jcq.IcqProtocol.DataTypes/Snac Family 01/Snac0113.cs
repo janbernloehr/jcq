@@ -31,7 +31,6 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0113 : Snac
     {
-        private readonly TlvMessageOfTheDay _MessageOfTheDay = new TlvMessageOfTheDay();
         private int _tlvsSize;
 
         public Snac0113() : base(0x1, 0x13)
@@ -40,28 +39,25 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public MessageOfTheDayType MessageOfTheDayType { get; set; }
 
-        public TlvMessageOfTheDay MessageOfTheDay
-        {
-            get { return _MessageOfTheDay; }
-        }
+        public TlvMessageOfTheDay MessageOfTheDay { get; } = new TlvMessageOfTheDay();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             MessageOfTheDayType = (MessageOfTheDayType) (byte) ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
             while (index + 4 <= data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0xb:
-                        _MessageOfTheDay.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MessageOfTheDay.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

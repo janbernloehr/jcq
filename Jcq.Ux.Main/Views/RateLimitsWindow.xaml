@@ -9,13 +9,13 @@
         xmlns:converters="clr-namespace:Jcq.Ux.Main.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance views:RateLimitsViewModel}">
-        <!--d:DataContext="{d:DesignInstance views:RateLimitsViewModel}"-->
+    <!--d:DataContext="{d:DesignInstance views:RateLimitsViewModel}"-->
     <Window.Resources>
         <converters:RateLimitsConverter x:Key="RateLimitsConverter" />
     </Window.Resources>
-    
+
     <Grid>
-        <ListView ItemsSource="{Binding RateLimits}" >
+        <ListView ItemsSource="{Binding RateLimits}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ClassId" DisplayMemberBinding="{Binding ClassId}" />
@@ -23,7 +23,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="contracts:IRateLimitsClass">
                                 <TextBlock FontWeight="Bold" Text="{Binding CurrentLevel}"
-                                           Foreground="{Binding Converter={StaticResource RateLimitsConverter}}"/>
+                                           Foreground="{Binding Converter={StaticResource RateLimitsConverter}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -41,7 +41,7 @@
                     <GridViewColumn Header="Families" DisplayMemberBinding="{Binding Families}" />
                 </GridView>
             </ListView.View>
-            
+
         </ListView>
     </Grid>
 </Window>

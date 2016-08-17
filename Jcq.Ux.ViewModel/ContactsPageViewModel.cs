@@ -69,7 +69,7 @@ namespace Jcq.Ux.ViewModel
         //TODO: Change to command.
         public void StartChatSessionWithContact(ContactViewModel contact)
         {
-            var vm =
+            MessageWindowViewModel vm =
                 ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
             vm.Show();
@@ -80,7 +80,7 @@ namespace Jcq.Ux.ViewModel
             var sv = ApplicationService.Current.Context.GetService<IContactContextMenuService>();
             menu.Items.Clear();
 
-            foreach (var x in sv.GetMenuItems(contact))
+            foreach (MenuItem x in sv.GetMenuItems(contact))
             {
                 menu.Items.Add(x);
             }

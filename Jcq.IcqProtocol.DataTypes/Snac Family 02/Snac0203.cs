@@ -31,22 +31,13 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0203 : Snac
     {
-        private readonly TlvMaxCapabilities _MaxCapabilities = new TlvMaxCapabilities();
-        private readonly TlvProfileMaxLength _ProfileMaxLenght = new TlvProfileMaxLength();
-
         public Snac0203() : base(0x2, 0x3)
         {
         }
 
-        public TlvProfileMaxLength TlvProfileMaxLength
-        {
-            get { return _ProfileMaxLenght; }
-        }
+        public TlvProfileMaxLength TlvProfileMaxLength { get; } = new TlvProfileMaxLength();
 
-        public TlvMaxCapabilities MaxCapabilities
-        {
-            get { return _MaxCapabilities; }
-        }
+        public TlvMaxCapabilities MaxCapabilities { get; } = new TlvMaxCapabilities();
 
         public override List<byte> Serialize()
         {
@@ -57,19 +48,19 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _ProfileMaxLenght.Deserialize(data.GetRange(index, desc.TotalSize));
+                        TlvProfileMaxLength.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x2:
-                        _MaxCapabilities.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MaxCapabilities.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

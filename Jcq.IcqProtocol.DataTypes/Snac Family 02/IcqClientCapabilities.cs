@@ -30,23 +30,10 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public static class IcqClientCapabilities
     {
-        private static readonly Guid _IcqFlag = new Guid("09461349-4C7F-11D1-8222-444553540000");
-        private static readonly Guid _IcqRouteFinder = new Guid("09461344-4C7F-11D1-8222-444553540000");
-        private static readonly Guid _RtfMessages = new Guid("97B12751-243C-4334-AD22-D6ABF73F1492");
+        public static Guid IcqFlag { get; } = new Guid("09461349-4C7F-11D1-8222-444553540000");
 
-        public static Guid IcqFlag
-        {
-            get { return _IcqFlag; }
-        }
+        public static Guid IcqRouteFinder { get; } = new Guid("09461344-4C7F-11D1-8222-444553540000");
 
-        public static Guid IcqRouteFinder
-        {
-            get { return _IcqRouteFinder; }
-        }
-
-        public static Guid RtfMessages
-        {
-            get { return _RtfMessages; }
-        }
+        public static Guid RtfMessages { get; } = new Guid("97B12751-243C-4334-AD22-D6ABF73F1492");
     }
 }

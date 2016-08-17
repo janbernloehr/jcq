@@ -67,9 +67,9 @@ namespace Jcq.IcqProtocol.Tests
             Assert.AreEqual(FlapChannel.SnacData, f.Channel, "Flap Channel");
 
             // snac
-            var item = f.DataItems.First();
+            ISerializable item = f.DataItems.First();
 
-            Assert.IsInstanceOfType(item, typeof (T), "Flap DataItem Type");
+            Assert.IsInstanceOfType(item, typeof(T), "Flap DataItem Type");
 
             var s = (T) item;
 

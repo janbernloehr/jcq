@@ -31,16 +31,11 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1303 : Snac
     {
-        private readonly TlvMaxItemNumbers _MaxItemNumbers = new TlvMaxItemNumbers();
-
         public Snac1303() : base(0x13, 0x3)
         {
         }
 
-        public TlvMaxItemNumbers MaxItemNumbers
-        {
-            get { return _MaxItemNumbers; }
-        }
+        public TlvMaxItemNumbers MaxItemNumbers { get; } = new TlvMaxItemNumbers();
 
         public override int CalculateDataSize()
         {
@@ -51,16 +46,16 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x4:
-                        _MaxItemNumbers.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MaxItemNumbers.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

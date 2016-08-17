@@ -30,29 +30,24 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class SSIGroupRecord : SSIRecord
     {
-        private readonly TlvSSIInnerItems _InnerItems = new TlvSSIInnerItems();
-
         public SSIGroupRecord() : base(SSIItemType.GroupRecord)
         {
         }
 
         public bool IsMasterGroup { get; set; }
 
-        public TlvSSIInnerItems InnerItems
-        {
-            get { return _InnerItems; }
-        }
+        public TlvSSIInnerItems InnerItems { get; } = new TlvSSIInnerItems();
 
         public override int CalculateDataSize()
         {
-            return _InnerItems.TotalSize;
+            return InnerItems.TotalSize;
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             if (GroupId == 0)
             {
@@ -61,12 +56,12 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0xc8:
-                        _InnerItems.Deserialize(data.GetRange(index, desc.TotalSize));
+                        InnerItems.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 
@@ -78,7 +73,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            data.AddRange(_InnerItems.Serialize());
+            data.AddRange(InnerItems.Serialize());
 
             return data;
         }

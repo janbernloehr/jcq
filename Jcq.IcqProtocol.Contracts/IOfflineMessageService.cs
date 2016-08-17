@@ -29,22 +29,22 @@ using System;
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a service contract to download and delete offline messages.
+    ///     Defines a service contract to download and delete offline messages.
     /// </summary>
     public interface IOfflineMessageService : IContextService
     {
         /// <summary>
-        /// Occurs when all offline messages have been received.
+        ///     Occurs when all offline messages have been received.
         /// </summary>
         event EventHandler AllOfflineMessagesReceived;
 
         /// <summary>
-        /// Request all offline messages from the server.
+        ///     Request all offline messages from the server.
         /// </summary>
         void RequestOfflineMessages();
 
         /// <summary>
-        /// Delete all offline messages from the server.
+        ///     Delete all offline messages from the server.
         /// </summary>
         void DeleteOfflineMessages();
     }

@@ -38,7 +38,7 @@ namespace Jcq.Ux.ViewModel
 
             byte[] avatar;
 
-            using (var fs = imageFile.OpenRead())
+            using (FileStream fs = imageFile.OpenRead())
             {
                 using (var br = new BinaryReader(fs))
                 {

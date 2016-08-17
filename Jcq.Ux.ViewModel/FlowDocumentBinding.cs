@@ -33,30 +33,36 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Jcq.Ux.ViewModel
 {
     public class FlowDocumentBinding : DependencyObject
     {
+        public static readonly DependencyProperty CollectionProperty = DependencyProperty.RegisterAttached(
+            "Collection", typeof(INotifyCollectionChanged), typeof(FlowDocumentBinding),
+            new FrameworkPropertyMetadata(null, OnThisPropertyChanged));
+
+        private static readonly Dictionary<INotifyCollectionChanged, DependencyObject> lookup =
+            new Dictionary<INotifyCollectionChanged, DependencyObject>();
+
         protected static void OnThisPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (e.OldValue != null)
             {
-                var collection = (INotifyCollectionChanged)e.OldValue;
+                var collection = (INotifyCollectionChanged) e.OldValue;
 
                 collection.CollectionChanged -= OnCollectionChanged;
             }
 
             if (e.NewValue != null)
             {
-                var collection = (INotifyCollectionChanged)e.NewValue;
+                var collection = (INotifyCollectionChanged) e.NewValue;
 
                 lookup.Add(collection, d);
 
-                var document = (FlowDocument)d;
+                var document = (FlowDocument) d;
 
-                foreach (var item in (IEnumerable)collection)
+                foreach (object item in (IEnumerable) collection)
                 {
                     AppendItemToDocument(document, item);
                 }
@@ -70,9 +76,9 @@ namespace Jcq.Ux.ViewModel
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    var item = e.NewItems[0];
-                    var collection = (INotifyCollectionChanged)sender;
-                    var document = (FlowDocument)lookup[collection];
+                    object item = e.NewItems[0];
+                    var collection = (INotifyCollectionChanged) sender;
+                    var document = (FlowDocument) lookup[collection];
 
                     AppendItemToDocument(document, item);
                     break;
@@ -93,8 +99,8 @@ namespace Jcq.Ux.ViewModel
             }
             else
             {
-                var template = DataTemplateSelector.SelectTemplate(item, document);
-                paragraph = (Paragraph)template.LoadContent();
+                DataTemplate template = DataTemplateSelector.SelectTemplate(item, document);
+                paragraph = (Paragraph) template.LoadContent();
                 paragraph.DataContext = item;
             }
 
@@ -103,7 +109,7 @@ namespace Jcq.Ux.ViewModel
 
         public static INotifyCollectionChanged GetCollection(DependencyObject obj)
         {
-            return (INotifyCollectionChanged)obj.GetValue(CollectionProperty);
+            return (INotifyCollectionChanged) obj.GetValue(CollectionProperty);
         }
 
         public static void SetCollection(DependencyObject obj, INotifyCollectionChanged value)
@@ -111,21 +117,18 @@ namespace Jcq.Ux.ViewModel
             obj.SetValue(CollectionProperty, value);
         }
 
-        public static readonly DependencyProperty CollectionProperty = DependencyProperty.RegisterAttached(
-            "Collection", typeof(INotifyCollectionChanged), typeof(FlowDocumentBinding),
-            new FrameworkPropertyMetadata(null, OnThisPropertyChanged));
-
-        private static readonly Dictionary<INotifyCollectionChanged, DependencyObject> lookup =
-            new Dictionary<INotifyCollectionChanged, DependencyObject>();
-
         private static Paragraph MessageToParagraph(TextMessageViewModel vm)
         {
-            var p = new Paragraph()
+            var p = new Paragraph
             {
                 Margin = new Thickness(0)
             };
 
-            var r1 = new Run() { Foreground = vm.Foreground, Text = String.Format("{0:t} ~ {1}: ", vm.DateCreated, vm.Sender.Name) };
+            var r1 = new Run
+            {
+                Foreground = vm.Foreground,
+                Text = string.Format("{0:t} ~ {1}: ", vm.DateCreated, vm.Sender.Name)
+            };
             //var r2 = new Run() { Foreground = vm.Foreground, Text = vm.Message };
 
             p.Inlines.Add(r1);
@@ -139,32 +142,33 @@ namespace Jcq.Ux.ViewModel
             {
                 if (m.Index > index)
                 {
-                    p.Inlines.Add(new Run() { Text = message.Substring(index, m.Index - index) });
+                    p.Inlines.Add(new Run {Text = message.Substring(index, m.Index - index)});
                 }
 
-                var key = message.Substring(m.Index, m.Length);
-                var value = EmojiHelper.EmojiMappings[key];
+                string key = message.Substring(m.Index, m.Length);
+                string value = EmojiHelper.EmojiMappings[key];
 
                 //p.Inlines.Add(new Run() { Foreground = new SolidColorBrush(Colors.BlueViolet), Text = value });
 
-                var emojiPath = string.Format("pack://application:,,,/Jcq.Ux.Main;component/resources/emoji/png/{0}.png", value);
+                string emojiPath =
+                    string.Format("pack://application:,,,/Jcq.Ux.Main;component/resources/emoji/png/{0}.png", value);
 
-                Image image = new Image();
-                var z = (new ImageSourceConverter()).ConvertFromString(emojiPath);
+                var image = new Image();
+                object z = new ImageSourceConverter().ConvertFromString(emojiPath);
                 image.Source = (ImageSource) z;
                 image.Width = 16;
                 image.Height = 16;
                 image.Stretch = Stretch.UniformToFill;
 
-                InlineUIContainer container = new InlineUIContainer(image);
-                
+                var container = new InlineUIContainer(image);
+
                 p.Inlines.Add(container);
 
                 index = m.Index + m.Length;
             }
 
             if (index < message.Length)
-                p.Inlines.Add(new Run() { Text = message.Substring(index) });
+                p.Inlines.Add(new Run {Text = message.Substring(index)});
 
             return p;
         }

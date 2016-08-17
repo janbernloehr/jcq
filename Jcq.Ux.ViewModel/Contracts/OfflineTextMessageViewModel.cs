@@ -32,8 +32,6 @@ namespace Jcq.Ux.ViewModel
 {
     public class OfflineTextMessageViewModel : TextMessageViewModel
     {
-        private readonly DateTime _DateSent;
-
         public OfflineTextMessageViewModel(IcqOfflineMessage message, Brush foreground)
             : this(
                 DateTime.Now, ContactViewModelCache.GetViewModel(message.Recipient),
@@ -44,12 +42,9 @@ namespace Jcq.Ux.ViewModel
         public OfflineTextMessageViewModel(DateTime received, ContactViewModel sender, ContactViewModel recipient,
             string message, DateTime sent, Brush foreground) : base(received, sender, recipient, message, foreground)
         {
-            _DateSent = sent;
+            DateSent = sent;
         }
 
-        public DateTime DateSent
-        {
-            get { return _DateSent; }
-        }
+        public DateTime DateSent { get; }
     }
 }

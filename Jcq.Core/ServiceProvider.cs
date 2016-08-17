@@ -46,8 +46,8 @@ namespace Jcq.Core
         public TC GetService<TC>()
             where TC : TS
         {
-            var serviceImplementation = default(TC);
-            var serviceContract = typeof (TC);
+            TC serviceImplementation = default(TC);
+            Type serviceContract = typeof(TC);
 
             try
             {
@@ -55,7 +55,7 @@ namespace Jcq.Core
 
                 if (!_services.ContainsKey(serviceContract))
                 {
-                    var serviceImplementationType = Kernel.Mapper.GetImplementationType<TC>();
+                    Type serviceImplementationType = Kernel.Mapper.GetImplementationType<TC>();
 
                     foreach (var pair in _services)
                     {
@@ -72,7 +72,7 @@ namespace Jcq.Core
 
                     if (serviceImplementation != null)
                     {
-                        var cookie = _lock.UpgradeToWriterLock(WaitTimeout);
+                        LockCookie cookie = _lock.UpgradeToWriterLock(WaitTimeout);
 
                         try
                         {

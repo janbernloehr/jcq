@@ -65,7 +65,7 @@ namespace Jcq.IcqProtocol.Internal
         {
             List<Delegate> handlerList;
 
-            var key = string.Format("{0:X2},{1:X2}", serviceId, subtypeId);
+            string key = string.Format("{0:X2},{1:X2}", serviceId, subtypeId);
 
             if (!_snacHandlers.TryGetValue(key, out handlerList))
             {
@@ -82,10 +82,10 @@ namespace Jcq.IcqProtocol.Internal
 
         protected virtual void InnerConnect()
         {
-            var hostName = ConfigurationManager.AppSettings["OscarServer"];
-            var hostPort = int.Parse(ConfigurationManager.AppSettings["OscarPort"]);
+            string hostName = ConfigurationManager.AppSettings["OscarServer"];
+            int hostPort = int.Parse(ConfigurationManager.AppSettings["OscarPort"]);
 
-            var hentry = Dns.GetHostEntry(hostName);
+            IPHostEntry hentry = Dns.GetHostEntry(hostName);
             var endpoint = new IPEndPoint(hentry.AddressList[0], hostPort);
 
             InnerConnect(endpoint);
@@ -149,8 +149,8 @@ namespace Jcq.IcqProtocol.Internal
 
             var serverAddressParts = address.Split(':');
 
-            var serverIp = IPAddress.Parse(serverAddressParts[0]);
-            var serverPort = int.Parse(serverAddressParts[1]);
+            IPAddress serverIp = IPAddress.Parse(serverAddressParts[0]);
+            int serverPort = int.Parse(serverAddressParts[1]);
 
             return new IPEndPoint(serverIp, serverPort);
         }
@@ -175,7 +175,7 @@ namespace Jcq.IcqProtocol.Internal
 
         private void CallSnacHandlers(Snac snac)
         {
-            var key = Snac.GetKey(snac);
+            string key = Snac.GetKey(snac);
 
             try
             {
@@ -186,7 +186,7 @@ namespace Jcq.IcqProtocol.Internal
 
                 if (!_snacHandlers.TryGetValue(key, out handlers)) return;
 
-                foreach (var x in handlers)
+                foreach (Delegate x in handlers)
                 {
                     x.DynamicInvoke(snac);
                 }
@@ -209,7 +209,7 @@ namespace Jcq.IcqProtocol.Internal
             // buffer bytes for analysis. if more bytes are needed to decode
             // the received data we wait for another cycle.
 
-            var id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
 
             try
             {
@@ -222,13 +222,13 @@ namespace Jcq.IcqProtocol.Internal
                     // add data to the buffer.
                     _analyzeBuffer.AddRange(data);
 
-                    var index = 0;
-                    var iloop = 0;
+                    int index = 0;
+                    int iloop = 0;
 
                     while (index + 6 <= _analyzeBuffer.Count)
                     {
                         // decode the flap header
-                        var desc = FlapDescriptor.GetDescriptor(index, _analyzeBuffer);
+                        FlapDescriptor desc = FlapDescriptor.GetDescriptor(index, _analyzeBuffer);
 
                         if (_analyzeBuffer.Count < index + desc.TotalSize)
                         {
@@ -283,7 +283,7 @@ namespace Jcq.IcqProtocol.Internal
                 {
                     try
                     {
-                        foreach (var x in flap.DataItems.Cast<Snac>())
+                        foreach (Snac x in flap.DataItems.Cast<Snac>())
                         {
                             CallSnacHandlers(x);
                         }
@@ -306,13 +306,14 @@ namespace Jcq.IcqProtocol.Internal
         {
             try
             {
-                var path = string.Format("jcq/dumps/{0}/{3}/{1}_{2}.json", TcpContext.Id, flap.DatagramSequenceNumber,
-                        flap.Channel == FlapChannel.SnacData & flap.DataItems.Any()
-                            ? flap.DataItems.First().GetType().Name
-                            : Enum.GetName(typeof(FlapChannel), flap.Channel),
-                        modifier);
+                string path = string.Format("jcq/dumps/{0}/{3}/{1}_{2}.json", TcpContext.Id, flap.DatagramSequenceNumber,
+                    flap.Channel == FlapChannel.SnacData & flap.DataItems.Any()
+                        ? flap.DataItems.First().GetType().Name
+                        : Enum.GetName(typeof(FlapChannel), flap.Channel),
+                    modifier);
 
-                var file = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), path));
+                var file =
+                    new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), path));
 
                 if (!file.Directory.Exists)
                 {
@@ -433,13 +434,13 @@ namespace Jcq.IcqProtocol.Internal
 
         private async Task SendData(ITcpContext context, BufferBlock<FlapDataPair> sendBuffer)
         {
-            var id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
 
             try
             {
                 while (context.ConnectionState == TcpConnectionState.Connected)
                 {
-                    var dataItem = await sendBuffer.ReceiveAsync();
+                    FlapDataPair dataItem = await sendBuffer.ReceiveAsync();
 
                     Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
                         "{0}@{1} SendBuffer received data {2} items in buffer",
@@ -450,7 +451,7 @@ namespace Jcq.IcqProtocol.Internal
                         if (dataItem.Flap.Channel == FlapChannel.SnacData)
                         {
                             var s = (Snac) dataItem.Flap.DataItems.First();
-                            var wait = Context.GetService<IRateLimitsService>().Calculate(s.ServiceId, s.SubtypeId);
+                            int wait = Context.GetService<IRateLimitsService>().Calculate(s.ServiceId, s.SubtypeId);
 
                             if (wait > 0)
                                 Thread.Sleep(wait);
@@ -560,7 +561,7 @@ namespace Jcq.IcqProtocol.Internal
             var pairs = flaps.Select(f => new FlapDataPair(f));
             var tasks = new List<Task<int>>();
 
-            foreach (var pair in pairs)
+            foreach (FlapDataPair pair in pairs)
             {
                 _sendBuffer.Post(pair);
 
@@ -594,7 +595,7 @@ namespace Jcq.IcqProtocol.Internal
 
             var dataItems = new List<Flap>();
 
-            foreach (var x in snacs)
+            foreach (Snac x in snacs)
             {
                 var flap = new Flap(FlapChannel.SnacData);
 

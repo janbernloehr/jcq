@@ -70,23 +70,24 @@ namespace Jcq.Wpf.CommonExtenders
                         break;
                     }
 
-                    var trans = _source.CompositionTarget.TransformToDevice;
+                    Matrix trans = _source.CompositionTarget.TransformToDevice;
 
                     Marshal.PtrToStructure(lParam, minmax);
 
-                    var workArea = trans.Transform(new Point(SystemParameters.WorkArea.Width, SystemParameters.WorkArea.Height));
+                    Point workArea =
+                        trans.Transform(new Point(SystemParameters.WorkArea.Width, SystemParameters.WorkArea.Height));
 
                     minmax.ptMaxSize.x = (int) workArea.X;
                     minmax.ptMaxSize.y = (int) workArea.Y;
 
-                    var maxSize = trans.Transform(new Point(_window.MaxWidth, _window.MaxHeight));
+                    Point maxSize = trans.Transform(new Point(_window.MaxWidth, _window.MaxHeight));
 
                     if (_window.MaxWidth < double.PositiveInfinity)
                         minmax.ptMaxTrackSize.x = (int) maxSize.X;
                     if (_window.MaxHeight < double.PositiveInfinity)
                         minmax.ptMaxTrackSize.y = (int) maxSize.Y;
 
-                    var minSize = trans.Transform(new Point(_window.MinWidth, _window.MinHeight));
+                    Point minSize = trans.Transform(new Point(_window.MinWidth, _window.MinHeight));
 
                     if (_window.MinWidth > 0)
                         minmax.ptMinTrackSize.x = (int) minSize.X;
@@ -115,8 +116,8 @@ namespace Jcq.Wpf.CommonExtenders
 
         private static bool WmValidateSize(int sizeMode, Win32Rect rectangle)
         {
-            var cx = rectangle.right - rectangle.left;
-            var cy = rectangle.bottom - rectangle.top;
+            int cx = rectangle.right - rectangle.left;
+            int cy = rectangle.bottom - rectangle.top;
 
             if (cx > SystemParameters.WorkArea.Width)
                 rectangle.right = (int) (rectangle.left + SystemParameters.WorkArea.Width);

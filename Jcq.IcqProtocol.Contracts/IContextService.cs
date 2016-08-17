@@ -29,7 +29,7 @@ using Jcq.Core.Contracts;
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a service contract associated to an IContext.
+    ///     Defines a service contract associated to an IContext.
     /// </summary>
     public interface IContextService : IService, IContextObject
     {

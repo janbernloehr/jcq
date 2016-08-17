@@ -29,8 +29,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
 using System.Windows.Threading;
 using Jcq.Core;
 using Jcq.IcqProtocol;
@@ -290,9 +288,10 @@ namespace Jcq.Ux.ViewModel
         {
             try
             {
-                var contact = ContactViewModelCache.GetViewModel(msg.Sender);
+                ContactViewModel contact = ContactViewModelCache.GetViewModel(msg.Sender);
 
-                var vm = ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
+                MessageWindowViewModel vm = ApplicationService.Current.Context
+                    .GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
 
                 var offlineMsg = msg as IcqOfflineMessage;
@@ -321,12 +320,13 @@ namespace Jcq.Ux.ViewModel
         {
             try
             {
-                var contact = ContactViewModelCache.GetViewModel(e.Contact);
+                ContactViewModel contact = ContactViewModelCache.GetViewModel(e.Contact);
 
                 if (!ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
                     .IsMessageWindowViewModelAvailable(contact)) return;
 
-                var vm = ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
+                MessageWindowViewModel vm = ApplicationService.Current.Context
+                    .GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
 
                 var message = new StatusChangedMessageViewModel(DateTime.Now, contact, vm.Contact, e.Status,
@@ -344,12 +344,13 @@ namespace Jcq.Ux.ViewModel
         {
             try
             {
-                var contact = ContactViewModelCache.GetViewModel(e.Contact);
+                ContactViewModel contact = ContactViewModelCache.GetViewModel(e.Contact);
 
                 if (!ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
                     .IsMessageWindowViewModelAvailable(contact)) return;
 
-                var vm = ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
+                MessageWindowViewModel vm = ApplicationService.Current.Context
+                    .GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
                 vm.DisplayTypingNotification(e.NotificationType);
             }

@@ -48,7 +48,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             CookieID = (long) ByteConverter.ToUInt64(data.GetRange(index, 8));
             index += 8;

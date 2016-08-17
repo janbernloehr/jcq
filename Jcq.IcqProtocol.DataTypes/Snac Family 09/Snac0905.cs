@@ -40,7 +40,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            var size = UsersToAdd.Where(x => !string.IsNullOrEmpty(x)).Sum(x => x.Length);
+            int size = UsersToAdd.Where(x => !string.IsNullOrEmpty(x)).Sum(x => x.Length);
             return size;
         }
 
@@ -53,7 +53,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (var uin in UsersToAdd)
+            foreach (string uin in UsersToAdd)
             {
                 data.Add((byte) uin.Length);
                 data.AddRange(ByteConverter.GetBytes(uin));

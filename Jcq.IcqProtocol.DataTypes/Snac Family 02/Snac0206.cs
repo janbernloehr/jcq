@@ -31,19 +31,6 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0206 : Snac
     {
-        private readonly TlvAwayMessageString _AwayMessage = new TlvAwayMessageString();
-        private readonly TlvAwayMessageEncoding _AwayMessageEncoding = new TlvAwayMessageEncoding();
-        private readonly TlvClientIdleTime _ClientIdleTime = new TlvClientIdleTime();
-        private readonly TlvClientProfileString _ClientProfileString = new TlvClientProfileString();
-        private readonly TlvDCInfo _DCInfo = new TlvDCInfo();
-        private readonly TlvEncodingType _EncodingType = new TlvEncodingType();
-        private readonly TlvExternalIpAddress _ExternalAddress = new TlvExternalIpAddress();
-        private readonly TlvMemberSince _MemberSince = new TlvMemberSince();
-        private readonly TlvSignonTime _SignOnTime = new TlvSignonTime();
-        private readonly TlvCapabilities _UserCapabilities = new TlvCapabilities();
-        private readonly TlvUserClass _UserClass = new TlvUserClass();
-        private readonly TlvUserStatus _UserStatus = new TlvUserStatus();
-
         public Snac0206() : base(0x2, 0x6)
         {
         }
@@ -51,65 +38,29 @@ namespace Jcq.IcqProtocol.DataTypes
         public string Uin { get; set; }
         public int WarningLevel { get; set; }
 
-        public TlvUserClass UserClass
-        {
-            get { return _UserClass; }
-        }
+        public TlvUserClass UserClass { get; } = new TlvUserClass();
 
-        public TlvUserStatus UserStatus
-        {
-            get { return _UserStatus; }
-        }
+        public TlvUserStatus UserStatus { get; } = new TlvUserStatus();
 
-        public TlvDCInfo DCInfo
-        {
-            get { return _DCInfo; }
-        }
+        public TlvDCInfo DCInfo { get; } = new TlvDCInfo();
 
-        public TlvExternalIpAddress ExternalAddress
-        {
-            get { return _ExternalAddress; }
-        }
+        public TlvExternalIpAddress ExternalAddress { get; } = new TlvExternalIpAddress();
 
-        public TlvClientIdleTime ClientIdleTime
-        {
-            get { return _ClientIdleTime; }
-        }
+        public TlvClientIdleTime ClientIdleTime { get; } = new TlvClientIdleTime();
 
-        public TlvSignonTime SignOnTime
-        {
-            get { return _SignOnTime; }
-        }
+        public TlvSignonTime SignOnTime { get; } = new TlvSignonTime();
 
-        public TlvMemberSince MemberSince
-        {
-            get { return _MemberSince; }
-        }
+        public TlvMemberSince MemberSince { get; } = new TlvMemberSince();
 
-        public TlvEncodingType EncodingType
-        {
-            get { return _EncodingType; }
-        }
+        public TlvEncodingType EncodingType { get; } = new TlvEncodingType();
 
-        public TlvClientProfileString ClientProfileString
-        {
-            get { return _ClientProfileString; }
-        }
+        public TlvClientProfileString ClientProfileString { get; } = new TlvClientProfileString();
 
-        public TlvAwayMessageEncoding AwayMessageEncoding
-        {
-            get { return _AwayMessageEncoding; }
-        }
+        public TlvAwayMessageEncoding AwayMessageEncoding { get; } = new TlvAwayMessageEncoding();
 
-        public TlvAwayMessageString AwayMessage
-        {
-            get { return _AwayMessage; }
-        }
+        public TlvAwayMessageString AwayMessage { get; } = new TlvAwayMessageString();
 
-        public TlvCapabilities UserCapabilities
-        {
-            get { return _UserCapabilities; }
-        }
+        public TlvCapabilities UserCapabilities { get; } = new TlvCapabilities();
 
         public override List<byte> Serialize()
         {
@@ -120,10 +71,10 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             int innerTlvCount;
-            var innerTlvIndex = 0;
+            int innerTlvIndex = 0;
 
             Uin = ByteConverter.ToStringFromByteIndex(index, data);
             index += 1 + Uin.Length;
@@ -136,30 +87,30 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (innerTlvIndex < innerTlvCount)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x6:
-                        _UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xc:
-                        _DCInfo.Deserialize(data.GetRange(index, desc.TotalSize));
+                        DCInfo.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xa:
-                        _ExternalAddress.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ExternalAddress.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xf:
-                        _ClientIdleTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ClientIdleTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x3:
-                        _SignOnTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        SignOnTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x5:
-                        _MemberSince.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MemberSince.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 
@@ -169,24 +120,24 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _EncodingType.Deserialize(data.GetRange(index, desc.TotalSize));
+                        EncodingType.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x2:
-                        _ClientProfileString.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ClientProfileString.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x3:
-                        _AwayMessageEncoding.Deserialize(data.GetRange(index, desc.TotalSize));
+                        AwayMessageEncoding.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x4:
-                        _AwayMessage.Deserialize(data.GetRange(index, desc.TotalSize));
+                        AwayMessage.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x5:
-                        _UserCapabilities.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserCapabilities.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

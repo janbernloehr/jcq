@@ -71,7 +71,7 @@ namespace Jcq.Ux.ViewModel
         {
             var svPrivacy = ApplicationService.Current.Context.GetService<IPrivacyService>();
             var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
-            var contact = svStorage.GetContactByIdentifier(identifier);
+            IContact contact = svStorage.GetContactByIdentifier(identifier);
 
             svPrivacy.AddContactToInvisibleList(contact);
         }
@@ -87,7 +87,7 @@ namespace Jcq.Ux.ViewModel
         {
             var svPrivacy = ApplicationService.Current.Context.GetService<IPrivacyService>();
             var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
-            var contact = svStorage.GetContactByIdentifier(identifier);
+            IContact contact = svStorage.GetContactByIdentifier(identifier);
 
             svPrivacy.AddContactToVisibleList(contact);
         }
@@ -103,7 +103,7 @@ namespace Jcq.Ux.ViewModel
         {
             var svPrivacy = ApplicationService.Current.Context.GetService<IPrivacyService>();
             var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
-            var contact = svStorage.GetContactByIdentifier(identifier);
+            IContact contact = svStorage.GetContactByIdentifier(identifier);
 
             svPrivacy.AddContactToIgnoreList(contact);
         }

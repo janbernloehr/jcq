@@ -30,16 +30,11 @@ namespace Jcq.IcqProtocol.Contracts
 {
     public class SignInFailedEventArgs : EventArgs
     {
-        private readonly string _message;
-
         public SignInFailedEventArgs(string message)
         {
-            _message = message;
+            Message = message;
         }
 
-        public string Message
-        {
-            get { return _message; }
-        }
+        public string Message { get; }
     }
 }

@@ -55,7 +55,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x2A, 0x02, 0x22, 0x9B, 0x00, 0x0A, 0x00, 0x03, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac0302>(f);
 
             Assert.Inconclusive("Verify that Snac0302 was deserialized correctly.");
@@ -71,7 +71,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x02, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac0303>(f);
 
             Assert.Inconclusive("Verify that Snac0303 was deserialized correctly.");
@@ -213,7 +213,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x0F, 0x00, 0x04, 0x00, 0x00, 0x88, 0xB4, 0x00, 0x03, 0x00, 0x04, 0x3D, 0xD4, 0x42, 0x7F
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac030B>(f);
 
             Assert.Inconclusive("Verify that Snac030B was deserialized correctly.");
@@ -235,7 +235,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x04, 0x41, 0xEC, 0x78, 0x5A
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac030B>(f);
 
             Assert.Inconclusive("Verify that Snac030B was deserialized correctly.");
@@ -251,7 +251,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x02, 0x00, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac030C>(f);
 
             Assert.Inconclusive("Verify that Snac030C was deserialized correctly.");

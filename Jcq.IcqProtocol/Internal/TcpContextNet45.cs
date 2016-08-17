@@ -134,7 +134,7 @@ namespace Jcq.IcqProtocol
         public event EventHandler<DisconnectEventArgs> Disconnected;
         public TcpConnectionState ConnectionState { get; private set; }
 
-        public BufferBlock<List<byte>> ReceivedDataBuffer { get; } 
+        public BufferBlock<List<byte>> ReceivedDataBuffer { get; }
 
         //public event EventHandler<DataReceivedEventArgs> DataReceived;
 
@@ -146,7 +146,7 @@ namespace Jcq.IcqProtocol
                 {
                     var buffer = new byte[256];
 
-                    var bytesRead = await _stream.ReadAsync(buffer, 0, 256);
+                    int bytesRead = await _stream.ReadAsync(buffer, 0, 256);
 
                     if (bytesRead == 0)
                     {

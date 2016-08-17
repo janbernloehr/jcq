@@ -31,31 +31,22 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac011e : Snac
     {
-        private readonly TlvDCInfo _DCInfo = new TlvDCInfo();
-        private readonly TlvUserStatus _UserStatus = new TlvUserStatus();
-
         public Snac011e() : base(0x1, 0x1e)
         {
         }
 
-        public TlvUserStatus UserStatus
-        {
-            get { return _UserStatus; }
-        }
+        public TlvUserStatus UserStatus { get; } = new TlvUserStatus();
 
-        public TlvDCInfo DCInfo
-        {
-            get { return _DCInfo; }
-        }
+        public TlvDCInfo DCInfo { get; } = new TlvDCInfo();
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            data.AddRange(_UserStatus.Serialize());
+            data.AddRange(UserStatus.Serialize());
 
             //TODO: Snac011e.Serialize: Check whether DCInfo is supplied.
-            data.AddRange(_DCInfo.Serialize());
+            data.AddRange(DCInfo.Serialize());
 
             return data;
         }
@@ -67,7 +58,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            return _UserStatus.CalculateTotalSize() + _DCInfo.CalculateTotalSize();
+            return UserStatus.CalculateTotalSize() + DCInfo.CalculateTotalSize();
         }
     }
 }

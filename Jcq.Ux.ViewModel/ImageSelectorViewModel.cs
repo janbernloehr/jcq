@@ -26,7 +26,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Microsoft.Win32;
@@ -67,7 +66,7 @@ namespace Jcq.Ux.ViewModel
         /// </summary>
         public void LoadImageFiles()
         {
-            var avatarDirectoryPath = Path.Combine(_dataDirectory.FullName, "avatars");
+            string avatarDirectoryPath = Path.Combine(_dataDirectory.FullName, "avatars");
             var avatarDirectory = new DirectoryInfo(avatarDirectoryPath);
 
             if (!avatarDirectory.Exists)
@@ -96,10 +95,11 @@ namespace Jcq.Ux.ViewModel
             if (!result.HasValue || !result.Value) return;
 
             var imageFile = new FileInfo(dialog.FileName);
-            var avatarDirectoryPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName, "avatars");
+            string avatarDirectoryPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
+                "avatars");
             var avatarDirectory = new DirectoryInfo(avatarDirectoryPath);
 
-            var newPath = Path.Combine(avatarDirectory.FullName, Guid.NewGuid() + imageFile.Extension);
+            string newPath = Path.Combine(avatarDirectory.FullName, Guid.NewGuid() + imageFile.Extension);
 
             imageFile.CopyTo(newPath);
 

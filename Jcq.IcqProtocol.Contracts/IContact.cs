@@ -30,12 +30,12 @@ using System.Collections.Generic;
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a Contact.
+    ///     Defines a Contact.
     /// </summary>
     public interface IContact : IStorageItem
     {
         /// <summary>
-        /// Gets the Group.
+        ///     Gets the Group.
         /// </summary>
         IGroup Group { get; }
 
@@ -53,12 +53,12 @@ namespace Jcq.IcqProtocol.Contracts
         void SetIconData(List<byte> value);
 
         /// <summary>
-        /// Occurs when an IconHash is received.
+        ///     Occurs when an IconHash is received.
         /// </summary>
         event EventHandler IconHashReceived;
 
         /// <summary>
-        /// Occurs when an Icon is received.
+        ///     Occurs when an Icon is received.
         /// </summary>
         event EventHandler IconDataReceived;
     }

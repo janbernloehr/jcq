@@ -66,9 +66,9 @@ namespace Jcq.Ux.Main.Views
         {
             try
             {
-                var fullname = txtName.Text;
-                var uin = txtUin.Text;
-                var password = txtPassword.Password;
+                string fullname = txtName.Text;
+                string uin = txtUin.Text;
+                string password = txtPassword.Password;
 
                 ViewModel.UpdateIdentity(fullname, uin, password);
                 ViewModel.NavigateToSignInPage();

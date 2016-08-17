@@ -48,7 +48,7 @@ namespace Jcq.IcqProtocol.Internal
         ///     Gets the Serialization of the Flap.
         /// </summary>
         public List<byte> Data { get; }
-        
+
         public TaskCompletionSource<int> TaskCompletionSource { get; }
     }
 }

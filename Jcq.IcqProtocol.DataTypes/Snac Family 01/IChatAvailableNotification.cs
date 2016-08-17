@@ -42,7 +42,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             string message;
 

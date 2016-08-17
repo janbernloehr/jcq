@@ -49,7 +49,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             UserClass = (UserClass) ByteConverter.ToUInt16(data.GetRange(index, 2));
         }

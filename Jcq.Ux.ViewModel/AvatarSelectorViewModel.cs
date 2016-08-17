@@ -39,7 +39,7 @@ namespace Jcq.Ux.ViewModel
             _identity = identity;
         }
 
-        public ImageSelectorViewModel ImageSelector { get; private set; }
+        public ImageSelectorViewModel ImageSelector { get; }
 
         public void SelectImageFile()
         {
@@ -47,7 +47,7 @@ namespace Jcq.Ux.ViewModel
 
             if (imageFile.Exists)
             {
-                var newfile = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
+                string newfile = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
                     string.Format("{0}.[default].jpg", _identity.Identifier));
 
                 AvatarImageService.CreateAvatarImageFromFile(imageFile.FullName, newfile);

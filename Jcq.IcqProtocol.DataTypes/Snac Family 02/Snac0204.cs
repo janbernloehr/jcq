@@ -31,22 +31,13 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0204 : Snac
     {
-        private readonly TlvCapabilities _Capabilities = new TlvCapabilities();
-        private readonly TlvMimeType _MimeType = new TlvMimeType();
-
         public Snac0204() : base(0x2, 0x4)
         {
         }
 
-        public TlvMimeType MimeType
-        {
-            get { return _MimeType; }
-        }
+        public TlvMimeType MimeType { get; } = new TlvMimeType();
 
-        public TlvCapabilities Capabilities
-        {
-            get { return _Capabilities; }
-        }
+        public TlvCapabilities Capabilities { get; } = new TlvCapabilities();
 
         public override void Deserialize(List<byte> data)
         {
@@ -57,23 +48,23 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            if (_MimeType.CalculateDataSize() > 0)
+            if (MimeType.CalculateDataSize() > 0)
             {
-                data.AddRange(_MimeType.Serialize());
+                data.AddRange(MimeType.Serialize());
             }
 
-            data.AddRange(_Capabilities.Serialize());
+            data.AddRange(Capabilities.Serialize());
 
             return data;
         }
 
         public override int CalculateDataSize()
         {
-            if (_MimeType.CalculateDataSize() == 0)
+            if (MimeType.CalculateDataSize() == 0)
             {
-                return _Capabilities.CalculateTotalSize();
+                return Capabilities.CalculateTotalSize();
             }
-            return _MimeType.CalculateTotalSize() + _Capabilities.CalculateTotalSize();
+            return MimeType.CalculateTotalSize() + Capabilities.CalculateTotalSize();
         }
     }
 }

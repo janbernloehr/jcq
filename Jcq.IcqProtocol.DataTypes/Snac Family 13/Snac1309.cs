@@ -34,53 +34,32 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1309 : Snac
     {
-        private readonly List<SSIBuddyRecord> _BuddyRecords = new List<SSIBuddyRecord>();
-        private readonly List<SSIDenyRecord> _DenyRecords = new List<SSIDenyRecord>();
-        private readonly List<SSIGroupRecord> _GroupRecords = new List<SSIGroupRecord>();
-        private readonly List<SSIIgnoreListRecord> _IgnoreListRecords = new List<SSIIgnoreListRecord>();
-        private readonly List<SSIPermitRecord> _PermitRecords = new List<SSIPermitRecord>();
-
         public Snac1309() : base(0x13, 0x9)
         {
         }
 
-        public List<SSIBuddyRecord> BuddyRecords
-        {
-            get { return _BuddyRecords; }
-        }
+        public List<SSIBuddyRecord> BuddyRecords { get; } = new List<SSIBuddyRecord>();
 
-        public List<SSIGroupRecord> GroupRecords
-        {
-            get { return _GroupRecords; }
-        }
+        public List<SSIGroupRecord> GroupRecords { get; } = new List<SSIGroupRecord>();
 
-        public List<SSIPermitRecord> PermitRecords
-        {
-            get { return _PermitRecords; }
-        }
+        public List<SSIPermitRecord> PermitRecords { get; } = new List<SSIPermitRecord>();
 
-        public List<SSIIgnoreListRecord> IgnoreListRecords
-        {
-            get { return _IgnoreListRecords; }
-        }
+        public List<SSIIgnoreListRecord> IgnoreListRecords { get; } = new List<SSIIgnoreListRecord>();
 
-        public List<SSIDenyRecord> DenyRecords
-        {
-            get { return _DenyRecords; }
-        }
+        public List<SSIDenyRecord> DenyRecords { get; } = new List<SSIDenyRecord>();
 
         public SSIBuddyIcon BuddyIcon { get; set; }
         public int MaxItemId { get; private set; }
 
         public override int CalculateDataSize()
         {
-            var size = 0;
+            int size = 0;
 
-            size += _BuddyRecords.Sum(x => x.CalculateTotalSize());
-            size += _GroupRecords.Sum(x => x.CalculateTotalSize());
-            size += _PermitRecords.Sum(x => x.CalculateTotalSize());
-            size += _DenyRecords.Sum(x => x.CalculateTotalSize());
-            size += _IgnoreListRecords.Sum(x => x.CalculateTotalSize());
+            size += BuddyRecords.Sum(x => x.CalculateTotalSize());
+            size += GroupRecords.Sum(x => x.CalculateTotalSize());
+            size += PermitRecords.Sum(x => x.CalculateTotalSize());
+            size += DenyRecords.Sum(x => x.CalculateTotalSize());
+            size += IgnoreListRecords.Sum(x => x.CalculateTotalSize());
 
             if (BuddyIcon != null)
             {
@@ -94,11 +73,11 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = SSIItemDescriptor.GetDescriptor(index, data);
+                SSIItemDescriptor desc = SSIItemDescriptor.GetDescriptor(index, data);
 
                 switch (desc.ItemType)
                 {
@@ -106,31 +85,31 @@ namespace Jcq.IcqProtocol.DataTypes
                         SSIBuddyRecord buddy;
                         buddy = new SSIBuddyRecord();
                         buddy.Deserialize(data.GetRange(index, desc.TotalSize));
-                        _BuddyRecords.Add(buddy);
+                        BuddyRecords.Add(buddy);
                         break;
                     case SSIItemType.GroupRecord:
-                        SSIGroupRecord @group;
-                        @group = new SSIGroupRecord();
-                        @group.Deserialize(data.GetRange(index, desc.TotalSize));
-                        _GroupRecords.Add(@group);
+                        SSIGroupRecord group;
+                        group = new SSIGroupRecord();
+                        group.Deserialize(data.GetRange(index, desc.TotalSize));
+                        GroupRecords.Add(group);
                         break;
                     case SSIItemType.PermitRecord:
                         SSIPermitRecord permit;
                         permit = new SSIPermitRecord();
                         permit.Deserialize(data.GetRange(index, desc.TotalSize));
-                        _PermitRecords.Add(permit);
+                        PermitRecords.Add(permit);
                         break;
                     case SSIItemType.DenyRecord:
                         SSIDenyRecord deny;
                         deny = new SSIDenyRecord();
                         deny.Deserialize(data.GetRange(index, desc.TotalSize));
-                        _DenyRecords.Add(deny);
+                        DenyRecords.Add(deny);
                         break;
                     case SSIItemType.IgnoreListRecord:
                         SSIIgnoreListRecord ignore;
                         ignore = new SSIIgnoreListRecord();
                         ignore.Deserialize(data.GetRange(index, desc.TotalSize));
-                        _IgnoreListRecords.Add(ignore);
+                        IgnoreListRecords.Add(ignore);
                         break;
                     default:
                         Kernel.Logger.Log("Snac1309", TraceEventType.Error, "Unsupported SSI item type: {0}",
@@ -150,23 +129,23 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (var x in _BuddyRecords)
+            foreach (SSIBuddyRecord x in BuddyRecords)
             {
                 data.AddRange(x.Serialize());
             }
-            foreach (var x in _GroupRecords)
+            foreach (SSIGroupRecord x in GroupRecords)
             {
                 data.AddRange(x.Serialize());
             }
-            foreach (var x in _PermitRecords)
+            foreach (SSIPermitRecord x in PermitRecords)
             {
                 data.AddRange(x.Serialize());
             }
-            foreach (var x in _DenyRecords)
+            foreach (SSIDenyRecord x in DenyRecords)
             {
                 data.AddRange(x.Serialize());
             }
-            foreach (var x in _IgnoreListRecords)
+            foreach (SSIIgnoreListRecord x in IgnoreListRecords)
             {
                 data.AddRange(x.Serialize());
             }

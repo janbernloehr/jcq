@@ -52,7 +52,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             NewProperty = (UserFlag) ByteConverter.ToUInt16(data.GetRange(index, 2));
             UserStatus = (UserStatus) ByteConverter.ToUInt16(data.GetRange(index + 2, 2));

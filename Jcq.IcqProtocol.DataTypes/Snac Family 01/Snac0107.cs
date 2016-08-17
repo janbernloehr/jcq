@@ -32,40 +32,31 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0107 : Snac
     {
-        private readonly List<RateClass> _rateClasses = new List<RateClass>();
-        private readonly List<RateGroup> _rateGroups = new List<RateGroup>();
-
         public Snac0107() : base(0x1, 0x7)
         {
         }
 
-        public List<RateClass> RateClasses
-        {
-            get { return _rateClasses; }
-        }
+        public List<RateClass> RateClasses { get; } = new List<RateClass>();
 
-        public List<RateGroup> RateGroups
-        {
-            get { return _rateGroups; }
-        }
+        public List<RateGroup> RateGroups { get; } = new List<RateGroup>();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             int classCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            var classIndex = 0;
+            int classIndex = 0;
 
             while (classIndex < classCount)
             {
                 var cls = new RateClass();
                 cls.Deserialize(data.GetRange(index, data.Count - index));
 
-                _rateClasses.Add(cls);
+                RateClasses.Add(cls);
 
                 index += cls.TotalSize;
                 classIndex += 1;
@@ -76,7 +67,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 var rateGroup = new RateGroup();
                 rateGroup.Deserialize(data.GetRange(index, data.Count - index));
 
-                _rateGroups.Add(rateGroup);
+                RateGroups.Add(rateGroup);
 
                 index += rateGroup.TotalSize;
             }
@@ -91,7 +82,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            return 2 + _rateClasses.Sum(x => x.CalculateTotalSize()) + _rateGroups.Sum(x => x.CalculateTotalSize());
+            return 2 + RateClasses.Sum(x => x.CalculateTotalSize()) + RateGroups.Sum(x => x.CalculateTotalSize());
         }
     }
 }

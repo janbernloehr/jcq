@@ -54,7 +54,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             ClientBuildNumber = ByteConverter.ToUInt16(data.GetRange(index, 2));
         }

@@ -27,7 +27,6 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Jcq.Core.Contracts;
 
 namespace Jcq.Core.Contracts
 {

@@ -40,15 +40,11 @@ namespace Jcq.Core
 
         void ILoggingService.Log(string category, TraceEventType severity, string message)
         {
-            //TODO: Logger
-            //Logger.Write(message, category, DefaultPriority, DefaultEventId, severity);
             JcqTraceSource.TraceInformation(message);
         }
 
         void ILoggingService.Log(string category, TraceEventType severity, string message, params object[] args)
         {
-            //TODO: Logger
-            //Logger.Write(string.Format(message, args), category, DefaultPriority, DefaultEventId, severity);
             JcqTraceSource.TraceInformation(message, args);
         }
     }

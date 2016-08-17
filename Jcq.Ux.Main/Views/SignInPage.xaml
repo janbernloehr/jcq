@@ -33,9 +33,9 @@
     mc:Ignorable="d" d:DesignHeight="436.96" d:DesignWidth="441.6"
     d:DataContext="{d:DesignInstance viewModel:SignInPageViewModel}">
     <Page.Resources>
-        <SolidColorBrush x:Key="TextColor" Color="Black"></SolidColorBrush>
-        
-        
+        <SolidColorBrush x:Key="TextColor" Color="Black" />
+
+
         <DataTemplate DataType="{x:Type identity:Identity}">
             <DockPanel>
                 <Image DockPanel.Dock="Left" Source="{Binding Path=ImageUrl}" Margin="4" Width="48" Height="48" />
@@ -126,8 +126,7 @@
         <TextBlock Text="Please select your identity to sign in" Foreground="{StaticResource TextColor}" Margin="6" />
 
         <ListView Grid.Row="1" IsSynchronizedWithCurrentItem="True" Padding="0" Margin="0,0,0,6"
-                  ItemsSource="{Binding Path=Identities}" BorderBrush="{x:Null}"
-                  >
+                  ItemsSource="{Binding Path=Identities}" BorderBrush="{x:Null}">
             <!--<ListView.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF3B3B3B" Offset="0.009" />

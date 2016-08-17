@@ -29,7 +29,7 @@ using System.IO;
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a service contract to load and save all data related to the IContext.
+    ///     Defines a service contract to load and save all data related to the IContext.
     /// </summary>
     public interface IDataWarehouseService : IContextService
     {

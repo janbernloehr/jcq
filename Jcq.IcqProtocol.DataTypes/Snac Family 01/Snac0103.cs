@@ -30,31 +30,26 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0103 : Snac
     {
-        private readonly List<int> _ServerSupportedFamilyIds = new List<int>();
-
         public Snac0103() : base(0x1, 0x3)
         {
         }
 
-        public List<int> ServerSupportedFamilyIds
-        {
-            get { return _ServerSupportedFamilyIds; }
-        }
+        public List<int> ServerSupportedFamilyIds { get; } = new List<int>();
 
         public override int CalculateDataSize()
         {
-            return _ServerSupportedFamilyIds.Count*2;
+            return ServerSupportedFamilyIds.Count*2;
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                _ServerSupportedFamilyIds.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
+                ServerSupportedFamilyIds.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
 
                 index += 2;
             }
@@ -66,7 +61,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (var familyId in _ServerSupportedFamilyIds)
+            foreach (int familyId in ServerSupportedFamilyIds)
             {
                 data.AddRange(ByteConverter.GetBytes((ushort) familyId));
             }

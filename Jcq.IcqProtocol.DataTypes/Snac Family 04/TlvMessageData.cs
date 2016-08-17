@@ -24,7 +24,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -32,24 +31,19 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvMessageData : Tlv
     {
-        private readonly List<byte> _requiredCapabilities = new List<byte>();
-
         public TlvMessageData()
             : base(0x2)
         {
-            _requiredCapabilities.AddRange(new Byte[] {1, 6});
+            RequiredCapabilities.AddRange(new byte[] {1, 6});
         }
 
-        public List<byte> RequiredCapabilities
-        {
-            get { return _requiredCapabilities; }
-        }
+        public List<byte> RequiredCapabilities { get; } = new List<byte>();
 
         public string MessageText { get; set; }
 
         public override int CalculateDataSize()
         {
-            return 4 + _requiredCapabilities.Count + 4 + 4 + 2*MessageText.Length;
+            return 4 + RequiredCapabilities.Count + 4 + 4 + 2*MessageText.Length;
         }
 
         public override List<byte> Serialize()
@@ -61,8 +55,8 @@ namespace Jcq.IcqProtocol.DataTypes
             // fragment version
             data.Add(0x1);
 
-            data.AddRange(ByteConverter.GetBytes((ushort) _requiredCapabilities.Count));
-            data.AddRange(_requiredCapabilities);
+            data.AddRange(ByteConverter.GetBytes((ushort) RequiredCapabilities.Count));
+            data.AddRange(RequiredCapabilities);
 
             // fragment identifier
             data.Add(0x1);
@@ -102,14 +96,14 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             index += 2;
 
             int length = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            _requiredCapabilities.AddRange(data.GetRange(index, length));
+            RequiredCapabilities.AddRange(data.GetRange(index, length));
             index += length;
 
             index += 2;

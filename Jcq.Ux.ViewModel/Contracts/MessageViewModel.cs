@@ -31,25 +31,16 @@ namespace Jcq.Ux.ViewModel
 {
     public class MessageViewModel
     {
-        private readonly DateTime _dateCreated;
-        private readonly ContactViewModel _recipient;
-
         public MessageViewModel(DateTime created, ContactViewModel recipient, Brush foreground)
         {
-            _dateCreated = created;
-            _recipient = recipient;
+            DateCreated = created;
+            Recipient = recipient;
             Foreground = foreground;
         }
 
-        public DateTime DateCreated
-        {
-            get { return _dateCreated; }
-        }
+        public DateTime DateCreated { get; }
 
-        public ContactViewModel Recipient
-        {
-            get { return _recipient; }
-        }
+        public ContactViewModel Recipient { get; }
 
         public Brush Foreground { get; private set; }
     }

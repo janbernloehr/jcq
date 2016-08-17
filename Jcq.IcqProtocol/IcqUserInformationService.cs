@@ -30,8 +30,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {
@@ -39,6 +39,8 @@ namespace Jcq.IcqProtocol
     {
         private static readonly Dictionary<long, ShortUserInformationRequestManager> PendingRequests =
             new Dictionary<long, ShortUserInformationRequestManager>();
+
+        private DateTime _lastRateLimitExcession = DateTime.MinValue;
 
         public IcqUserInformationService(IContext context)
             : base(context)
@@ -89,7 +91,7 @@ namespace Jcq.IcqProtocol
             // enumeration to fail.
             var contacts = Context.GetService<IStorageService>().Contacts.ToList();
 
-            foreach (var x in contacts)
+            foreach (IContact x in contacts)
             {
                 RequestShortUserInfo(x);
 
@@ -101,29 +103,28 @@ namespace Jcq.IcqProtocol
             RequestShortUserInfoForAllUsersCompleted?.Invoke(this, EventArgs.Empty);
         }
 
-        private DateTime _lastRateLimitExcession = DateTime.MinValue;
+        public event EventHandler RequestShortUserInfoForAllUsersCompleted;
 
 
         private TimeSpan ComputeSleepInterval()
         {
-            var diff = _lastRateLimitExcession.AddMinutes(5) - DateTime.Now;
+            TimeSpan diff = _lastRateLimitExcession.AddMinutes(5) - DateTime.Now;
 
             if (diff.TotalSeconds < 1)
-                 diff = TimeSpan.FromSeconds(1);
+                diff = TimeSpan.FromSeconds(1);
 
             Debug.WriteLine("IcqUserInformationService: Sleep Interval is {0}", diff);
 
             return diff;
         }
 
-        public event EventHandler RequestShortUserInfoForAllUsersCompleted;
         internal event EventHandler<ShortUserInformationTransportEventArgs> ShortUserInformationReceived;
 
         internal void AnalyseSnac010F(Snac010F dataIn)
         {
-            foreach (var x in dataIn.UserInfos)
+            foreach (UserInfo x in dataIn.UserInfos)
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
                 if (c == null)
                     continue;
 
@@ -158,7 +159,7 @@ namespace Jcq.IcqProtocol
 
                 if (x.UserStatus.HasData)
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
 
                     Debug.WriteLine(string.Format("User {0} changed Status to {1}.", c.Identifier, newStatus),
@@ -173,7 +174,7 @@ namespace Jcq.IcqProtocol
                 }
                 else
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.Online;
 
                     if (!ReferenceEquals(oldStatus, newStatus))
@@ -188,9 +189,9 @@ namespace Jcq.IcqProtocol
 
         internal void AnalyseSnac030B(Snac030B dataIn)
         {
-            foreach (var x in dataIn.UserInfos)
+            foreach (UserInfo x in dataIn.UserInfos)
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
                 if (c == null)
                     continue;
 
@@ -225,7 +226,7 @@ namespace Jcq.IcqProtocol
 
                 if (x.UserStatus.HasData)
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
 
                     Debug.WriteLine(string.Format("User {0} changed Status to {1}.", c.Identifier, newStatus),
@@ -240,7 +241,7 @@ namespace Jcq.IcqProtocol
                 }
                 else
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.Online;
 
                     if (!ReferenceEquals(oldStatus, newStatus))
@@ -255,9 +256,9 @@ namespace Jcq.IcqProtocol
 
         internal void AnalyseSnac030C(Snac030C dataIn)
         {
-            foreach (var x in dataIn.UserInfos)
+            foreach (UserInfo x in dataIn.UserInfos)
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
 
                 c.Status = IcqStatusCodes.GetStatusCode(UserStatus.Offline);
             }
@@ -287,12 +288,10 @@ namespace Jcq.IcqProtocol
                     }
 
                     //Context.GetService<IRateLimitsService>().EmergencyThrottle();
-
                 }
             }
             catch (Exception ex)
             {
-
                 Kernel.Exceptions.PublishException(ex);
             }
         }

@@ -89,11 +89,11 @@ namespace Jcq.Ux.Main.Services
         {
             var lines = new List<string>();
 
-            foreach (var par in document.Blocks.Cast<Paragraph>())
+            foreach (Paragraph par in document.Blocks.Cast<Paragraph>())
             {
                 var writer = new StringBuilder();
 
-                foreach (var text in par.Inlines.OfType<Run>())
+                foreach (Run text in par.Inlines.OfType<Run>())
                 {
                     writer.Append(text.Text);
                 }

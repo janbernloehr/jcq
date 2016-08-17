@@ -50,7 +50,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             AccountCreationTime = ByteConverter.ToDateTimeFromUInt32FileStamp(data.GetRange(index, 4));
         }

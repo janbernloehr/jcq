@@ -34,7 +34,7 @@ namespace Jcq.Ux.Main.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var format = (string) parameter;
+            string format = (string) parameter;
 
             return string.Format(format, value);
         }

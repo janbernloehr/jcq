@@ -39,7 +39,7 @@ namespace Jcq.IcqProtocol.DataTypes
         }
 
         public int TypeId { get; private set; }
-        public int DataSize { get; private set; }
+        public int DataSize { get; }
 
         public int TotalSize
         {

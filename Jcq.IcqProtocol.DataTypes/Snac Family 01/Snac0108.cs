@@ -30,22 +30,17 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0108 : Snac
     {
-        private readonly List<int> _RateGroupIds = new List<int>();
-
         public Snac0108() : base(0x1, 0x8)
         {
         }
 
-        public List<int> RateGroupIds
-        {
-            get { return _RateGroupIds; }
-        }
+        public List<int> RateGroupIds { get; } = new List<int>();
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            foreach (var x in _RateGroupIds)
+            foreach (int x in RateGroupIds)
             {
                 data.AddRange(ByteConverter.GetBytes((ushort) x));
             }
@@ -57,11 +52,11 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index + 2 <= data.Count)
             {
-                _RateGroupIds.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
+                RateGroupIds.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
 
                 index += 2;
             }

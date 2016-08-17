@@ -36,9 +36,9 @@ namespace Jcq.Ux.Main.Theme
         {
             if (Mouse.LeftButton != MouseButtonState.Pressed) return;
 
-            var wnd = ((FrameworkElement)sender).TemplatedParent as Window;
+            var wnd = ((FrameworkElement) sender).TemplatedParent as Window;
 
-            if (wnd != null) 
+            if (wnd != null)
                 wnd.DragMove();
         }
 
@@ -90,7 +90,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.North);
         }
@@ -101,7 +101,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.South);
         }
@@ -112,7 +112,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.East);
         }
@@ -123,7 +123,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.West);
         }
@@ -134,7 +134,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.NorthEast);
         }
@@ -145,7 +145,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.NorthWest);
         }
@@ -156,7 +156,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.SouthEast);
         }
@@ -167,7 +167,7 @@ namespace Jcq.Ux.Main.Theme
 
             if (wnd == null) return;
 
-            var wse = WindowExtenderProvider.GetResizeExtender(wnd);
+            WindowResizeExtender wse = WindowExtenderProvider.GetResizeExtender(wnd);
 
             wse.DragSize(SizingAction.SouthWest);
         }

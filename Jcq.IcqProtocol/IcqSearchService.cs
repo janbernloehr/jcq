@@ -27,8 +27,8 @@
 using System;
 using System.Collections.Generic;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {
@@ -84,7 +84,7 @@ namespace Jcq.IcqProtocol
                         {
                             var resp = (MetaSearchByUinResponse) dataIn.MetaData.MetaResponse;
 
-                            var contact = Context.GetService<IStorageService>()
+                            IContact contact = Context.GetService<IStorageService>()
                                 .GetContactByIdentifier(resp.FoundUserUin.ToString());
 
                             contact.Name = resp.Nickname;

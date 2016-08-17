@@ -103,7 +103,7 @@ namespace Jcq.IcqProtocol.Tests
         {
             var value = new DateTime(2015, 01, 01);
 
-            CollectionAssert.AreEqual(new Byte[] {84, 164, 142, 0}, ByteConverter.GetBytesForUInt32Date(value));
+            CollectionAssert.AreEqual(new byte[] {84, 164, 142, 0}, ByteConverter.GetBytesForUInt32Date(value));
         }
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace Jcq.IcqProtocol.Tests
         {
             var value = new DateTime(2245, 01, 01);
 
-            CollectionAssert.AreEqual(new Byte[] {0, 0, 0, 2, 5, 66, 167, 0}, ByteConverter.GetBytesForUInt64Date(value));
+            CollectionAssert.AreEqual(new byte[] {0, 0, 0, 2, 5, 66, 167, 0}, ByteConverter.GetBytesForUInt64Date(value));
         }
     }
 }

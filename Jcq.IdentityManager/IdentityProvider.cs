@@ -38,7 +38,7 @@ namespace Jcq.IdentityManager
             Identities = new NotifyingCollection<IIdentity>();
         }
 
-        public NotifyingCollection<IIdentity> Identities { get; private set; }
+        public NotifyingCollection<IIdentity> Identities { get; }
 
         public void CreateIdentity(IIdentity identity)
         {

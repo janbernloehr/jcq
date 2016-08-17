@@ -26,10 +26,8 @@
 
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Threading;
 using Jcq.Core;
 using Jcq.IcqProtocol.Contracts;
 using Jcq.Ux.ViewModel.Contracts;
@@ -75,7 +73,7 @@ namespace Jcq.Ux.ViewModel
             var sv = ApplicationService.Current.Context.GetService<IContactContextMenuService>();
             menu.Items.Clear();
 
-            foreach (var x in sv.GetMenuItems(contact))
+            foreach (MenuItem x in sv.GetMenuItems(contact))
             {
                 menu.Items.Add(x);
             }

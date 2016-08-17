@@ -24,7 +24,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 
 namespace Jcq.IcqProtocol.DataTypes
@@ -57,7 +56,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
             int index = SizeFixPart + 2;
 
-            SearchUin = (int)ByteConverter.ToUInt32LE(data.GetRange(index, 4));
+            SearchUin = (int) ByteConverter.ToUInt32LE(data.GetRange(index, 4));
             index += 4;
         }
     }

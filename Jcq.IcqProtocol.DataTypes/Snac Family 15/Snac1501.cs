@@ -53,14 +53,14 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             ErrorCode = (ErrorCode) (short) ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 if (desc.TypeId == 0x8)
                 {

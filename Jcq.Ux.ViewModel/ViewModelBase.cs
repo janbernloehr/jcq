@@ -40,7 +40,7 @@ namespace Jcq.Ux.ViewModel
 
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            var handler = PropertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, e);
         }
     }

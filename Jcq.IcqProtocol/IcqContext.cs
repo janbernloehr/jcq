@@ -28,8 +28,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jcq.Core;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {
@@ -56,19 +56,19 @@ namespace Jcq.IcqProtocol
 
         public TC GetService<TC>() where TC : IContextService
         {
-            if (_cachedBindings.ContainsKey(typeof (TC)))
-                return (TC) _cachedBindings[typeof (TC)];
+            if (_cachedBindings.ContainsKey(typeof(TC)))
+                return (TC) _cachedBindings[typeof(TC)];
 
-            var type = Kernel.Mapper.GetImplementationType<TC>();
+            Type type = Kernel.Mapper.GetImplementationType<TC>();
 
             if (!_cachedInstances.ContainsKey(type))
             {
                 _cachedInstances.Add(type, (TC) Activator.CreateInstance(type, this));
             }
 
-            _cachedBindings.Add(typeof (TC), _cachedInstances[type]);
+            _cachedBindings.Add(typeof(TC), _cachedInstances[type]);
 
-            return (TC) _cachedBindings[typeof (TC)];
+            return (TC) _cachedBindings[typeof(TC)];
         }
 
         public IContact Identity
@@ -83,7 +83,7 @@ namespace Jcq.IcqProtocol
             if (icqStatus == null)
                 throw new ArgumentException(@"IcqStatusCode required", nameof(statusCode));
 
-            var status = icqStatus.UserStatus;
+            UserStatus status = icqStatus.UserStatus;
 
             var dataOut = new Snac011e();
             dataOut.UserStatus.UserStatus = status;

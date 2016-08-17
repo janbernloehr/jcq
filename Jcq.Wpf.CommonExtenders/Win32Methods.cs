@@ -32,22 +32,26 @@ namespace Jcq.Wpf.CommonExtenders
     internal class Win32Methods
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+        internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
     }
 
     [StructLayout(LayoutKind.Sequential)]
     internal class MinMaxInfo
     {
-        internal Win32Point ptReserved;
-        internal Win32Point ptMaxSize;
         internal Win32Point ptMaxPosition;
-        internal Win32Point ptMinTrackSize;
+        internal Win32Point ptMaxSize;
         internal Win32Point ptMaxTrackSize;
+        internal Win32Point ptMinTrackSize;
+        internal Win32Point ptReserved;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     internal class Win32Point
     {
+        // Fields
+        internal int x;
+        internal int y;
+
         internal Win32Point()
         {
         }
@@ -57,21 +61,17 @@ namespace Jcq.Wpf.CommonExtenders
             x = xval;
             y = yval;
         }
-
-        // Fields
-        internal int x;
-        internal int y;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     internal class Win32Rect
     {
+        internal int bottom;
         // Fields
 
         internal int left;
-        internal int top;
         internal int right;
-        internal int bottom;
+        internal int top;
     }
 
     internal enum WindowMessage : uint

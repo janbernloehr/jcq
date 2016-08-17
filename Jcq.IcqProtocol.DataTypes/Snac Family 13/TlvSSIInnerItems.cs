@@ -30,31 +30,26 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvSSIInnerItems : Tlv
     {
-        private readonly List<int> _InnerItems = new List<int>();
-
         public TlvSSIInnerItems() : base(0xc8)
         {
         }
 
-        public List<int> InnerItems
-        {
-            get { return _InnerItems; }
-        }
+        public List<int> InnerItems { get; } = new List<int>();
 
         public override int CalculateDataSize()
         {
-            return _InnerItems.Count*2;
+            return InnerItems.Count*2;
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                _InnerItems.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
+                InnerItems.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
 
                 index += 2;
             }
@@ -64,7 +59,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (var x in _InnerItems)
+            foreach (int x in InnerItems)
             {
                 data.AddRange(ByteConverter.GetBytes((ushort) x));
             }

@@ -24,7 +24,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 
 namespace Jcq.IcqProtocol.DataTypes
@@ -54,10 +53,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
             int index = SizeFixPart;
 
-            RequestSubType = (MetaRequestSubType)ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            RequestSubType = (MetaRequestSubType) ByteConverter.ToUInt16LE(data.GetRange(index, 2));
             index += 2;
-
-
         }
     }
 }

@@ -27,19 +27,19 @@
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines an abstract authentication credential.
+    ///     Defines an abstract authentication credential.
     /// </summary>
     public interface ICredential
     {
     }
 
     /// <summary>
-    /// Defines a password credential.
+    ///     Defines a password credential.
     /// </summary>
     public interface IPasswordCredential : ICredential
     {
         /// <summary>
-        /// Gets the password.
+        ///     Gets the password.
         /// </summary>
         string Password { get; }
     }

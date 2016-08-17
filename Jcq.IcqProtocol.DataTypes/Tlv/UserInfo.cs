@@ -30,62 +30,26 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class UserInfo : ISerializable
     {
-        private readonly TlvDCInfo _DCInfo = new TlvDCInfo();
-        private readonly TlvExternalIpAddress _ExternalAddress = new TlvExternalIpAddress();
-        private readonly TlvMemberSince _MemberSince = new TlvMemberSince();
-        private readonly TlvOnlineTime _OnlineTime = new TlvOnlineTime();
-        private readonly TlvSignonTime _SignOnTime = new TlvSignonTime();
-        private readonly TlvCapabilities _UserCapabilities = new TlvCapabilities();
-        private readonly TlvUserClass _UserClass = new TlvUserClass();
-        private readonly TlvUserIconIdAndHash _UserIconIdAndHash = new TlvUserIconIdAndHash();
-        private readonly TlvUserStatus _UserStatus = new TlvUserStatus();
         public string Uin { get; set; }
         public int WarningLevel { get; set; }
 
-        public TlvUserClass UserClass
-        {
-            get { return _UserClass; }
-        }
+        public TlvUserClass UserClass { get; } = new TlvUserClass();
 
-        public TlvUserStatus UserStatus
-        {
-            get { return _UserStatus; }
-        }
+        public TlvUserStatus UserStatus { get; } = new TlvUserStatus();
 
-        public TlvDCInfo DCInfo
-        {
-            get { return _DCInfo; }
-        }
+        public TlvDCInfo DCInfo { get; } = new TlvDCInfo();
 
-        public TlvExternalIpAddress ExternalAddress
-        {
-            get { return _ExternalAddress; }
-        }
+        public TlvExternalIpAddress ExternalAddress { get; } = new TlvExternalIpAddress();
 
-        public TlvSignonTime SignOnTime
-        {
-            get { return _SignOnTime; }
-        }
+        public TlvSignonTime SignOnTime { get; } = new TlvSignonTime();
 
-        public TlvMemberSince MemberSince
-        {
-            get { return _MemberSince; }
-        }
+        public TlvMemberSince MemberSince { get; } = new TlvMemberSince();
 
-        public TlvCapabilities UserCapabilities
-        {
-            get { return _UserCapabilities; }
-        }
+        public TlvCapabilities UserCapabilities { get; } = new TlvCapabilities();
 
-        public TlvOnlineTime OnlineTime
-        {
-            get { return _OnlineTime; }
-        }
+        public TlvOnlineTime OnlineTime { get; } = new TlvOnlineTime();
 
-        public TlvUserIconIdAndHash UserIconIdAndHash
-        {
-            get { return _UserIconIdAndHash; }
-        }
+        public TlvUserIconIdAndHash UserIconIdAndHash { get; } = new TlvUserIconIdAndHash();
 
         public int DataSize { get; private set; }
 
@@ -98,11 +62,11 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public virtual int CalculateDataSize()
         {
-            return _UserClass.CalculateDataSize() + _DCInfo.CalculateDataSize() + _ExternalAddress.CalculateDataSize() +
-                   _UserStatus.CalculateDataSize() + _UserCapabilities.CalculateDataSize() +
-                   _OnlineTime.CalculateDataSize() +
-                   _SignOnTime.CalculateDataSize() + _MemberSince.CalculateDataSize() +
-                   _UserIconIdAndHash.CalculateDataSize();
+            return UserClass.CalculateDataSize() + DCInfo.CalculateDataSize() + ExternalAddress.CalculateDataSize() +
+                   UserStatus.CalculateDataSize() + UserCapabilities.CalculateDataSize() +
+                   OnlineTime.CalculateDataSize() +
+                   SignOnTime.CalculateDataSize() + MemberSince.CalculateDataSize() +
+                   UserIconIdAndHash.CalculateDataSize();
         }
 
         public int CalculateTotalSize()
@@ -112,7 +76,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public virtual void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             if (data[index] == 0x0 & data[index + 1] == 0x6)
                 index += 8;
@@ -124,43 +88,43 @@ namespace Jcq.IcqProtocol.DataTypes
             index += 2;
 
             int innerTlvCount;
-            var innerTlvIndex = 0;
+            int innerTlvIndex = 0;
 
             innerTlvCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
             while (innerTlvIndex < innerTlvCount)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xc:
-                        _DCInfo.Deserialize(data.GetRange(index, desc.TotalSize));
+                        DCInfo.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xa:
-                        _ExternalAddress.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ExternalAddress.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x6:
-                        _UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xd:
-                        _UserCapabilities.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserCapabilities.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xf:
-                        _OnlineTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        OnlineTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x3:
-                        _SignOnTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        SignOnTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x5:
-                        _MemberSince.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MemberSince.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x1d:
-                        _UserIconIdAndHash.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserIconIdAndHash.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 
@@ -179,15 +143,15 @@ namespace Jcq.IcqProtocol.DataTypes
 
             data = new List<byte>();
 
-            data.AddRange(_UserClass.Serialize());
-            data.AddRange(_DCInfo.Serialize());
-            data.AddRange(_ExternalAddress.Serialize());
-            data.AddRange(_UserStatus.Serialize());
-            data.AddRange(_UserCapabilities.Serialize());
-            data.AddRange(_OnlineTime.Serialize());
-            data.AddRange(_SignOnTime.Serialize());
-            data.AddRange(_MemberSince.Serialize());
-            data.AddRange(_UserIconIdAndHash.Serialize());
+            data.AddRange(UserClass.Serialize());
+            data.AddRange(DCInfo.Serialize());
+            data.AddRange(ExternalAddress.Serialize());
+            data.AddRange(UserStatus.Serialize());
+            data.AddRange(UserCapabilities.Serialize());
+            data.AddRange(OnlineTime.Serialize());
+            data.AddRange(SignOnTime.Serialize());
+            data.AddRange(MemberSince.Serialize());
+            data.AddRange(UserIconIdAndHash.Serialize());
 
             return data;
         }

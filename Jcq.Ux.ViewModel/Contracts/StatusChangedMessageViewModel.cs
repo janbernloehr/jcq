@@ -32,24 +32,15 @@ namespace Jcq.Ux.ViewModel
 {
     public class StatusChangedMessageViewModel : MessageViewModel
     {
-        private readonly ContactViewModel _Sender;
-        private readonly IStatusCode _Status;
-
         public StatusChangedMessageViewModel(DateTime created, ContactViewModel sender, ContactViewModel recipient,
             IStatusCode status, Brush foreground) : base(created, recipient, foreground)
         {
-            _Sender = sender;
-            _Status = status;
+            Sender = sender;
+            Status = status;
         }
 
-        public ContactViewModel Sender
-        {
-            get { return _Sender; }
-        }
+        public ContactViewModel Sender { get; }
 
-        public IStatusCode Status
-        {
-            get { return _Status; }
-        }
+        public IStatusCode Status { get; }
     }
 }

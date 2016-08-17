@@ -25,7 +25,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Windows;
-using Jcq.Wpf.CommonExtenders;
 
 namespace Jcq.Ux.Main.Code
 {

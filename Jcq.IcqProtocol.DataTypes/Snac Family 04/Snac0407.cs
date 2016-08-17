@@ -31,12 +31,6 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0407 : Snac
     {
-        private readonly TlvAccountCreationTime _AccountCreationTime = new TlvAccountCreationTime();
-        private readonly TlvClientIdleTime _ClientIdleTime = new TlvClientIdleTime();
-        private readonly TlvMessageData _MessageData = new TlvMessageData();
-        private readonly TlvUserClass _UserClass = new TlvUserClass();
-        private readonly TlvUserStatus _UserStatus = new TlvUserStatus();
-
         public Snac0407() : base(0x4, 0x7)
         {
         }
@@ -47,30 +41,15 @@ namespace Jcq.IcqProtocol.DataTypes
         public int SenderWarningLevel { get; private set; }
         public bool AutoResponseFlag { get; private set; }
 
-        public TlvUserClass UserClass
-        {
-            get { return _UserClass; }
-        }
+        public TlvUserClass UserClass { get; } = new TlvUserClass();
 
-        public TlvUserStatus UserStatus
-        {
-            get { return _UserStatus; }
-        }
+        public TlvUserStatus UserStatus { get; } = new TlvUserStatus();
 
-        public TlvClientIdleTime ClientIdleTime
-        {
-            get { return _ClientIdleTime; }
-        }
+        public TlvClientIdleTime ClientIdleTime { get; } = new TlvClientIdleTime();
 
-        public TlvAccountCreationTime AccountCreationTime
-        {
-            get { return _AccountCreationTime; }
-        }
+        public TlvAccountCreationTime AccountCreationTime { get; } = new TlvAccountCreationTime();
 
-        public TlvMessageData MessageData
-        {
-            get { return _MessageData; }
-        }
+        public TlvMessageData MessageData { get; } = new TlvMessageData();
 
         public override int CalculateDataSize()
         {
@@ -86,7 +65,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             TlvDescriptor desc;
 
@@ -103,7 +82,7 @@ namespace Jcq.IcqProtocol.DataTypes
             index += 2;
 
             int innerTlvCount;
-            var innerTlvIndex = 0;
+            int innerTlvIndex = 0;
 
             innerTlvCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
@@ -115,16 +94,16 @@ namespace Jcq.IcqProtocol.DataTypes
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x6:
-                        _UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xf:
-                        _ClientIdleTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ClientIdleTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x3:
-                        _AccountCreationTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        AccountCreationTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x4:
                         AutoResponseFlag = true;
@@ -137,8 +116,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
             desc = TlvDescriptor.GetDescriptor(index, data);
 
-            _MessageData.Deserialize(data.GetRange(index, desc.TotalSize));
-            index += _MessageData.TotalSize;
+            MessageData.Deserialize(data.GetRange(index, desc.TotalSize));
+            index += MessageData.TotalSize;
 
             while (index + 4 <= data.Count)
             {

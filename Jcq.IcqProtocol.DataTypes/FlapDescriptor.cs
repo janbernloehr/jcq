@@ -52,13 +52,13 @@ namespace Jcq.IcqProtocol.DataTypes
 
         private void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             if (data[index] != 0x2a)
             {
                 string info = null;
 
-                for (var i = 0; i <= Flap.SizeFixPart - 1; i++)
+                for (int i = 0; i <= Flap.SizeFixPart - 1; i++)
                 {
                     info += string.Format("{0:X} ", data[i]);
                 }

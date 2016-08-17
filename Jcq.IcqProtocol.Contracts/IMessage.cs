@@ -27,22 +27,22 @@
 namespace Jcq.IcqProtocol.Contracts
 {
     /// <summary>
-    /// Defines a message for sending or receiving.
+    ///     Defines a message for sending or receiving.
     /// </summary>
     public interface IMessage
     {
         /// <summary>
-        /// Gets or sets the sender.
+        ///     Gets or sets the sender.
         /// </summary>
         IContact Sender { get; set; }
 
         /// <summary>
-        /// Gets or sets the recipient.
+        ///     Gets or sets the recipient.
         /// </summary>
         IContact Recipient { get; set; }
 
         /// <summary>
-        /// Gets or sets the message text.
+        ///     Gets or sets the message text.
         /// </summary>
         string Text { get; set; }
     }

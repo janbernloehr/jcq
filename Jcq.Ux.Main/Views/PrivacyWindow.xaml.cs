@@ -30,7 +30,6 @@ using System.Windows;
 using System.Windows.Data;
 using Jcq.Core;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -53,7 +52,7 @@ namespace Jcq.Ux.Main.Views
         {
             try
             {
-                var identifier = NewVisibleContact.Text;
+                string identifier = NewVisibleContact.Text;
 
                 ViewModel.AddVisibleContact(identifier);
             }
@@ -67,7 +66,7 @@ namespace Jcq.Ux.Main.Views
         {
             try
             {
-                var view = CollectionViewSource.GetDefaultView(ViewModel.VisibleContacts);
+                ICollectionView view = CollectionViewSource.GetDefaultView(ViewModel.VisibleContacts);
                 var contact = (ContactViewModel) view.CurrentItem;
 
                 ViewModel.RemoveVisibleContact(contact);
@@ -82,7 +81,7 @@ namespace Jcq.Ux.Main.Views
         {
             try
             {
-                var identifier = NewInvisibleContact.Text;
+                string identifier = NewInvisibleContact.Text;
 
                 ViewModel.AddInvisibleContact(identifier);
             }
@@ -96,7 +95,7 @@ namespace Jcq.Ux.Main.Views
         {
             try
             {
-                var view = CollectionViewSource.GetDefaultView(ViewModel.InvisibleContacts);
+                ICollectionView view = CollectionViewSource.GetDefaultView(ViewModel.InvisibleContacts);
                 var contact = (ContactViewModel) view.CurrentItem;
 
                 ViewModel.RemoveInvisibleContact(contact);
@@ -111,7 +110,7 @@ namespace Jcq.Ux.Main.Views
         {
             try
             {
-                var identifier = NewIgnoreContact.Text;
+                string identifier = NewIgnoreContact.Text;
 
                 ViewModel.AddIgnoreContact(identifier);
             }

@@ -31,76 +31,31 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class FlapRequestSignInCookie : Flap
     {
-        private readonly TlvClientBuildNumber _clientBuildNumber = new TlvClientBuildNumber();
-        private readonly TlvClientCountry _clientCountry = new TlvClientCountry();
-        private readonly TlvClientDistributionNumber _clientDistributionNumber = new TlvClientDistributionNumber();
-        private readonly TlvClientId _clientId = new TlvClientId();
-        private readonly TlvClientIdString _clientIdString = new TlvClientIdString();
-        private readonly TlvClientLanguage _clientLanguage = new TlvClientLanguage();
-        private readonly TlvClientLesserVersion _clientLesserVersion = new TlvClientLesserVersion();
-        private readonly TlvClientMajorVersion _clientMajorVersion = new TlvClientMajorVersion();
-        private readonly TlvClientMinorVersion _clientMinorVersion = new TlvClientMinorVersion();
-        private readonly TlvPassword _password = new TlvPassword();
-        private readonly TlvScreenName _screenName = new TlvScreenName();
-
         public FlapRequestSignInCookie() : base(FlapChannel.NewConnectionNegotiation)
         {
         }
 
-        public TlvScreenName ScreenName
-        {
-            get { return _screenName; }
-        }
+        public TlvScreenName ScreenName { get; } = new TlvScreenName();
 
-        public TlvPassword Password
-        {
-            get { return _password; }
-        }
+        public TlvPassword Password { get; } = new TlvPassword();
 
-        public TlvClientIdString ClientIdString
-        {
-            get { return _clientIdString; }
-        }
+        public TlvClientIdString ClientIdString { get; } = new TlvClientIdString();
 
-        public TlvClientId ClientId
-        {
-            get { return _clientId; }
-        }
+        public TlvClientId ClientId { get; } = new TlvClientId();
 
-        public TlvClientMajorVersion ClientMajorVersion
-        {
-            get { return _clientMajorVersion; }
-        }
+        public TlvClientMajorVersion ClientMajorVersion { get; } = new TlvClientMajorVersion();
 
-        public TlvClientMinorVersion ClientMinorVersion
-        {
-            get { return _clientMinorVersion; }
-        }
+        public TlvClientMinorVersion ClientMinorVersion { get; } = new TlvClientMinorVersion();
 
-        public TlvClientLesserVersion ClientLesserVersion
-        {
-            get { return _clientLesserVersion; }
-        }
+        public TlvClientLesserVersion ClientLesserVersion { get; } = new TlvClientLesserVersion();
 
-        public TlvClientBuildNumber ClientBuildNumber
-        {
-            get { return _clientBuildNumber; }
-        }
+        public TlvClientBuildNumber ClientBuildNumber { get; } = new TlvClientBuildNumber();
 
-        public TlvClientDistributionNumber ClientDistributionNumber
-        {
-            get { return _clientDistributionNumber; }
-        }
+        public TlvClientDistributionNumber ClientDistributionNumber { get; } = new TlvClientDistributionNumber();
 
-        public TlvClientLanguage ClientLanguage
-        {
-            get { return _clientLanguage; }
-        }
+        public TlvClientLanguage ClientLanguage { get; } = new TlvClientLanguage();
 
-        public TlvClientCountry ClientCountry
-        {
-            get { return _clientCountry; }
-        }
+        public TlvClientCountry ClientCountry { get; } = new TlvClientCountry();
 
         public override void Deserialize(List<byte> data)
         {
@@ -109,12 +64,12 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            return 4 + _screenName.CalculateTotalSize() + _password.CalculateTotalSize() +
-                   _clientIdString.CalculateTotalSize() + _clientId.CalculateTotalSize() +
-                   _clientMajorVersion.CalculateTotalSize() + _clientMinorVersion.CalculateTotalSize() +
-                   _clientLesserVersion.CalculateTotalSize() + _clientBuildNumber.CalculateTotalSize() +
-                   _clientDistributionNumber.CalculateTotalSize() + _clientLanguage.CalculateTotalSize() +
-                   _clientCountry.CalculateTotalSize();
+            return 4 + ScreenName.CalculateTotalSize() + Password.CalculateTotalSize() +
+                   ClientIdString.CalculateTotalSize() + ClientId.CalculateTotalSize() +
+                   ClientMajorVersion.CalculateTotalSize() + ClientMinorVersion.CalculateTotalSize() +
+                   ClientLesserVersion.CalculateTotalSize() + ClientBuildNumber.CalculateTotalSize() +
+                   ClientDistributionNumber.CalculateTotalSize() + ClientLanguage.CalculateTotalSize() +
+                   ClientCountry.CalculateTotalSize();
         }
 
         public override List<byte> Serialize()
@@ -122,17 +77,17 @@ namespace Jcq.IcqProtocol.DataTypes
             var data = base.Serialize();
 
             data.AddRange(ByteConverter.GetBytes((uint) 1));
-            data.AddRange(_screenName.Serialize());
-            data.AddRange(_password.Serialize());
-            data.AddRange(_clientIdString.Serialize());
-            data.AddRange(_clientId.Serialize());
-            data.AddRange(_clientMajorVersion.Serialize());
-            data.AddRange(_clientMinorVersion.Serialize());
-            data.AddRange(_clientLesserVersion.Serialize());
-            data.AddRange(_clientBuildNumber.Serialize());
-            data.AddRange(_clientDistributionNumber.Serialize());
-            data.AddRange(_clientLanguage.Serialize());
-            data.AddRange(_clientCountry.Serialize());
+            data.AddRange(ScreenName.Serialize());
+            data.AddRange(Password.Serialize());
+            data.AddRange(ClientIdString.Serialize());
+            data.AddRange(ClientId.Serialize());
+            data.AddRange(ClientMajorVersion.Serialize());
+            data.AddRange(ClientMinorVersion.Serialize());
+            data.AddRange(ClientLesserVersion.Serialize());
+            data.AddRange(ClientBuildNumber.Serialize());
+            data.AddRange(ClientDistributionNumber.Serialize());
+            data.AddRange(ClientLanguage.Serialize());
+            data.AddRange(ClientCountry.Serialize());
 
             return data;
         }

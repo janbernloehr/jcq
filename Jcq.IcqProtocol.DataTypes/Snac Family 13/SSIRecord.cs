@@ -75,7 +75,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public virtual void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             _ItemName = ByteConverter.ToStringFromUInt16Index(index, data);
             index += _ItemName.Length + 2;

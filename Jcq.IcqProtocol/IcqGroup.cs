@@ -53,8 +53,8 @@ namespace Jcq.IcqProtocol
             }
         }
 
-        public NotifyingCollection<IcqContact> Contacts { get; private set; }
-        public NotifyingCollection<IcqGroup> Groups { get; private set; }
+        public NotifyingCollection<IcqContact> Contacts { get; }
+        public NotifyingCollection<IcqGroup> Groups { get; }
 
         #region IGroup Interface Members
 

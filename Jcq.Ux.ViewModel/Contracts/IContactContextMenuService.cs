@@ -31,12 +31,12 @@ using Jcq.IcqProtocol.Contracts;
 namespace Jcq.Ux.ViewModel.Contracts
 {
     /// <summary>
-    /// Defines a service contract to create the context menu for a contact.
+    ///     Defines a service contract to create the context menu for a contact.
     /// </summary>
     public interface IContactContextMenuService : IContextService
     {
         /// <summary>
-        /// Create a list of menu items for the given contact.
+        ///     Create a list of menu items for the given contact.
         /// </summary>
         /// <param name="contact">The contact.</param>
         /// <returns></returns>

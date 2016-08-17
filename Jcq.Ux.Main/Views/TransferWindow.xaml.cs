@@ -29,7 +29,6 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
 using Jcq.Ux.ViewModel;
-using JCsTools.JCQ.Ux;
 
 namespace Jcq.Ux.Main.Views
 {
@@ -48,7 +47,7 @@ namespace Jcq.Ux.Main.Views
             App.DefaultWindowStyle.Attach(this);
         }
 
-        public TransferWindowViewModel ViewModel { get; private set; }
+        public TransferWindowViewModel ViewModel { get; }
 
         protected void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

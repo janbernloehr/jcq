@@ -31,24 +31,33 @@ namespace Jcq.Core
 {
     public static class Kernel
     {
-        /// <summary>
-        /// Gets the default IServiceProvider implementation.
-        /// </summary>
-        public static IServiceProvider<IService> Services { get; } = new ServiceProvider<IService>();
+        static Kernel()
+        {
+            // order of initialization is important since Services.GetService depends on Kernel.Mapper.
+            Mapper = new Mapper();
+            Services = new ServiceProvider<IService>();
+            Exceptions = Services.GetService<IExceptionService>();
+            Logger = Services.GetService<ILoggingService>();
+        }
 
         /// <summary>
-        /// Gets the default IExceptionService implementation.
+        ///     Gets the default IServiceProvider implementation.
         /// </summary>
-        public static IExceptionService Exceptions => Services.GetService<IExceptionService>();
+        public static IServiceProvider<IService> Services { get; }
 
         /// <summary>
-        /// Gets the default ILoggingService implementation.
+        ///     Gets the default IExceptionService implementation.
         /// </summary>
-        public static ILoggingService Logger { get; } = Services.GetService<ILoggingService>();
+        public static IExceptionService Exceptions { get; }
 
         /// <summary>
-        /// Gets the default IMapper implementation.
+        ///     Gets the default ILoggingService implementation.
         /// </summary>
-        public static IMapper Mapper { get; } = new Mapper();
+        public static ILoggingService Logger { get; }
+
+        /// <summary>
+        ///     Gets the default IMapper implementation.
+        /// </summary>
+        public static IMapper Mapper { get; }
     }
 }

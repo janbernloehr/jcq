@@ -31,13 +31,9 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public class UploadIconNotification : ExtendedStatusNotification
     {
-        private readonly List<byte> _IconHash = new List<byte>(16);
         public UploadIconFlag IconFlag { get; set; }
 
-        public List<byte> IconHash
-        {
-            get { return _IconHash; }
-        }
+        public List<byte> IconHash { get; } = new List<byte>(16);
 
         public override int CalculateDataSize()
         {
@@ -48,7 +44,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             byte hashLength;
 
@@ -57,7 +53,7 @@ namespace Jcq.IcqProtocol.DataTypes
             hashLength = data[index];
             index += 1;
 
-            _IconHash.AddRange(data.GetRange(index, hashLength));
+            IconHash.AddRange(data.GetRange(index, hashLength));
             index += hashLength;
 
             SetDataSize(index);

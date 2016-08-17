@@ -26,13 +26,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Jcq.IcqProtocol.DataTypes
 {
     public static class SerializationContext
     {
-        private static readonly Type ContextType = typeof (SerializationContext);
+        private static readonly Type ContextType = typeof(SerializationContext);
         private static readonly string AssemblyName;
         private static readonly string SnacNamespace;
 
@@ -44,11 +43,11 @@ namespace Jcq.IcqProtocol.DataTypes
 
         private static Type GetSnacMapping(SnacDescriptor desc)
         {
-            var typeName = string.Format("{1}.Snac{0}, {2}", 
+            string typeName = string.Format("{1}.Snac{0}, {2}",
                 SnacDescriptor.GetKey(desc).Replace(",", ""), SnacNamespace, AssemblyName);
 
-            var snacType = Type.GetType(typeName, false, true);
-           
+            Type snacType = Type.GetType(typeName, false, true);
+
             return snacType;
         }
 
@@ -56,7 +55,7 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = bytes.GetRange(offset, bytes.Count - offset);
 
-            var type = GetSnacMapping(desc);
+            Type type = GetSnacMapping(desc);
 
             if (type == null)
                 return null;

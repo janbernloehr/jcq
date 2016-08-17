@@ -25,8 +25,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Diagnostics;
-using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol
 {

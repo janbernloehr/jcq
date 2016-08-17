@@ -26,7 +26,6 @@
 
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Jcq.Core;
 using Jcq.Core.Collections;
 using Jcq.IcqProtocol.Contracts;
 

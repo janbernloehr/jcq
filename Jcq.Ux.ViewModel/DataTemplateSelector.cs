@@ -45,7 +45,7 @@ namespace Jcq.Ux.ViewModel
             {
                 Content = item;
 
-                var m = typeof (ContentPresenter).GetMethod("ChangeLogicalParent",
+                MethodInfo m = typeof(ContentPresenter).GetMethod("ChangeLogicalParent",
                     BindingFlags.NonPublic | BindingFlags.Instance);
                 m.Invoke(this, new object[] {container});
 
