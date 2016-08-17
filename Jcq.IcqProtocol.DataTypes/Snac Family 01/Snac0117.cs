@@ -52,7 +52,19 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override void Deserialize(List<byte> data)
         {
-            throw new NotImplementedException();
+            base.Deserialize(data);
+
+            int index = SizeFixPart;
+
+            for (; index < data.Count; index+=4)
+            {
+                FamilyNameVersionPairs.Add(new FamilyVersionPair(
+                    ByteConverter.ToUInt16(data.GetRange(index, 2)),
+                    ByteConverter.ToUInt16(data.GetRange(index + 2, 2))
+                    ));
+            }
+
+            TotalSize = index;
         }
 
         public override int CalculateDataSize()

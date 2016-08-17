@@ -43,6 +43,13 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
+        public override void Deserialize(List<byte> data)
+        {
+            base.Deserialize(data);
+
+            TotalSize = SizeFixPart + 4;
+        }
+
         public override int CalculateDataSize()
         {
             return 4;

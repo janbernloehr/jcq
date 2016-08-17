@@ -55,9 +55,10 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (index < data.Count)
             {
-                UserInfo info;
-                info = new UserInfo();
+                var info = new UserInfo();
                 index += info.Deserialize(index, data);
+
+                UserInfos.Add(info);
             }
 
             TotalSize = index;

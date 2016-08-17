@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Jcq.IcqProtocol.DataTypes
@@ -297,6 +298,11 @@ namespace Jcq.IcqProtocol.DataTypes
             long seconds = ToUInt32(bytes.GetRange(0, 4));
 
             return UnixFileTime.AddSeconds(seconds);
+        }
+
+        public static DateTime ToDateTimeFromUInt32FileStamp(IEnumerable<byte> bytes)
+        {
+            return ToDateTimeFromUInt32FileStamp(bytes.ToList());
         }
 
         public static DateTime ToDateTimeFromUInt64FileStamp(List<byte> bytes)

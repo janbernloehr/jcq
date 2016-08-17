@@ -48,7 +48,13 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override void Deserialize(List<byte> data)
         {
-            throw new NotImplementedException();
+            base.Deserialize(data);
+
+            int index = SizeFixPart;
+
+            Md5HashArray = data.GetRange(index, 16);
+
+            TotalSize = index + 16;
         }
 
         public override int CalculateDataSize()

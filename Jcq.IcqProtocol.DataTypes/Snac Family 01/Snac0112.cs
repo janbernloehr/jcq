@@ -72,7 +72,7 @@ namespace Jcq.IcqProtocol.DataTypes
                         ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x6:
-                        ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
+                        AuthorizationCookie.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

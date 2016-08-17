@@ -35,14 +35,14 @@ namespace Jcq.IcqProtocol.DataTypes
         {
         }
 
-        public UserFlag NewProperty { get; set; }
+        public UserFlag UserFlag { get; set; }
         public UserStatus UserStatus { get; set; }
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            data.AddRange(ByteConverter.GetBytes((ushort) NewProperty));
+            data.AddRange(ByteConverter.GetBytes((ushort) UserFlag));
             data.AddRange(ByteConverter.GetBytes((ushort) UserStatus));
 
             return data;
@@ -54,7 +54,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
             int index = SizeFixPart;
 
-            NewProperty = (UserFlag) ByteConverter.ToUInt16(data.GetRange(index, 2));
+            UserFlag = (UserFlag) ByteConverter.ToUInt16(data.GetRange(index, 2));
             UserStatus = (UserStatus) ByteConverter.ToUInt16(data.GetRange(index + 2, 2));
         }
 

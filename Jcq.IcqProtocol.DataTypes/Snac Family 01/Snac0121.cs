@@ -59,9 +59,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 index += desc.TotalSize;
             }
 
-            ExtendedStatusNotificationType type;
-
-            type = (ExtendedStatusNotificationType) ByteConverter.ToUInt16(data.GetRange(index, 2));
+            var type = (ExtendedStatusNotificationType) ByteConverter.ToUInt16(data.GetRange(index, 2));
 
             switch (type)
             {
@@ -73,7 +71,6 @@ namespace Jcq.IcqProtocol.DataTypes
                     break;
                 default:
                     throw new NotImplementedException();
-                    break;
             }
 
             Notification.Deserialize(data.GetRange(index, data.Count - index));

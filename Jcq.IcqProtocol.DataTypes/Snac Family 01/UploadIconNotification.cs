@@ -46,17 +46,15 @@ namespace Jcq.IcqProtocol.DataTypes
 
             int index = SizeFixPart;
 
-            byte hashLength;
-
-            IconFlag = (UploadIconFlag) data[index];
+            IconFlag = (UploadIconFlag)data[index];
             index += 1;
-            hashLength = data[index];
+            byte hashLength = data[index];
             index += 1;
 
             IconHash.AddRange(data.GetRange(index, hashLength));
             index += hashLength;
 
-            SetDataSize(index);
+            SetDataSize(index - SizeFixPart);
         }
 
         public override List<byte> Serialize()

@@ -77,7 +77,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
             var data = new List<byte>(SizeFixPart + DataSize);
 
-            RequestId = Interlocked.Increment(ref _snacRequestId);
+            if (RequestId == 0)
+                RequestId = Interlocked.Increment(ref _snacRequestId);
 
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(ServiceId)));
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(SubtypeId)));

@@ -48,14 +48,11 @@ namespace Jcq.IcqProtocol.DataTypes
 
             int index = SizeFixPart;
 
-            while (index + 4 < data.Count)
+            while (index + 4 <= data.Count)
             {
-                int number;
-                int version;
-
-                number = ByteConverter.ToUInt16(data.GetRange(index, 2));
+                int number = ByteConverter.ToUInt16(data.GetRange(index, 2));
                 index += 2;
-                version = ByteConverter.ToUInt16(data.GetRange(index, 2));
+                int version = ByteConverter.ToUInt16(data.GetRange(index, 2));
                 index += 2;
 
                 FamilyNameVersionPairs.Add(new FamilyVersionPair(number, version));
@@ -66,7 +63,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override int CalculateDataSize()
         {
-            return FamilyNameVersionPairs.Count*4;
+            return FamilyNameVersionPairs.Count * 4;
         }
     }
 }
