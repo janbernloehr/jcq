@@ -58,20 +58,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnacFamily02Tests.cs" />
     <Compile Include="SnacFamily03Tests.cs" />
-    <Compile Include="SnacFamily04Tests.cs" />
-    <Compile Include="SnacFamily06Tests.cs" />
-    <Compile Include="SnacFamily07Tests.cs" />
-    <Compile Include="SnacFamily08Tests.cs" />
-    <Compile Include="SnacFamily09Tests.cs" />
-    <Compile Include="SnacFamily0ATests.cs" />
-    <Compile Include="SnacFamily0BTests.cs" />
-    <Compile Include="SnacFamily0DTests.cs" />
-    <Compile Include="SnacFamily0ETests.cs" />
-    <Compile Include="SnacFamily0FTests.cs" />
-    <Compile Include="SnacFamily10Tests.cs" />
-    <Compile Include="SnacFamily13Tests.cs" />
-    <Compile Include="SnacFamily15Tests.cs" />
-    <Compile Include="SnacFamily17Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jcq.Core.Contracts\Jcq.Core.Contracts.csproj">
