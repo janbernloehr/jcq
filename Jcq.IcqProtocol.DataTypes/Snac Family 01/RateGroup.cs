@@ -27,17 +27,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class RateGroup : ISerializable
     {
-        private readonly List<FamilySubtypePair> _ServiceFamilyIdSubTypeIdPairs = new List<FamilySubtypePair>();
         public int GroupId { get; set; }
 
-        public List<FamilySubtypePair> ServiceFamilyIdSubTypeIdPairs
-        {
-            get { return _ServiceFamilyIdSubTypeIdPairs; }
-        }
+        public List<FamilySubtypePair> ServiceFamilyIdSubTypeIdPairs { get; } = new List<FamilySubtypePair>();
 
         public int TotalSize
         {
@@ -49,7 +45,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public virtual void Deserialize(List<byte> data)
         {
             int pairCount;
-            var pairIndex = 0;
+            int pairIndex = 0;
             int index;
 
             GroupId = ByteConverter.ToUInt16(data.GetRange(0, 2));
@@ -62,7 +58,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 int familyId = ByteConverter.ToUInt16(data.GetRange(index, 2));
                 int subtypeId = ByteConverter.ToUInt16(data.GetRange(index + 2, 2));
 
-                _ServiceFamilyIdSubTypeIdPairs.Add(new FamilySubtypePair(familyId, subtypeId));
+                ServiceFamilyIdSubTypeIdPairs.Add(new FamilySubtypePair(familyId, subtypeId));
 
                 pairIndex += 1;
                 index += 4;
@@ -81,7 +77,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public virtual int CalculateDataSize()
         {
-            return _ServiceFamilyIdSubTypeIdPairs.Count*4;
+            return ServiceFamilyIdSubTypeIdPairs.Count*4;
         }
 
         public int CalculateTotalSize()

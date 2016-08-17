@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public abstract class MetaResponse : ISerializable
     {
@@ -59,7 +59,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public virtual void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             DataSize = ByteConverter.ToUInt16LE(data.GetRange(index, 2)) - (SizeFixPart - 2);
             index += 2;

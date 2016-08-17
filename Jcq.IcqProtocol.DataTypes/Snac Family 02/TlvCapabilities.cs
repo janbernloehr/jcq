@@ -27,26 +27,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvCapabilities : Tlv
     {
-        private readonly List<Guid> _Capabilites = new List<Guid>();
-
         public TlvCapabilities() : base(0x5)
         {
         }
 
-        public List<Guid> Capabilites
-        {
-            get { return _Capabilites; }
-        }
+        public List<Guid> Capabilites { get; } = new List<Guid>();
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            foreach (var cap in _Capabilites)
+            foreach (Guid cap in Capabilites)
             {
                 data.AddRange(ByteConverter.GetBytes(cap));
             }
@@ -58,11 +53,11 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index + 16 <= data.Count)
             {
-                _Capabilites.Add(ByteConverter.ToGuid(data.GetRange(index, 16)));
+                Capabilites.Add(ByteConverter.ToGuid(data.GetRange(index, 16)));
 
                 index += 16;
             }
@@ -70,7 +65,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public override int CalculateDataSize()
         {
-            return _Capabilites.Count*16;
+            return Capabilites.Count*16;
         }
     }
 }

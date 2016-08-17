@@ -26,7 +26,7 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvAllowOtherToSee : Tlv
     {
@@ -45,7 +45,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             AllowOtherToSeeSetting = (AllowOtherToSeeSetting) ByteConverter.ToUInt32(data.GetRange(index, 4));
         }

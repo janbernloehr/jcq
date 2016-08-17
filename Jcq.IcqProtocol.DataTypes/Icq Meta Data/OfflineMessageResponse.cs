@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class OfflineMessageResponse : MetaResponse
     {
@@ -52,7 +52,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             SenderUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4));
             index += 4;

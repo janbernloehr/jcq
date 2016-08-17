@@ -26,13 +26,28 @@
 
 using System.Diagnostics;
 
-namespace JCsTools.Core.Interfaces
+namespace Jcq.Core.Contracts
 {
+    /// <summary>
+    ///     Defines a contract for a logging service.
+    /// </summary>
     public interface ILoggingService : IService
     {
-        int DefaultEventId { get; }
-        int DefaultPriority { get; }
+        /// <summary>
+        ///     Adds the given log entry to the log.
+        /// </summary>
+        /// <param name="category">The category of the entry.</param>
+        /// <param name="severity">The severity of the entry.</param>
+        /// <param name="message">The message of the entry.</param>
         void Log(string category, TraceEventType severity, string message);
+
+        /// <summary>
+        ///     Adds the given log entry to the log.
+        /// </summary>
+        /// <param name="category">The category of the entry.</param>
+        /// <param name="severity">The severity of the entry.</param>
+        /// <param name="message">The message of the entry.</param>
+        /// <param name="args">The formatting arguments for the message.</param>
         void Log(string category, TraceEventType severity, string message, params object[] args);
     }
 }

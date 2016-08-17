@@ -26,21 +26,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Microsoft.Win32;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class ImageSelectorViewModel : INotifyPropertyChanged
+    public class ImageSelectorViewModel : ViewModelBase
     {
-        private readonly DirectoryInfo _DataDirectory;
-        private string _SelectedImageFile;
+        private readonly DirectoryInfo _dataDirectory;
+        private string _selectedImageFile;
 
         public ImageSelectorViewModel(DirectoryInfo dataDirectory)
         {
-            _DataDirectory = dataDirectory;
+            _dataDirectory = dataDirectory;
             LoadImageFiles();
         }
 
@@ -54,26 +53,21 @@ namespace JCsTools.JCQ.ViewModel
         /// </summary>
         public string SelectedImageFile
         {
-            get { return _SelectedImageFile; }
+            get { return _selectedImageFile; }
             set
             {
-                _SelectedImageFile = value;
-                OnPropertyChanged("SelectedImageFile");
+                _selectedImageFile = value;
+                OnPropertyChanged();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         ///     Finds image files in the data directory and adds them to ImageFiles.
         /// </summary>
         public void LoadImageFiles()
         {
-            string avatarDirectoryPath;
-            DirectoryInfo avatarDirectory;
-
-            avatarDirectoryPath = Path.Combine(_DataDirectory.FullName, "avatars");
-            avatarDirectory = new DirectoryInfo(avatarDirectoryPath);
+            string avatarDirectoryPath = Path.Combine(_dataDirectory.FullName, "avatars");
+            var avatarDirectory = new DirectoryInfo(avatarDirectoryPath);
 
             if (!avatarDirectory.Exists)
                 avatarDirectory.Create();
@@ -90,36 +84,26 @@ namespace JCsTools.JCQ.ViewModel
         /// <remarks></remarks>
         public void AddImageFile()
         {
-            var dialog = new OpenFileDialog();
-
-            dialog.CheckFileExists = true;
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            var dialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures)
+            };
 
             var result = dialog.ShowDialog();
 
             if (!result.HasValue || !result.Value) return;
 
-            FileInfo imageFile;
-            string avatarDirectoryPath;
-            DirectoryInfo avatarDirectory;
+            var imageFile = new FileInfo(dialog.FileName);
+            string avatarDirectoryPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
+                "avatars");
+            var avatarDirectory = new DirectoryInfo(avatarDirectoryPath);
 
-            imageFile = new FileInfo(dialog.FileName);
-            avatarDirectoryPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName, "avatars");
-            avatarDirectory = new DirectoryInfo(avatarDirectoryPath);
-
-            var newPath = Path.Combine(avatarDirectory.FullName, Guid.NewGuid() + imageFile.Extension);
+            string newPath = Path.Combine(avatarDirectory.FullName, Guid.NewGuid() + imageFile.Extension);
 
             imageFile.CopyTo(newPath);
 
             LoadImageFiles();
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

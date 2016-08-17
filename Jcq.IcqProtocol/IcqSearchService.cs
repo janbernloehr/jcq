@@ -26,11 +26,11 @@
 
 using System;
 using System.Collections.Generic;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqSearchService : ContextService, ISearchService
     {
@@ -84,7 +84,7 @@ namespace JCsTools.JCQ.IcqInterface
                         {
                             var resp = (MetaSearchByUinResponse) dataIn.MetaData.MetaResponse;
 
-                            var contact = Context.GetService<IStorageService>()
+                            IContact contact = Context.GetService<IStorageService>()
                                 .GetContactByIdentifier(resp.FoundUserUin.ToString());
 
                             contact.Name = resp.Nickname;

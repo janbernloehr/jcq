@@ -27,20 +27,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1003 : Snac
     {
-        private readonly List<byte> _IconHash = new List<byte>(16);
-
         public Snac1003() : base(0x10, 0x3)
         {
         }
 
-        public List<byte> IconHash
-        {
-            get { return _IconHash; }
-        }
+        public List<byte> IconHash { get; } = new List<byte>(16);
 
         public override int CalculateDataSize()
         {
@@ -61,7 +56,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             //10\t \tbyte\t \tsize of the icon md5 checksum
             //xx ..\t \tarray\t \ticon md5 checksum
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             byte hashLength;
 
@@ -71,7 +66,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             hashLength = data[index];
             index += 1;
 
-            _IconHash.AddRange(data.GetRange(index, hashLength));
+            IconHash.AddRange(data.GetRange(index, hashLength));
             index += hashLength;
 
             TotalSize = index;

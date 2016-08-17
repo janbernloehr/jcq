@@ -26,15 +26,12 @@
 
 using System;
 using System.Windows.Media;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class TextMessageViewModel : MessageViewModel
     {
-        private readonly string _message;
-        private readonly ContactViewModel _sender;
-
         public TextMessageViewModel(IMessage message, Brush foreground)
             : this(
                 DateTime.Now, ContactViewModelCache.GetViewModel(message.Sender),
@@ -45,18 +42,12 @@ namespace JCsTools.JCQ.ViewModel
         public TextMessageViewModel(DateTime created, ContactViewModel sender, ContactViewModel recipient,
             string message, Brush foreground) : base(created, recipient, foreground)
         {
-            _sender = sender;
-            _message = message;
+            Sender = sender;
+            Message = message;
         }
 
-        public ContactViewModel Sender
-        {
-            get { return _sender; }
-        }
+        public ContactViewModel Sender { get; }
 
-        public string Message
-        {
-            get { return _message; }
-        }
+        public string Message { get; }
     }
 }

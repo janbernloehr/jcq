@@ -24,22 +24,17 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class PasswordCredential : IPasswordCredential
     {
-        private readonly string _password;
-
         public PasswordCredential(string pwd)
         {
-            _password = pwd;
+            Password = pwd;
         }
 
-        string IPasswordCredential.Password
-        {
-            get { return _password; }
-        }
+        public string Password { get; }
     }
 }

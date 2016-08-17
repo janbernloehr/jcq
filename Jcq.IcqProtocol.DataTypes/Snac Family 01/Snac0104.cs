@@ -26,7 +26,7 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0104 : Snac
     {
@@ -54,7 +54,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             ServiceFamilyId = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;

@@ -27,9 +27,8 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Jcq.Core.Contracts;
 
-namespace JCsTools.Core.Interfaces
+namespace Jcq.Core.Contracts
 {
     /// <summary>
     ///     The exception that is thrown when an attempt to find an implementation for a contract which does not exists fails.

@@ -26,11 +26,22 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to send and receive messages.
+    /// </summary>
     public interface IMessageService : IContextService
     {
+        /// <summary>
+        ///     Send the given message.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
         void SendMessage(IMessage message);
+
+        /// <summary>
+        ///     Occurs when a message is received.
+        /// </summary>
         event EventHandler<MessageEventArgs> MessageReceived;
     }
 }

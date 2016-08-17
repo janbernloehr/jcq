@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class MetaShortUserInformationResponse : MetaInformationResponse
     {
@@ -57,7 +57,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart + 2;
+            int index = SizeFixPart + 2;
 
             if (data[index] == 0xa)
             {

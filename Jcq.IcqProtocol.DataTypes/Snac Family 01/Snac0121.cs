@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0121 : Snac
     {
@@ -46,7 +46,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             if (data.Count > index + 2 && (data[index] == 0 & data[index + 1] == 6))
             {
@@ -54,14 +54,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
                 index += 2;
 
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 index += desc.TotalSize;
             }
 
-            ExtendedStatusNotificationType type;
-
-            type = (ExtendedStatusNotificationType) ByteConverter.ToUInt16(data.GetRange(index, 2));
+            var type = (ExtendedStatusNotificationType) ByteConverter.ToUInt16(data.GetRange(index, 2));
 
             switch (type)
             {
@@ -73,7 +71,6 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                     break;
                 default:
                     throw new NotImplementedException();
-                    break;
             }
 
             Notification.Deserialize(data.GetRange(index, data.Count - index));

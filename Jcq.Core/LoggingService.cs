@@ -25,9 +25,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Diagnostics;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     public class LoggingService : Service, ILoggingService
     {
@@ -38,27 +38,13 @@ namespace JCsTools.Core
             JcqTraceSource = new TraceSource("jcq") {Switch = new SourceSwitch("MySwitch", "Verbose")};
         }
 
-        int ILoggingService.DefaultEventId
-        {
-            get { return 100; }
-        }
-
-        int ILoggingService.DefaultPriority
-        {
-            get { return 100; }
-        }
-
         void ILoggingService.Log(string category, TraceEventType severity, string message)
         {
-            //TODO: Logger
-            //Logger.Write(message, category, DefaultPriority, DefaultEventId, severity);
             JcqTraceSource.TraceInformation(message);
         }
 
         void ILoggingService.Log(string category, TraceEventType severity, string message, params object[] args)
         {
-            //TODO: Logger
-            //Logger.Write(string.Format(message, args), category, DefaultPriority, DefaultEventId, severity);
             JcqTraceSource.TraceInformation(message, args);
         }
     }

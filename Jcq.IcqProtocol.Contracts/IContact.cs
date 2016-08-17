@@ -27,11 +27,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a Contact.
+    /// </summary>
     public interface IContact : IStorageItem
     {
+        /// <summary>
+        ///     Gets the Group.
+        /// </summary>
         IGroup Group { get; }
+
         DateTime MemberSince { get; set; }
         DateTime SignOnTime { get; set; }
         string FirstName { get; set; }
@@ -44,7 +51,15 @@ namespace JCsTools.JCQ.IcqInterface.Interfaces
         IStatusCode Status { get; set; }
         void SetIconHash(List<byte> value);
         void SetIconData(List<byte> value);
+
+        /// <summary>
+        ///     Occurs when an IconHash is received.
+        /// </summary>
         event EventHandler IconHashReceived;
+
+        /// <summary>
+        ///     Occurs when an Icon is received.
+        /// </summary>
         event EventHandler IconDataReceived;
     }
 

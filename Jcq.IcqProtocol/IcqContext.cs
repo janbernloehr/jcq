@@ -27,11 +27,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqContext : Service, IContext
     {
@@ -50,23 +50,25 @@ namespace JCsTools.JCQ.IcqInterface
             GetService<IIconService>();
 
             GetService<IDataWarehouseService>();
+
+            GetService<IRateLimitsService>();
         }
 
-        public C GetService<C>() where C : IContextService
+        public TC GetService<TC>() where TC : IContextService
         {
-            if (_cachedBindings.ContainsKey(typeof (C)))
-                return (C) _cachedBindings[typeof (C)];
+            if (_cachedBindings.ContainsKey(typeof(TC)))
+                return (TC) _cachedBindings[typeof(TC)];
 
-            var type = Kernel.Mapper.GetImplementationType<C>();
+            Type type = Kernel.Mapper.GetImplementationType<TC>();
 
             if (!_cachedInstances.ContainsKey(type))
             {
-                _cachedInstances.Add(type, (C) Activator.CreateInstance(type, this));
+                _cachedInstances.Add(type, (TC) Activator.CreateInstance(type, this));
             }
 
-            _cachedBindings.Add(typeof (C), _cachedInstances[type]);
+            _cachedBindings.Add(typeof(TC), _cachedInstances[type]);
 
-            return (C) _cachedBindings[typeof (C)];
+            return (TC) _cachedBindings[typeof(TC)];
         }
 
         public IContact Identity
@@ -79,9 +81,9 @@ namespace JCsTools.JCQ.IcqInterface
             var icqStatus = statusCode as IcqStatusCode;
 
             if (icqStatus == null)
-                throw new ArgumentException(@"IcqStatusCode required", "statusCode");
+                throw new ArgumentException(@"IcqStatusCode required", nameof(statusCode));
 
-            var status = icqStatus.UserStatus;
+            UserStatus status = icqStatus.UserStatus;
 
             var dataOut = new Snac011e();
             dataOut.UserStatus.UserStatus = status;

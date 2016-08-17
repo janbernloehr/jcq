@@ -25,10 +25,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Linq;
-using JCsTools.Core;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Collections;
+using Jcq.Core.Contracts.Collections;
+using Jcq.IdentityManager.Contracts;
 
-namespace JCsTools.IdentityManager
+namespace Jcq.IdentityManager
 {
     public abstract class IdentityProvider : IIdentityProvider
     {
@@ -37,7 +38,7 @@ namespace JCsTools.IdentityManager
             Identities = new NotifyingCollection<IIdentity>();
         }
 
-        public NotifyingCollection<IIdentity> Identities { get; private set; }
+        public NotifyingCollection<IIdentity> Identities { get; }
 
         public void CreateIdentity(IIdentity identity)
         {

@@ -24,10 +24,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public abstract class MetaInformationRequest : MetaRequest
     {
@@ -50,7 +49,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public override void Deserialize(List<byte> data)
         {
-            throw new NotImplementedException();
+            base.Deserialize(data);
+
+            int index = SizeFixPart;
+
+            RequestSubType = (MetaRequestSubType) ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            index += 2;
         }
     }
 }

@@ -24,10 +24,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Jcq.Ux.ViewModel;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel.Contracts
 {
     public interface INavigationService : IService
     {

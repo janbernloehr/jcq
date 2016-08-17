@@ -26,30 +26,131 @@
 
 using System;
 using System.Threading.Tasks;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts.Collections;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to access the server side storage.
+    /// </summary>
     public interface IStorageService : IContextService
     {
+        /// <summary>
+        ///     Gets a value indicating whether the contact list has been loaded.
+        /// </summary>
         bool IsContactListAvailable { get; }
+
+        /// <summary>
+        ///     Gets a value indicating whether the contact list is up to date.
+        /// </summary>
         bool IsFreshContactList { get; }
+
+        /// <summary>
+        ///     Gets the contact list statistics.
+        /// </summary>
         IContactListInfo Info { get; }
+
+        /// <summary>
+        ///     Gets a list of this identity's contact groups.
+        /// </summary>
         IReadOnlyNotifyingCollection<IGroup> Groups { get; }
+
+        /// <summary>
+        ///     Gets a list of this identity's contacts.
+        /// </summary>
         IReadOnlyNotifyingCollection<IContact> Contacts { get; }
+
+        /// <summary>
+        ///     Gets the master group.
+        /// </summary>
         IGroup MasterGroup { get; }
+
+        /// <summary>
+        ///     Occurs when the contact list is activated.
+        /// </summary>
         event EventHandler ContactListActivated;
+
+        /// <summary>
+        ///     Occurs when a contact changes status.
+        /// </summary>
         event EventHandler<StatusChangedEventArgs> ContactStatusChanged;
+
+        /// <summary>
+        ///     Get an IContact by its identifier.
+        /// </summary>
+        /// <param name="identifier">The contact unique identifier.</param>
+        /// <returns></returns>
         IContact GetContactByIdentifier(string identifier);
+
+        /// <summary>
+        ///     Get an IGroup by its identifier.
+        /// </summary>
+        /// <param name="identifier">The contact unique identifier.</param>
+        /// <returns></returns>
         IGroup GetGroupByIdentifier(string identifier);
+
+        /// <summary>
+        ///     Gets a value indicating whether the given contact is stored in the server side storage.
+        /// </summary>
+        /// <param name="contact">The contact.</param>
+        /// <returns>True if the contact is stored, otherwise false.</returns>
         bool IsContactStored(IContact contact);
-        Task AddContact(IContact contact, IGroup @group);
-        void AttachContact(IContact contact, IGroup @group, bool stored);
-        Task RemoveContact(IContact contact, IGroup @group);
+
+        /// <summary>
+        ///     Add the given contact to the server side storage.
+        /// </summary>
+        /// <param name="contact">The contact to add.</param>
+        /// <param name="group">The group the contact should be added to.</param>
+        /// <returns></returns>
+        Task AddContact(IContact contact, IGroup group);
+
+        /// <summary>
+        ///     Attach the given contact without adding it to server side storage.
+        /// </summary>
+        /// <param name="contact">The contact to add.</param>
+        /// <param name="group">The group the contact should be added to.</param>
+        /// <param name="stored">A value indicating whether the contact exists in the server side storage.</param>
+        /// <returns></returns>
+        void AttachContact(IContact contact, IGroup group, bool stored);
+
+        /// <summary>
+        ///     Add the given contact from the server side storage.
+        /// </summary>
+        /// <param name="contact">The contact to remove.</param>
+        /// <param name="group">The group the contact should be removed from.</param>
+        /// <returns></returns>
+        Task RemoveContact(IContact contact, IGroup group);
+
+        /// <summary>
+        ///     Update the server side storage data of the given contact.
+        /// </summary>
+        /// <param name="contact">The contact to update.</param>
+        /// <returns></returns>
         Task UpdateContact(IContact contact);
-        Task AddGroup(IGroup @group);
-        Task RemoveGroup(IGroup @group);
-        Task UpdateGroup(IGroup @group);
+
+
+        /// <summary>
+        ///     Add a group to the server side storage.
+        /// </summary>
+        /// <param name="group">The group to add.</param>
+        /// <returns></returns>
+        Task AddGroup(IGroup group);
+
+        /// <summary>
+        ///     Remove a group from the server side storage.
+        /// </summary>
+        /// <param name="group">The group to remove.</param>
+        /// <returns></returns>
+        Task RemoveGroup(IGroup group);
+
+        /// <summary>
+        ///     Update the server side storage data of the given group.
+        /// </summary>
+        /// <param name="group">The group to update.</param>
+        /// <returns></returns>
+        Task UpdateGroup(IGroup group);
+
+
         void RegisterLocalContactList(int itemCount, DateTime dateChanged);
     }
 }

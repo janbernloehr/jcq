@@ -26,11 +26,21 @@
 
 using System.ComponentModel;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines an item of the server side storage.
+    /// </summary>
     public interface IStorageItem : INotifyPropertyChanged
     {
+        /// <summary>
+        ///     Gets or sets the unique identifier of the item.
+        /// </summary>
         string Identifier { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the display name of the item.
+        /// </summary>
         string Name { get; set; }
     }
 }

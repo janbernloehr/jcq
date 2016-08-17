@@ -26,11 +26,22 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to search users on the network.
+    /// </summary>
     public interface ISearchService : IContextService
     {
+        /// <summary>
+        ///     Occurs when a Search Result is obtained.
+        /// </summary>
         event EventHandler<SearchResultEventArgs> SearchResult;
+
+        /// <summary>
+        ///     Search for the contact information of the given UIN.
+        /// </summary>
+        /// <param name="uin">The UIN.</param>
         void SearchByUin(string uin);
     }
 }

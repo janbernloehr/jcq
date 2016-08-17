@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0906 : Snac
     {
@@ -52,7 +52,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (var uin in UsersToRemove)
+            foreach (string uin in UsersToRemove)
             {
                 data.Add((byte) uin.Length);
                 data.AddRange(ByteConverter.GetBytes(uin));

@@ -26,31 +26,26 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0102 : Snac
     {
-        private readonly List<FamilyIdToolPair> _families = new List<FamilyIdToolPair>();
-
         public Snac0102() : base(0x1, 0x2)
         {
         }
 
-        public List<FamilyIdToolPair> Families
-        {
-            get { return _families; }
-        }
+        public List<FamilyIdToolPair> Families { get; } = new List<FamilyIdToolPair>();
 
         public override int CalculateDataSize()
         {
-            return _families.Count*FamilyIdToolPair.SizeFixPart;
+            return Families.Count*FamilyIdToolPair.SizeFixPart;
         }
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            foreach (var x in _families)
+            foreach (FamilyIdToolPair x in Families)
             {
                 data.AddRange(x.Serialize());
             }
@@ -62,7 +57,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
@@ -70,7 +65,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
                 fam.Deserialize(data.GetRange(index, 8));
 
-                _families.Add(fam);
+                Families.Add(fam);
 
                 index += FamilyIdToolPair.SizeFixPart;
             }

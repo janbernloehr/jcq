@@ -27,22 +27,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1002 : Snac
     {
-        private readonly List<byte> _IconData = new List<byte>();
-
         public Snac1002() : base(0x10, 0x2)
         {
         }
 
         public int ReferenceNumber { get; set; }
 
-        public List<byte> IconData
-        {
-            get { return _IconData; }
-        }
+        public List<byte> IconData { get; } = new List<byte>();
 
         // xx xx\t \tword\t \treference number
         // xx xx\t \tword\t \ticon length

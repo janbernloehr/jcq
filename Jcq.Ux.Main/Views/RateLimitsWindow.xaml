@@ -1,0 +1,47 @@
+﻿<Window x:Class="Jcq.Ux.Main.Views.RateLimitsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RateLimitsWindow" Height="300" Width="700"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:views="clr-namespace:Jcq.Ux.Main.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:contracts="clr-namespace:Jcq.IcqProtocol.Contracts;assembly=Jcq.IcqProtocol.Contracts"
+        xmlns:converters="clr-namespace:Jcq.Ux.Main.Converters"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance views:RateLimitsViewModel}">
+    <!--d:DataContext="{d:DesignInstance views:RateLimitsViewModel}"-->
+    <Window.Resources>
+        <converters:RateLimitsConverter x:Key="RateLimitsConverter" />
+    </Window.Resources>
+
+    <Grid>
+        <ListView ItemsSource="{Binding RateLimits}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ClassId" DisplayMemberBinding="{Binding ClassId}" />
+                    <GridViewColumn Header="Current">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="contracts:IRateLimitsClass">
+                                <TextBlock FontWeight="Bold" Text="{Binding CurrentLevel}"
+                                           Foreground="{Binding Converter={StaticResource RateLimitsConverter}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Max" DisplayMemberBinding="{Binding MaxLevel}" />
+                    <GridViewColumn Header="Clear" DisplayMemberBinding="{Binding ClearLevel}" />
+                    <GridViewColumn Header="Alert" DisplayMemberBinding="{Binding AlertLevel}" />
+                    <GridViewColumn Header="Limit" DisplayMemberBinding="{Binding LimitLevel}" />
+                    <GridViewColumn Header="Disconnect" DisplayMemberBinding="{Binding DisconnectLevel}" />
+                    <GridViewColumn Header="CurrentState" DisplayMemberBinding="{Binding CurrentState}" />
+                    <GridViewColumn Header="LastTime" DisplayMemberBinding="{Binding LastTime}" />
+                    <GridViewColumn Header="Computed" DisplayMemberBinding="{Binding Computed}" />
+                    <GridViewColumn Header="LocalLastTime" DisplayMemberBinding="{Binding LocalLastTime}" />
+                    <GridViewColumn Header="ServerLastTime" DisplayMemberBinding="{Binding DataLastUpdatedFromServer}" />
+                    <GridViewColumn Header="WaitTime" DisplayMemberBinding="{Binding WaitTime}" />
+                    <GridViewColumn Header="Families" DisplayMemberBinding="{Binding Families}" />
+                </GridView>
+            </ListView.View>
+
+        </ListView>
+    </Grid>
+</Window>

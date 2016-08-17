@@ -24,47 +24,40 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.Core.Interfaces;
-using JCsTools.Core.Interfaces.Exceptions;
+using Jcq.Core.Contracts;
+using Jcq.Core.Contracts.Exceptions;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     public static class Kernel
     {
-        private static readonly IMapper _Mapper = new Mapper();
-        private static readonly IServiceProvider<IService> _ServiceProvider = new ServiceProvider<IService>();
-        private static readonly ILoggingService _Logger = Services.GetService<ILoggingService>();
-
-        /// <summary>
-        ///     Provides services derived from IService.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public static IServiceProvider<IService> Services
+        static Kernel()
         {
-            get { return _ServiceProvider; }
+            // order of initialization is important since Services.GetService depends on Kernel.Mapper.
+            Mapper = new Mapper();
+            Services = new ServiceProvider<IService>();
+            Exceptions = Services.GetService<IExceptionService>();
+            Logger = Services.GetService<ILoggingService>();
         }
 
         /// <summary>
-        ///     Provides exception handling.
+        ///     Gets the default IServiceProvider implementation.
         /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public static IExceptionService Exceptions
-        {
-            get { return Services.GetService<IExceptionService>(); }
-        }
+        public static IServiceProvider<IService> Services { get; }
 
-        public static ILoggingService Logger
-        {
-            get { return _Logger; }
-        }
+        /// <summary>
+        ///     Gets the default IExceptionService implementation.
+        /// </summary>
+        public static IExceptionService Exceptions { get; }
 
-        public static IMapper Mapper
-        {
-            get { return _Mapper; }
-        }
+        /// <summary>
+        ///     Gets the default ILoggingService implementation.
+        /// </summary>
+        public static ILoggingService Logger { get; }
+
+        /// <summary>
+        ///     Gets the default IMapper implementation.
+        /// </summary>
+        public static IMapper Mapper { get; }
     }
 }

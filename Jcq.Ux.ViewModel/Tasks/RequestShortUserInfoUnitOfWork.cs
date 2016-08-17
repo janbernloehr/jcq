@@ -26,14 +26,15 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class RequestShortUserInfoUnitOfWork
     {
         public static Task Execute()
         {
+            //TODO: Move the async functionality to the IUserInformationService implementation.
             var svShortUserInfo = ApplicationService.Current.Context.GetService<IUserInformationService>();
 
             var sem = new SemaphoreSlim(0, 1);

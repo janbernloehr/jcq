@@ -26,12 +26,10 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvUserIconIdAndHash : Tlv
     {
-        private readonly List<byte> _IconMD5Hash = new List<byte>();
-
         public TlvUserIconIdAndHash() : base(0x1d)
         {
         }
@@ -40,21 +38,18 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public byte IconFlags { get; set; }
         public byte IconHashLenght { get; set; }
 
-        public List<byte> IconMD5Hash
-        {
-            get { return _IconMD5Hash; }
-        }
+        public List<byte> IconMD5Hash { get; } = new List<byte>();
 
         public override int CalculateDataSize()
         {
-            return 2 + 1 + 1 + _IconMD5Hash.Count;
+            return 2 + 1 + 1 + IconMD5Hash.Count;
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             IconId = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
@@ -65,8 +60,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             IconHashLenght = data[index];
             index += 1;
 
-            _IconMD5Hash.AddRange(data.GetRange(index, IconHashLenght));
-            index += _IconMD5Hash.Count;
+            IconMD5Hash.AddRange(data.GetRange(index, IconHashLenght));
+            index += IconMD5Hash.Count;
         }
 
         public override List<byte> Serialize()
@@ -76,7 +71,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             data.AddRange(ByteConverter.GetBytes((ushort) IconId));
             data.Add(IconFlags);
             data.Add(IconHashLenght);
-            data.AddRange(_IconMD5Hash);
+            data.AddRange(IconMD5Hash);
 
             return data;
         }

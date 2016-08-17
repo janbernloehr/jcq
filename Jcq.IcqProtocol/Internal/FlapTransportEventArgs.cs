@@ -25,22 +25,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
 namespace Jcq.IcqProtocol.Internal
 {
     public class FlapTransportEventArgs : EventArgs
     {
-        private readonly Flap _flap;
-
         public FlapTransportEventArgs(Flap f)
         {
-            _flap = f;
+            Flap = f;
         }
 
-        public Flap Flap
-        {
-            get { return _flap; }
-        }
+        public Flap Flap { get; }
     }
 }

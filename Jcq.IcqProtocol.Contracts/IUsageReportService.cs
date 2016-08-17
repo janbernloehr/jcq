@@ -26,12 +26,26 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to send usage reports.
+    /// </summary>
     public interface IUsageReportService : IContextService
     {
+        /// <summary>
+        ///     Occurs when the send usage report is accepted.
+        /// </summary>
         event EventHandler UsageReportAccepted;
+
+        /// <summary>
+        ///     Occurs when the server specifies a minimum report interval for usage reports.
+        /// </summary>
         event EventHandler<IntervallReceivedEventArgs> MinimumUsageReportIntervallReceived;
+
+        /// <summary>
+        ///     Send a usage report.
+        /// </summary>
         void SendUsageReport();
     }
 }

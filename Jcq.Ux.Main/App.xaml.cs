@@ -25,30 +25,26 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.ViewModel;
+using Jcq.Ux.Main.Views;
+using Jcq.Ux.ViewModel;
+using JCsTools.JCQ.Ux;
+using WindowStyle = Jcq.Ux.Main.Code.WindowStyle;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main
 {
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
-        private static readonly WindowStyle Style = new WindowStyle
+        public static WindowStyle DefaultWindowStyle { get; } = new WindowStyle
         {
             AllowTransparency = true,
             Opacity = 0.95
         };
-
-        public static WindowStyle DefaultWindowStyle
-        {
-            get { return Style; }
-        }
 
         #region  Persistance
 
@@ -110,7 +106,7 @@ namespace JCsTools.JCQ.Ux
             {
                 AppDomain.CurrentDomain.UnhandledException += OnAppDomainException;
 
-                Kernel.Logger.Log("Ux", TraceEventType.Start, "Starting up JCQ.");
+                //Kernel.Logger.Log("Ux", TraceEventType.Start, "Starting up JCQ.");
 
                 ApplicationService.Initialize(new DirectoryInfo(DataStorageDirectoryPath));
                 ApplicationService.Current.LoadServiceData();
@@ -131,6 +127,8 @@ namespace JCsTools.JCQ.Ux
 
                 //avatarSelWindow = New TestAvatarSelector
                 //avatarSelWindow.Show()
+
+                EmojiHelper.Initialize();
 
                 MainWindow = hostWindow;
             }

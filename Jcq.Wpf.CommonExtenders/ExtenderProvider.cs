@@ -28,23 +28,22 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace JCsTools.Wpf.Extenders
+namespace Jcq.Wpf.CommonExtenders
 {
     public class WindowExtenderProvider
     {
-        private static readonly object _lock = new object();
+        private static readonly object Lock = new object();
 
-        private static readonly Dictionary<Window, WindowResizeExtender> _ResizeExtenders =
+        private static readonly Dictionary<Window, WindowResizeExtender> ResizeExtenders =
             new Dictionary<Window, WindowResizeExtender>();
 
         public static WindowResizeExtender AttachResizeExtender(Window wnd)
         {
-            var extender = new WindowResizeExtender();
-            extender.Window = wnd;
+            var extender = new WindowResizeExtender {Window = wnd};
 
-            lock (_lock)
+            lock (Lock)
             {
-                _ResizeExtenders.Add(wnd, extender);
+                ResizeExtenders.Add(wnd, extender);
             }
 
             wnd.Closed += OnWindowClosed;
@@ -56,20 +55,20 @@ namespace JCsTools.Wpf.Extenders
         {
             var wnd = (Window) sender;
 
-            lock (_lock)
+            lock (Lock)
             {
-                if (_ResizeExtenders.ContainsKey(wnd))
+                if (ResizeExtenders.ContainsKey(wnd))
                 {
-                    _ResizeExtenders.Remove(wnd);
+                    ResizeExtenders.Remove(wnd);
                 }
             }
         }
 
         public static WindowResizeExtender GetResizeExtender(Window wnd)
         {
-            lock (_lock)
+            lock (Lock)
             {
-                return _ResizeExtenders.ContainsKey(wnd) ? _ResizeExtenders[wnd] : null;
+                return ResizeExtenders.ContainsKey(wnd) ? ResizeExtenders[wnd] : null;
             }
         }
     }

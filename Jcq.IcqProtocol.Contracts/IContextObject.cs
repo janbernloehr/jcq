@@ -24,10 +24,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines an object related to an IContext.
+    /// </summary>
     public interface IContextObject
     {
+        /// <summary>
+        ///     Gets the IContext of this object.
+        /// </summary>
         IContext Context { get; }
     }
 }

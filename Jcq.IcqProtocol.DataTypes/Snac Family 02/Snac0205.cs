@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0205 : Snac
     {
@@ -36,13 +36,13 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         }
 
         public string Uin { get; set; }
-        public LocationInfoRequestType NewProperty { get; set; }
+        public LocationInfoRequestType TypeOfRequestingInfo { get; set; }
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            data.AddRange(ByteConverter.GetBytes((ushort) NewProperty));
+            data.AddRange(ByteConverter.GetBytes((ushort) TypeOfRequestingInfo));
             data.Add((byte) Uin.Length);
             data.AddRange(ByteConverter.GetBytes(Uin));
 

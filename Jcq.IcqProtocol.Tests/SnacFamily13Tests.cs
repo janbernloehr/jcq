@@ -24,7 +24,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jcq.IcqProtocol.Tests
@@ -55,7 +55,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x2A, 0x02, 0x22, 0x96, 0x00, 0x0A, 0x00, 0x13, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1302>(f);
 
             Assert.Inconclusive("Verify that Snac1302 was deserialized correctly.");
@@ -74,7 +74,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x00, 0x06, 0x00, 0x02, 0x00, 0x61, 0x00, 0x07, 0x00, 0x02, 0x00, 0x0A
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1303>(f);
 
             Assert.Inconclusive("Verify that Snac1303 was deserialized correctly.");
@@ -88,7 +88,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x2A, 0x02, 0x22, 0x96, 0x00, 0x0A, 0x00, 0x13, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1304>(f);
 
             Assert.Inconclusive("Verify that Snac1304 was deserialized correctly.");
@@ -103,7 +103,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x3D, 0xE7, 0x48, 0x17, 0x00, 0xBB
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1305>(f);
 
             Assert.Inconclusive("Verify that Snac1305 was deserialized correctly.");
@@ -131,7 +131,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x66, 0x00, 0x00, 0x3B, 0xB7, 0x4B, 0x7D
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1306>(f);
 
             Assert.Inconclusive("Verify that Snac1306 was deserialized correctly.");
@@ -145,7 +145,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x2A, 0x02, 0x33, 0x71, 0x00, 0x0A, 0x00, 0x13, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1307>(f);
 
             Assert.Inconclusive("Verify that Snac1307 was deserialized correctly.");
@@ -164,7 +164,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x00, 0xC8, 0x00, 0x08, 0x26, 0x9A, 0x08, 0x80, 0x12, 0xA1, 0x05, 0x83
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1308>(f);
 
             Assert.Inconclusive("Verify that Snac1308 was deserialized correctly.");
@@ -180,7 +180,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x0C, 0x00, 0xC8, 0x00, 0x08, 0x0F, 0x63, 0x78, 0x2A, 0x63, 0x6F, 0x5A, 0x9B
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1309>(f);
 
             Assert.Inconclusive("Verify that Snac1309 was deserialized correctly.");
@@ -196,7 +196,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x00, 0x00, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac130A>(f);
 
             Assert.Inconclusive("Verify that Snac130A was deserialized correctly.");
@@ -211,7 +211,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x00, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac130E>(f);
 
             Assert.Inconclusive("Verify that Snac130E was deserialized correctly.");
@@ -226,7 +226,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x3D, 0xE7, 0x48, 0x17, 0x00, 0xBB
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac130F>(f);
 
             Assert.Inconclusive("Verify that Snac130F was deserialized correctly.");
@@ -240,7 +240,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x2A, 0x02, 0x22, 0x96, 0x00, 0x0A, 0x00, 0x13, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1311>(f);
 
             Assert.Inconclusive("Verify that Snac1311 was deserialized correctly.");
@@ -254,7 +254,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x2A, 0x02, 0x22, 0x96, 0x00, 0x0A, 0x00, 0x13, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1312>(f);
 
             Assert.Inconclusive("Verify that Snac1312 was deserialized correctly.");
@@ -269,7 +269,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x07, 0x36, 0x32, 0x31, 0x38, 0x38, 0x39, 0x35, 0x00, 0x04, 0x73, 0x75, 0x72, 0x65, 0x00, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1314>(f);
 
             Assert.Inconclusive("Verify that Snac1314 was deserialized correctly.");
@@ -284,7 +284,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x07, 0x34, 0x36, 0x37, 0x38, 0x38, 0x31, 0x32, 0x00, 0x04, 0x73, 0x75, 0x72, 0x65, 0x00, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1315>(f);
 
             Assert.Inconclusive("Verify that Snac1315 was deserialized correctly.");
@@ -300,7 +300,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x95
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1316>(f);
 
             Assert.Inconclusive("Verify that Snac1316 was deserialized correctly.");
@@ -316,7 +316,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x00, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1318>(f);
 
             Assert.Inconclusive("Verify that Snac1318 was deserialized correctly.");
@@ -332,7 +332,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x00, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1319>(f);
 
             Assert.Inconclusive("Verify that Snac1319 was deserialized correctly.");
@@ -347,7 +347,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x07, 0x36, 0x32, 0x31, 0x38, 0x38, 0x39, 0x36, 0x00, 0x00, 0x05, 0x73, 0x6F, 0x72, 0x72, 0x79
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac131A>(f);
 
             Assert.Inconclusive("Verify that Snac131A was deserialized correctly.");
@@ -362,7 +362,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x07, 0x36, 0x32, 0x31, 0x38, 0x38, 0x39, 0x35, 0x00, 0x00, 0x05, 0x73, 0x6F, 0x72, 0x72, 0x79
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac131B>(f);
 
             Assert.Inconclusive("Verify that Snac131B was deserialized correctly.");
@@ -377,7 +377,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x07, 0x36, 0x32, 0x31, 0x38, 0x38, 0x39, 0x35
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac131C>(f);
 
             Assert.Inconclusive("Verify that Snac131C was deserialized correctly.");

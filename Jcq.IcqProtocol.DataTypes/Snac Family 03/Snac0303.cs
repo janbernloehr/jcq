@@ -27,59 +27,46 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0303 : Snac
     {
-        private readonly TlvMaxBuddylistSize _MaxBuddylistSize = new TlvMaxBuddylistSize();
-        private readonly TlvMaxNumberOfWatchers _MaxNumberOfWatchers = new TlvMaxNumberOfWatchers();
-        private readonly TlvMaxOnlineNotifications _MaxOnlineNotifications = new TlvMaxOnlineNotifications();
-
         public Snac0303() : base(0x3, 0x3)
         {
         }
 
-        public TlvMaxBuddylistSize MaxBuddylistSize
-        {
-            get { return _MaxBuddylistSize; }
-        }
+        public TlvMaxBuddylistSize MaxBuddylistSize { get; } = new TlvMaxBuddylistSize();
 
-        public TlvMaxNumberOfWatchers MaxNumberOfWatchers
-        {
-            get { return _MaxNumberOfWatchers; }
-        }
+        public TlvMaxNumberOfWatchers MaxNumberOfWatchers { get; } = new TlvMaxNumberOfWatchers();
 
-        public TlvMaxOnlineNotifications MaxOnlineNotifications
-        {
-            get { return _MaxOnlineNotifications; }
-        }
+        public TlvMaxOnlineNotifications MaxOnlineNotifications { get; } = new TlvMaxOnlineNotifications();
 
         public override int CalculateDataSize()
         {
-            return _MaxBuddylistSize.CalculateTotalSize() + _MaxNumberOfWatchers.CalculateTotalSize() +
-                   _MaxOnlineNotifications.CalculateTotalSize();
+            return MaxBuddylistSize.CalculateTotalSize() + MaxNumberOfWatchers.CalculateTotalSize() +
+                   MaxOnlineNotifications.CalculateTotalSize();
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _MaxBuddylistSize.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MaxBuddylistSize.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x2:
-                        _MaxNumberOfWatchers.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MaxNumberOfWatchers.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x3:
-                        _MaxOnlineNotifications.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MaxOnlineNotifications.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

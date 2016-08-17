@@ -29,16 +29,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqUserInformationService : ContextService, IUserInformationService
     {
         private static readonly Dictionary<long, ShortUserInformationRequestManager> PendingRequests =
             new Dictionary<long, ShortUserInformationRequestManager>();
+
+        private DateTime _lastRateLimitExcession = DateTime.MinValue;
 
         public IcqUserInformationService(IContext context)
             : base(context)
@@ -48,10 +50,11 @@ namespace JCsTools.JCQ.IcqInterface
             if (connector == null)
                 throw new InvalidCastException("Context Connector Service must be of Type IcqConnector");
 
-            connector.RegisterSnacHandler(0x1, 0xf, new Action<Snac010F>(AnalyseSnac010F));
-            connector.RegisterSnacHandler(0x3, 0xb, new Action<Snac030B>(AnalyseSnac030B));
-            connector.RegisterSnacHandler(0x3, 0xc, new Action<Snac030C>(AnalyseSnac030C));
-            connector.RegisterSnacHandler(0x15, 0x3, new Action<Snac1503>(AnalyseSnac1503));
+            connector.RegisterSnacHandler<Snac010F>(0x1, 0xf, AnalyseSnac010F);
+            connector.RegisterSnacHandler<Snac030B>(0x3, 0xb, AnalyseSnac030B);
+            connector.RegisterSnacHandler<Snac030C>(0x3, 0xc, AnalyseSnac030C);
+            connector.RegisterSnacHandler<Snac1501>(0x15, 0x1, AnalyseSnac1501);
+            connector.RegisterSnacHandler<Snac1503>(0x15, 0x3, AnalyseSnac1503);
         }
 
         public void RequestShortUserInfo(IContact contact)
@@ -88,29 +91,40 @@ namespace JCsTools.JCQ.IcqInterface
             // enumeration to fail.
             var contacts = Context.GetService<IStorageService>().Contacts.ToList();
 
-            foreach (var x in contacts)
+            foreach (IContact x in contacts)
             {
                 RequestShortUserInfo(x);
 
                 // sleep for 1 second to avoid server spaming
                 // which may result in a disconnect.
-                Thread.Sleep(1000);
+                Thread.Sleep(ComputeSleepInterval());
             }
 
-            if (RequestShortUserInfoForAllUsersCompleted != null)
-            {
-                RequestShortUserInfoForAllUsersCompleted(this, EventArgs.Empty);
-            }
+            RequestShortUserInfoForAllUsersCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler RequestShortUserInfoForAllUsersCompleted;
+
+
+        private TimeSpan ComputeSleepInterval()
+        {
+            TimeSpan diff = _lastRateLimitExcession.AddMinutes(5) - DateTime.Now;
+
+            if (diff.TotalSeconds < 1)
+                diff = TimeSpan.FromSeconds(1);
+
+            Debug.WriteLine("IcqUserInformationService: Sleep Interval is {0}", diff);
+
+            return diff;
+        }
+
         internal event EventHandler<ShortUserInformationTransportEventArgs> ShortUserInformationReceived;
 
         internal void AnalyseSnac010F(Snac010F dataIn)
         {
-            foreach (var x in dataIn.UserInfos)
+            foreach (UserInfo x in dataIn.UserInfos)
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
                 if (c == null)
                     continue;
 
@@ -145,7 +159,7 @@ namespace JCsTools.JCQ.IcqInterface
 
                 if (x.UserStatus.HasData)
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
 
                     Debug.WriteLine(string.Format("User {0} changed Status to {1}.", c.Identifier, newStatus),
@@ -160,7 +174,7 @@ namespace JCsTools.JCQ.IcqInterface
                 }
                 else
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.Online;
 
                     if (!ReferenceEquals(oldStatus, newStatus))
@@ -175,9 +189,9 @@ namespace JCsTools.JCQ.IcqInterface
 
         internal void AnalyseSnac030B(Snac030B dataIn)
         {
-            foreach (var x in dataIn.UserInfos)
+            foreach (UserInfo x in dataIn.UserInfos)
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
                 if (c == null)
                     continue;
 
@@ -212,7 +226,7 @@ namespace JCsTools.JCQ.IcqInterface
 
                 if (x.UserStatus.HasData)
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.GetStatusCode(x.UserStatus.UserStatus);
 
                     Debug.WriteLine(string.Format("User {0} changed Status to {1}.", c.Identifier, newStatus),
@@ -227,7 +241,7 @@ namespace JCsTools.JCQ.IcqInterface
                 }
                 else
                 {
-                    var oldStatus = c.Status;
+                    IStatusCode oldStatus = c.Status;
                     IStatusCode newStatus = IcqStatusCodes.Online;
 
                     if (!ReferenceEquals(oldStatus, newStatus))
@@ -242,11 +256,43 @@ namespace JCsTools.JCQ.IcqInterface
 
         internal void AnalyseSnac030C(Snac030C dataIn)
         {
-            foreach (var x in dataIn.UserInfos)
+            foreach (UserInfo x in dataIn.UserInfos)
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(x.Uin);
 
                 c.Status = IcqStatusCodes.GetStatusCode(UserStatus.Offline);
+            }
+        }
+
+        private void AnalyseSnac1501(Snac1501 dataIn)
+        {
+            try
+            {
+                _lastRateLimitExcession = DateTime.Now;
+
+                //OnServerError(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode, dataIn.SubError.ErrorSubCode));
+
+                if (dataIn.ErrorCode == ErrorCode.ServerRateLimitExceeded)
+                {
+                    lock (PendingRequests)
+                    {
+                        if (PendingRequests.ContainsKey(dataIn.RequestId))
+                        {
+                            PendingRequests[dataIn.RequestId].ServerRateLimitExceeded();
+                        }
+                        else
+                        {
+                            Kernel.Logger.Log("IcqUserInformationService", TraceEventType.Error,
+                                "No Request Manager for request {0}", dataIn.RequestId);
+                        }
+                    }
+
+                    //Context.GetService<IRateLimitsService>().EmergencyThrottle();
+                }
+            }
+            catch (Exception ex)
+            {
+                Kernel.Exceptions.PublishException(ex);
             }
         }
 
@@ -261,11 +307,8 @@ namespace JCsTools.JCQ.IcqInterface
                     {
                         var resp = (MetaShortUserInformationResponse) dataIn.MetaData.MetaResponse;
 
-                        if (ShortUserInformationReceived != null)
-                        {
-                            ShortUserInformationReceived(this,
-                                new ShortUserInformationTransportEventArgs(dataIn.RequestId, resp));
-                        }
+                        ShortUserInformationReceived?.Invoke(this,
+                            new ShortUserInformationTransportEventArgs(dataIn.RequestId, resp));
 
                         lock (PendingRequests)
                         {

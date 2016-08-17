@@ -27,22 +27,21 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class MessageWindowViewModel : INotifyPropertyChanged
     {
         private readonly ObservableCollection<MessageViewModel> _messages;
         private readonly CountDownTimer _typingNotificationTimer;
-        //private ImageSource _ContactImage;
-        //private bool _ContactImageCreated;
         private string _statusText;
-        //private DispatcherTimer _textChangedTimer;
 
         public MessageWindowViewModel(ContactViewModel contact)
         {
@@ -59,7 +58,7 @@ namespace JCsTools.JCQ.ViewModel
             _typingNotificationTimer.Tick += OnTypingNotificationTimer_Tick;
         }
 
-        public ContactViewModel Contact { get; private set; }
+        public ContactViewModel Contact { get; }
         public ReadOnlyObservableCollection<MessageViewModel> Messages { get; private set; }
 
         public string StatusText
@@ -106,6 +105,15 @@ namespace JCsTools.JCQ.ViewModel
 
         public void SendMessage(string text)
         {
+            foreach (Match m in EmojiHelper.EmojiRegex.Matches(text))
+            {
+                string key1 = m.Value;
+                string key2 = EmojiHelper.EmojiMappings[key1].ToUpper();
+                string value = EmojiHelper.EmojiToUnicodeMappings[key2];
+
+                text = text.Replace(m.Value, value);
+            }
+
             var msg = new IcqMessage
             {
                 Sender = ApplicationService.Current.Context.Identity,
@@ -150,15 +158,6 @@ namespace JCsTools.JCQ.ViewModel
                     break;
             }
         }
-
-        //private MessageSenderRole GetSenderRole(IMessage message)
-        //{
-        //    if (message.Sender.Identifier == ApplicationService.Current.Context.Identity.Identifier)
-        //    {
-        //        return MessageSenderRole.ContextIdentity;
-        //    }
-        //    return MessageSenderRole.FirstAtt;
-        //}
 
         private void DisplayMessage(TextMessageViewModel message)
         {
@@ -289,9 +288,10 @@ namespace JCsTools.JCQ.ViewModel
         {
             try
             {
-                var contact = ContactViewModelCache.GetViewModel(msg.Sender);
+                ContactViewModel contact = ContactViewModelCache.GetViewModel(msg.Sender);
 
-                var vm = ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
+                MessageWindowViewModel vm = ApplicationService.Current.Context
+                    .GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
 
                 var offlineMsg = msg as IcqOfflineMessage;
@@ -320,12 +320,13 @@ namespace JCsTools.JCQ.ViewModel
         {
             try
             {
-                var contact = ContactViewModelCache.GetViewModel(e.Contact);
+                ContactViewModel contact = ContactViewModelCache.GetViewModel(e.Contact);
 
                 if (!ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
                     .IsMessageWindowViewModelAvailable(contact)) return;
 
-                var vm = ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
+                MessageWindowViewModel vm = ApplicationService.Current.Context
+                    .GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
 
                 var message = new StatusChangedMessageViewModel(DateTime.Now, contact, vm.Contact, e.Status,
@@ -343,12 +344,13 @@ namespace JCsTools.JCQ.ViewModel
         {
             try
             {
-                var contact = ContactViewModelCache.GetViewModel(e.Contact);
+                ContactViewModel contact = ContactViewModelCache.GetViewModel(e.Contact);
 
                 if (!ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
                     .IsMessageWindowViewModelAvailable(contact)) return;
 
-                var vm = ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
+                MessageWindowViewModel vm = ApplicationService.Current.Context
+                    .GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
                 vm.DisplayTypingNotification(e.NotificationType);
             }

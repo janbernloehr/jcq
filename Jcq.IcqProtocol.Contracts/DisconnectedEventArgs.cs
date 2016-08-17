@@ -26,27 +26,18 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
     public class DisconnectedEventArgs : EventArgs
     {
-        private readonly bool _isExpected;
-        private readonly string _message;
-
         public DisconnectedEventArgs(string message, bool isExpected)
         {
-            _message = message;
-            _isExpected = isExpected;
+            Message = message;
+            IsExpected = isExpected;
         }
 
-        public bool IsExpected
-        {
-            get { return _isExpected; }
-        }
+        public bool IsExpected { get; }
 
-        public string Message
-        {
-            get { return _message; }
-        }
+        public string Message { get; }
     }
 }

@@ -28,45 +28,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0107 : Snac
     {
-        private readonly List<RateClass> _RateClasses = new List<RateClass>();
-        private readonly List<RateGroup> _RateGroups = new List<RateGroup>();
-
         public Snac0107() : base(0x1, 0x7)
         {
         }
 
-        public List<RateClass> RateClasses
-        {
-            get { return _RateClasses; }
-        }
+        public List<RateClass> RateClasses { get; } = new List<RateClass>();
 
-        public List<RateGroup> RateGroups
-        {
-            get { return _RateGroups; }
-        }
+        public List<RateGroup> RateGroups { get; } = new List<RateGroup>();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             int classCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            var classIndex = 0;
+            int classIndex = 0;
 
             while (classIndex < classCount)
             {
-                RateClass cls;
-                cls = new RateClass();
+                var cls = new RateClass();
                 cls.Deserialize(data.GetRange(index, data.Count - index));
 
-                _RateClasses.Add(cls);
+                RateClasses.Add(cls);
 
                 index += cls.TotalSize;
                 classIndex += 1;
@@ -74,13 +64,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             while (index + 4 <= data.Count)
             {
-                RateGroup @group;
-                @group = new RateGroup();
-                @group.Deserialize(data.GetRange(index, data.Count - index));
+                var rateGroup = new RateGroup();
+                rateGroup.Deserialize(data.GetRange(index, data.Count - index));
 
-                _RateGroups.Add(@group);
+                RateGroups.Add(rateGroup);
 
-                index += @group.TotalSize;
+                index += rateGroup.TotalSize;
             }
 
             TotalSize = index;
@@ -93,7 +82,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public override int CalculateDataSize()
         {
-            return 2 + _RateClasses.Sum(x => x.CalculateTotalSize()) + _RateGroups.Sum(x => x.CalculateTotalSize());
+            return 2 + RateClasses.Sum(x => x.CalculateTotalSize()) + RateGroups.Sum(x => x.CalculateTotalSize());
         }
     }
 }

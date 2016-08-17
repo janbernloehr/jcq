@@ -24,23 +24,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public abstract class BaseSsiTransaction : ISsiTransaction
     {
-        private readonly IcqStorageService _service;
-
         protected BaseSsiTransaction(IcqStorageService owner)
         {
-            _service = owner;
+            Service = owner;
         }
 
-        public IcqStorageService Service
-        {
-            get { return _service; }
-        }
+        public IcqStorageService Service { get; }
 
         public abstract Snac CreateSnac();
         public abstract void OnComplete(SSIActionResultCode action);

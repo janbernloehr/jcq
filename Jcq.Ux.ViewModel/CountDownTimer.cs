@@ -27,7 +27,7 @@
 using System;
 using System.Threading;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class CountDownTimer : IDisposable
     {

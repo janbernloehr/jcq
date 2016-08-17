@@ -28,9 +28,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts.Collections;
 
-namespace JCsTools.Core
+namespace Jcq.Core.Collections
 {
     public class KeyedNotifiyingCollection<TKey, TValue> : KeyedCollection<TKey, TValue>, INotifyingCollection<TValue>
     {
@@ -60,7 +60,7 @@ namespace JCsTools.Core
 
         protected virtual void MoveItem(int oldIndex, int newIndex)
         {
-            var item = base[oldIndex];
+            TValue item = base[oldIndex];
             base.RemoveItem(oldIndex);
             base.InsertItem(newIndex, item);
             OnPropertyChanged("Item[]");
@@ -71,7 +71,7 @@ namespace JCsTools.Core
         {
             base.SetItem(index, item);
 
-            var oldItem = base[index];
+            TValue oldItem = base[index];
 
             OnPropertyChanged("Item[]");
             OnCollectionChanged(NotifyCollectionChangedAction.Replace, oldItem, item, index);
@@ -81,7 +81,7 @@ namespace JCsTools.Core
         {
             base.RemoveItem(index);
 
-            var item = base[index];
+            TValue item = base[index];
 
             OnPropertyChanged("Count");
             OnPropertyChanged("Item[]");

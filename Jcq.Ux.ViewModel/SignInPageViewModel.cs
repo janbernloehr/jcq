@@ -32,15 +32,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
-using Jcq.Ux.ViewModel;
-using JCsTools.Core;
-using JCsTools.IdentityManager;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.Core.Collections;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IdentityManager.Contracts;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class SignInPageViewModel : DispatcherObject
+    public class SignInPageViewModel : ViewModelBase
     {
         private readonly ObservableCollection<IIdentity> _identities;
         private NotifyingCollectionBinding<IIdentity> _binding;
@@ -93,7 +94,7 @@ namespace JCsTools.JCQ.ViewModel
 
                 MessageWindowViewModel.RegisterEventHandlers();
 
-                Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(NavigateToContactsPage));
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(NavigateToContactsPage));
 
                 ApplicationService.Current.Context.GetService<IOfflineMessageService>().RequestOfflineMessages();
 

@@ -27,9 +27,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using JCsTools.Core;
+using Jcq.Core;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class MetaSearchByUinResponse : MetaInformationResponse
     {
@@ -56,7 +56,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart + 2;
+            int index = SizeFixPart + 2;
 
             Kernel.Logger.Log("MetaSearchByUinResponse", TraceEventType.Information,
                 "found at index {0}; total size: {1}", index, data.Count);

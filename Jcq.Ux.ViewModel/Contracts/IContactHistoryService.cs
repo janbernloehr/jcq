@@ -25,16 +25,45 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel.Contracts
 {
+    /// <summary>
+    ///     Defines a service conctract to load, save, and mange the chat history of contacts.
+    /// </summary>
     public interface IContactHistoryService : IContextService
     {
+        /// <summary>
+        ///     Load the chat history from the local storage.
+        /// </summary>
         void Load();
+
+        /// <summary>
+        ///     Save the chat history to the local storage.
+        /// </summary>
         void Save();
+
+        /// <summary>
+        ///     Append a message to the chat history of a given contact.
+        /// </summary>
+        /// <param name="contact">The contact.</param>
+        /// <param name="message">The message.</param>
         void AppendMessage(ContactViewModel contact, MessageViewModel message);
+
+        /// <summary>
+        ///     Get the chat history for a given contact.
+        /// </summary>
+        /// <param name="contact">The contact.</param>
+        /// <returns></returns>
         List<MessageViewModel> GetHistory(ContactViewModel contact);
+
+        /// <summary>
+        ///     Get the chat history for a given contact.
+        /// </summary>
+        /// <param name="contact">The contact.</param>
+        /// <param name="maxItems">The maximum number of items to return.</param>
+        /// <returns></returns>
         List<MessageViewModel> GetHistory(ContactViewModel contact, int maxItems);
     }
 }

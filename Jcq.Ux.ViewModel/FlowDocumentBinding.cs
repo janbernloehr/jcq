@@ -28,13 +28,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class FlowDocumentBinding : DependencyObject
     {
+        public static readonly DependencyProperty CollectionProperty = DependencyProperty.RegisterAttached(
+            "Collection", typeof(INotifyCollectionChanged), typeof(FlowDocumentBinding),
+            new FrameworkPropertyMetadata(null, OnThisPropertyChanged));
+
+        private static readonly Dictionary<INotifyCollectionChanged, DependencyObject> lookup =
+            new Dictionary<INotifyCollectionChanged, DependencyObject>();
+
         protected static void OnThisPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (e.OldValue != null)
@@ -52,7 +62,7 @@ namespace JCsTools.JCQ.ViewModel
 
                 var document = (FlowDocument) d;
 
-                foreach (var item in (IEnumerable) collection)
+                foreach (object item in (IEnumerable) collection)
                 {
                     AppendItemToDocument(document, item);
                 }
@@ -66,7 +76,7 @@ namespace JCsTools.JCQ.ViewModel
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    var item = e.NewItems[0];
+                    object item = e.NewItems[0];
                     var collection = (INotifyCollectionChanged) sender;
                     var document = (FlowDocument) lookup[collection];
 
@@ -74,18 +84,25 @@ namespace JCsTools.JCQ.ViewModel
                     break;
                 default:
                     throw new NotImplementedException();
-                    break;
             }
         }
 
         private static void AppendItemToDocument(FlowDocument document, object item)
         {
-            DataTemplate template;
+            var msg = item as TextMessageViewModel;
+
             Paragraph paragraph;
 
-            template = DataTemplateSelector.SelectTemplate(item, document);
-            paragraph = (Paragraph) template.LoadContent();
-            paragraph.DataContext = item;
+            if (msg != null)
+            {
+                paragraph = MessageToParagraph(msg);
+            }
+            else
+            {
+                DataTemplate template = DataTemplateSelector.SelectTemplate(item, document);
+                paragraph = (Paragraph) template.LoadContent();
+                paragraph.DataContext = item;
+            }
 
             document.Blocks.Add(paragraph);
         }
@@ -100,11 +117,60 @@ namespace JCsTools.JCQ.ViewModel
             obj.SetValue(CollectionProperty, value);
         }
 
-        public static readonly DependencyProperty CollectionProperty = DependencyProperty.RegisterAttached(
-            "Collection", typeof (INotifyCollectionChanged), typeof (FlowDocumentBinding),
-            new FrameworkPropertyMetadata(null, OnThisPropertyChanged));
+        private static Paragraph MessageToParagraph(TextMessageViewModel vm)
+        {
+            var p = new Paragraph
+            {
+                Margin = new Thickness(0)
+            };
 
-        private static readonly Dictionary<INotifyCollectionChanged, DependencyObject> lookup =
-            new Dictionary<INotifyCollectionChanged, DependencyObject>();
+            var r1 = new Run
+            {
+                Foreground = vm.Foreground,
+                Text = string.Format("{0:t} ~ {1}: ", vm.DateCreated, vm.Sender.Name)
+            };
+            //var r2 = new Run() { Foreground = vm.Foreground, Text = vm.Message };
+
+            p.Inlines.Add(r1);
+            //          p.Inlines.Add(r2);
+
+            string message = vm.Message;
+
+            int index = 0;
+
+            foreach (Match m in EmojiHelper.EmojiRegex.Matches(vm.Message))
+            {
+                if (m.Index > index)
+                {
+                    p.Inlines.Add(new Run {Text = message.Substring(index, m.Index - index)});
+                }
+
+                string key = message.Substring(m.Index, m.Length);
+                string value = EmojiHelper.EmojiMappings[key];
+
+                //p.Inlines.Add(new Run() { Foreground = new SolidColorBrush(Colors.BlueViolet), Text = value });
+
+                string emojiPath =
+                    string.Format("pack://application:,,,/Jcq.Ux.Main;component/resources/emoji/png/{0}.png", value);
+
+                var image = new Image();
+                object z = new ImageSourceConverter().ConvertFromString(emojiPath);
+                image.Source = (ImageSource) z;
+                image.Width = 16;
+                image.Height = 16;
+                image.Stretch = Stretch.UniformToFill;
+
+                var container = new InlineUIContainer(image);
+
+                p.Inlines.Add(container);
+
+                index = m.Index + m.Length;
+            }
+
+            if (index < message.Length)
+                p.Inlines.Add(new Run {Text = message.Substring(index)});
+
+            return p;
+        }
     }
 }

@@ -25,8 +25,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.ObjectModel;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class HistoryWindowViewModel
     {

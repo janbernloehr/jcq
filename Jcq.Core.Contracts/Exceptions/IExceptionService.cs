@@ -27,8 +27,11 @@
 using System;
 using System.Collections.ObjectModel;
 
-namespace JCsTools.Core.Interfaces.Exceptions
+namespace Jcq.Core.Contracts.Exceptions
 {
+    /// <summary>
+    ///     Provides an Exception publication contract.
+    /// </summary>
     public interface IExceptionService : IService
     {
         ReadOnlyCollection<IExceptionInformation> Exceptions { get; }

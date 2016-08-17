@@ -27,9 +27,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     public class ServiceProvider<TS> : Service, IServiceProvider<TS> where TS : IService
     {
@@ -46,8 +46,8 @@ namespace JCsTools.Core
         public TC GetService<TC>()
             where TC : TS
         {
-            var serviceImplementation = default(TC);
-            var serviceContract = typeof (TC);
+            TC serviceImplementation = default(TC);
+            Type serviceContract = typeof(TC);
 
             try
             {
@@ -55,7 +55,7 @@ namespace JCsTools.Core
 
                 if (!_services.ContainsKey(serviceContract))
                 {
-                    var serviceImplementationType = Kernel.Mapper.GetImplementationType<TC>();
+                    Type serviceImplementationType = Kernel.Mapper.GetImplementationType<TC>();
 
                     foreach (var pair in _services)
                     {
@@ -72,7 +72,7 @@ namespace JCsTools.Core
 
                     if (serviceImplementation != null)
                     {
-                        var cookie = _lock.UpgradeToWriterLock(WaitTimeout);
+                        LockCookie cookie = _lock.UpgradeToWriterLock(WaitTimeout);
 
                         try
                         {

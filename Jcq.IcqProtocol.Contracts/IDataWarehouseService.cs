@@ -26,8 +26,11 @@
 
 using System.IO;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to load and save all data related to the IContext.
+    /// </summary>
     public interface IDataWarehouseService : IContextService
     {
         void Save(DirectoryInfo path);

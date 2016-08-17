@@ -26,11 +26,11 @@
 
 using System;
 using System.Diagnostics;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqUsageReportService : ContextService, IUsageReportService
     {
@@ -73,11 +73,8 @@ namespace JCsTools.JCQ.IcqInterface
                 Kernel.Logger.Log("IcqUsageReportService", TraceEventType.Information, "Minimum report intervall: {0}",
                     data.MinimumReportIntervall);
 
-                if (MinimumUsageReportIntervallReceived != null)
-                {
-                    MinimumUsageReportIntervallReceived(this,
-                        new IntervallReceivedEventArgs(data.MinimumReportIntervall));
-                }
+                MinimumUsageReportIntervallReceived?.Invoke(this,
+                    new IntervallReceivedEventArgs(data.MinimumReportIntervall));
             }
             catch (Exception ex)
             {
@@ -91,10 +88,7 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 Kernel.Logger.Log("IcqUsageReportService", TraceEventType.Information, "Usage report accepted.");
 
-                if (UsageReportAccepted != null)
-                {
-                    UsageReportAccepted(this, EventArgs.Empty);
-                }
+                UsageReportAccepted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {

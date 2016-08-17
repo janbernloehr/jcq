@@ -27,20 +27,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0B03 : Snac
     {
-        private readonly TlvUsageReport _TlvUsageReport = new TlvUsageReport();
-
         public Snac0B03() : base(0xb, 0x3)
         {
         }
 
-        public TlvUsageReport TlvUsageReport
-        {
-            get { return _TlvUsageReport; }
-        }
+        public TlvUsageReport TlvUsageReport { get; } = new TlvUsageReport();
 
         public override int CalculateDataSize()
         {

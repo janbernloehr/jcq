@@ -27,16 +27,15 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class ShortUserInformationRequestManager
     {
-        private readonly IcqContact _contact;
-        private readonly IContext _context;
+        private readonly int _retryDue2Millisecond = Convert.ToInt32(TimeSpan.FromMinutes(5).TotalMilliseconds);
         private readonly int _retryDueMillisecond = Convert.ToInt32(TimeSpan.FromSeconds(10).TotalMilliseconds);
         private bool _requestSucceeded;
         private int _retryIteration;
@@ -44,19 +43,13 @@ namespace JCsTools.JCQ.IcqInterface
 
         public ShortUserInformationRequestManager(IContext context, IcqContact contact)
         {
-            _context = context;
-            _contact = contact;
+            Context = context;
+            Contact = contact;
         }
 
-        public IcqContact Contact
-        {
-            get { return _contact; }
-        }
+        public IcqContact Contact { get; }
 
-        public IContext Context
-        {
-            get { return _context; }
-        }
+        public IContext Context { get; }
 
         public long RequestId { get; private set; }
 
@@ -113,13 +106,13 @@ namespace JCsTools.JCQ.IcqInterface
             var req = new MetaShortUserInformationRequest
             {
                 RequestSequenceNumber = MetaRequest.GetNextSequenceNumber(),
-                ClientUin = long.Parse(_context.Identity.Identifier),
+                ClientUin = long.Parse(Context.Identity.Identifier),
                 SearchUin = int.Parse(Contact.Identifier)
             };
 
             dataOut.MetaData.MetaRequest = req;
 
-            var transfer = (IIcqDataTranferService) _context.GetService<IConnector>();
+            var transfer = (IIcqDataTranferService) Context.GetService<IConnector>();
             transfer.Send(dataOut);
 
             RequestId = dataOut.RequestId;
@@ -130,6 +123,11 @@ namespace JCsTools.JCQ.IcqInterface
             SendRequest();
 
             _retryTimer = new Timer(OnTimerCallback, null, 0, _retryDueMillisecond);
+        }
+
+        public void ServerRateLimitExceeded()
+        {
+            _retryTimer.Change(_retryDue2Millisecond, _retryDue2Millisecond);
         }
     }
 }

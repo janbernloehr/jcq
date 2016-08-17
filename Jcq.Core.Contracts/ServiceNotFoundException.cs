@@ -27,9 +27,8 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Jcq.Core.Contracts;
 
-namespace JCsTools.Core.Interfaces
+namespace Jcq.Core.Contracts
 {
     [Serializable]
     public class ServiceNotFoundException : ArgumentException

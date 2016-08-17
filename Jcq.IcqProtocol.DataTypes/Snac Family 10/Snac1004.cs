@@ -27,26 +27,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1004 : Snac
     {
-        private readonly List<byte> _IconHash = new List<byte>();
-
         public Snac1004() : base(0x10, 0x4)
         {
         }
 
         public string Uin { get; set; }
 
-        public List<byte> IconHash
-        {
-            get { return _IconHash; }
-        }
+        public List<byte> IconHash { get; } = new List<byte>();
 
         public override int CalculateDataSize()
         {
-            return 1 + Uin.Length + 1 + 2 + 1 + 1 + _IconHash.Count;
+            return 1 + Uin.Length + 1 + 2 + 1 + 1 + IconHash.Count;
         }
 
         public override void Deserialize(List<byte> data)
@@ -64,8 +59,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             data.Add(0x0);
             data.Add(0x1);
             data.Add(0x1);
-            data.Add((byte) _IconHash.Count);
-            data.AddRange(_IconHash);
+            data.Add((byte) IconHash.Count);
+            data.AddRange(IconHash);
 
             //xx   byte   uin length 
             // xx ..   ascii   uin string 

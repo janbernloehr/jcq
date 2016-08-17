@@ -28,17 +28,17 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Jcq.IcqProtocol.Internal;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public class BaseConnector : ContextService, IIcqDataTranferService
     {
@@ -65,7 +65,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
         {
             List<Delegate> handlerList;
 
-            var key = string.Format("{0:X2},{1:X2}", serviceId, subtypeId);
+            string key = string.Format("{0:X2},{1:X2}", serviceId, subtypeId);
 
             if (!_snacHandlers.TryGetValue(key, out handlerList))
             {
@@ -82,10 +82,10 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         protected virtual void InnerConnect()
         {
-            var hostName = ConfigurationManager.AppSettings["OscarServer"];
-            var hostPort = int.Parse(ConfigurationManager.AppSettings["OscarPort"]);
+            string hostName = ConfigurationManager.AppSettings["OscarServer"];
+            int hostPort = int.Parse(ConfigurationManager.AppSettings["OscarPort"]);
 
-            var hentry = Dns.GetHostEntry(hostName);
+            IPHostEntry hentry = Dns.GetHostEntry(hostName);
             var endpoint = new IPEndPoint(hentry.AddressList[0], hostPort);
 
             InnerConnect(endpoint);
@@ -149,8 +149,8 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
             var serverAddressParts = address.Split(':');
 
-            var serverIp = IPAddress.Parse(serverAddressParts[0]);
-            var serverPort = int.Parse(serverAddressParts[1]);
+            IPAddress serverIp = IPAddress.Parse(serverAddressParts[0]);
+            int serverPort = int.Parse(serverAddressParts[1]);
 
             return new IPEndPoint(serverIp, serverPort);
         }
@@ -175,7 +175,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         private void CallSnacHandlers(Snac snac)
         {
-            var key = Snac.GetKey(snac);
+            string key = Snac.GetKey(snac);
 
             try
             {
@@ -186,7 +186,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
                 if (!_snacHandlers.TryGetValue(key, out handlers)) return;
 
-                foreach (var x in handlers)
+                foreach (Delegate x in handlers)
                 {
                     x.DynamicInvoke(snac);
                 }
@@ -209,7 +209,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
             // buffer bytes for analysis. if more bytes are needed to decode
             // the received data we wait for another cycle.
 
-            var id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
 
             try
             {
@@ -222,13 +222,13 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                     // add data to the buffer.
                     _analyzeBuffer.AddRange(data);
 
-                    var index = 0;
-                    var iloop = 0;
+                    int index = 0;
+                    int iloop = 0;
 
                     while (index + 6 <= _analyzeBuffer.Count)
                     {
                         // decode the flap header
-                        var desc = FlapDescriptor.GetDescriptor(index, _analyzeBuffer);
+                        FlapDescriptor desc = FlapDescriptor.GetDescriptor(index, _analyzeBuffer);
 
                         if (_analyzeBuffer.Count < index + desc.TotalSize)
                         {
@@ -272,13 +272,18 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                     FlapReceived(this, new FlapTransportEventArgs(flap));
                 }
 
-                if (flap.Channel != FlapChannel.SnacData) return;
+                WriteInFlapLog(flapData, flap);
+
+                if (flap.Channel != FlapChannel.SnacData)
+                {
+                    return;
+                }
 
                 Task.Run(() =>
                 {
                     try
                     {
-                        foreach (var x in flap.DataItems.Cast<Snac>())
+                        foreach (Snac x in flap.DataItems.Cast<Snac>())
                         {
                             CallSnacHandlers(x);
                         }
@@ -295,6 +300,45 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                 // the analyze loop should still continue.
                 Kernel.Exceptions.PublishException(ex);
             }
+        }
+
+        private void WriteFlapLog(string modifier, List<byte> flapData, Flap flap)
+        {
+            try
+            {
+                string path = string.Format("jcq/dumps/{0}/{3}/{1}_{2}.json", TcpContext.Id, flap.DatagramSequenceNumber,
+                    flap.Channel == FlapChannel.SnacData & flap.DataItems.Any()
+                        ? flap.DataItems.First().GetType().Name
+                        : Enum.GetName(typeof(FlapChannel), flap.Channel),
+                    modifier);
+
+                var file =
+                    new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), path));
+
+                if (!file.Directory.Exists)
+                {
+                    file.Directory.Create();
+                }
+
+                using (var sw = new StreamWriter(file.FullName))
+                {
+                    sw.Write(BitConverter.ToString(flapData.ToArray()));
+                }
+            }
+            catch (Exception ex)
+            {
+                Kernel.Exceptions.PublishException(ex);
+            }
+        }
+
+        private void WriteInFlapLog(List<byte> flapData, Flap flap)
+        {
+            WriteFlapLog("in", flapData, flap);
+        }
+
+        private void WriteOutFlapLog(List<byte> flapData, Flap flap)
+        {
+            WriteFlapLog("out", flapData, flap);
         }
 
         //private void OnTcpContextDataReceived(object sender, DataReceivedEventArgs e)
@@ -390,13 +434,13 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
         private async Task SendData(ITcpContext context, BufferBlock<FlapDataPair> sendBuffer)
         {
-            var id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
 
             try
             {
                 while (context.ConnectionState == TcpConnectionState.Connected)
                 {
-                    var dataItem = await sendBuffer.ReceiveAsync();
+                    FlapDataPair dataItem = await sendBuffer.ReceiveAsync();
 
                     Kernel.Logger.Log("BaseConnector", TraceEventType.Verbose,
                         "{0}@{1} SendBuffer received data {2} items in buffer",
@@ -404,6 +448,15 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
                     try
                     {
+                        if (dataItem.Flap.Channel == FlapChannel.SnacData)
+                        {
+                            var s = (Snac) dataItem.Flap.DataItems.First();
+                            int wait = Context.GetService<IRateLimitsService>().Calculate(s.ServiceId, s.SubtypeId);
+
+                            if (wait > 0)
+                                Thread.Sleep(wait);
+                        }
+
                         context.SendData(dataItem.Data);
 
                         if (FlapSent != null)
@@ -414,6 +467,8 @@ namespace JCsTools.JCQ.IcqInterface.Internal
                         //TODO: For the moment we want it in this way so that this thread can continue to send without being disturbed
                         // by what happens on the other threads
                         Task.Run(() => dataItem.TaskCompletionSource.SetResult(dataItem.Flap.DatagramSequenceNumber));
+
+                        Thread.Sleep(10); //TODO: Implement proper throtteling
                     }
                     catch (Exception sendException)
                     {
@@ -485,6 +540,8 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
             _sendBuffer.Post(pair);
 
+            WriteOutFlapLog(pair.Data, flap);
+
             return pair.TaskCompletionSource.Task;
         }
 
@@ -504,9 +561,11 @@ namespace JCsTools.JCQ.IcqInterface.Internal
             var pairs = flaps.Select(f => new FlapDataPair(f));
             var tasks = new List<Task<int>>();
 
-            foreach (var pair in pairs)
+            foreach (FlapDataPair pair in pairs)
             {
                 _sendBuffer.Post(pair);
+
+                WriteOutFlapLog(pair.Data, pair.Flap);
 
                 tasks.Add(pair.TaskCompletionSource.Task);
             }
@@ -536,7 +595,7 @@ namespace JCsTools.JCQ.IcqInterface.Internal
 
             var dataItems = new List<Flap>();
 
-            foreach (var x in snacs)
+            foreach (Snac x in snacs)
             {
                 var flap = new Flap(FlapChannel.SnacData);
 

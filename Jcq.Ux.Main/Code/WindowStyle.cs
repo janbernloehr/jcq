@@ -25,9 +25,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Windows;
-using JCsTools.Wpf.Extenders;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Code
 {
     public class WindowStyle
     {
@@ -41,16 +40,14 @@ namespace JCsTools.JCQ.Ux
 
         public void Attach(Window wnd)
         {
-            wnd.Opacity = Opacity;
-            wnd.AllowsTransparency = AllowTransparency;
-            wnd.WindowStyle = System.Windows.WindowStyle.None;
-            wnd.Style = (Style) Application.Current.FindResource("SimpleWindow");
+            //wnd.Opacity = Opacity;
+            //wnd.AllowsTransparency = AllowTransparency;
+            //wnd.WindowStyle = System.Windows.WindowStyle.None;
+            //wnd.Style = (Style) Application.Current.FindResource("SimpleWindow");
 
-            object extender = WindowExtenderProvider.AttachResizeExtender(wnd);
+            //object extender = WindowExtenderProvider.AttachResizeExtender(wnd);
 
-            wnd.Resources["WindowExtender"] = extender;
-
-            //Style="{StaticResource SimpleWindow}" WindowStyle="None"
+            //wnd.Resources["WindowExtender"] = extender;
         }
     }
 }

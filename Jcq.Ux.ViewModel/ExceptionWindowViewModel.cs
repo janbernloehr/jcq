@@ -25,15 +25,14 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
-using JCsTools.Core;
-using JCsTools.Core.Interfaces;
+using Jcq.Core;
+using Jcq.Core.Contracts.Exceptions;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class ExceptionWindowViewModel : INotifyPropertyChanged
+    public class ExceptionWindowViewModel : ViewModelBase
     {
-        private string _Message;
+        private string _message;
 
         public ExceptionWindowViewModel()
         {
@@ -42,29 +41,18 @@ namespace JCsTools.JCQ.ViewModel
 
         public string Message
         {
-            get { return _Message; }
+            get { return _message; }
             set
             {
-                _Message = value;
+                _message = value;
 
-                OnPropertyChanged("Message");
+                OnPropertyChanged();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnException(object sender, ExceptionEventArgs e)
         {
-            Message += string.Format("{0:d}: {1}\n\n", DateTime.Now,
-                e.ExceptionInfo.Exception);
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            Message += string.Format("{0:d}: {1}\n\n", DateTime.Now, e.ExceptionInfo.Exception);
         }
     }
 }

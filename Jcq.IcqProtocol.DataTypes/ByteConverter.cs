@@ -26,9 +26,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class ByteConverter
     {
@@ -36,38 +37,38 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         private static readonly Encoding IcqEncoding = Encoding.GetEncoding(28599);
         //private static readonly Encoding _icqenc = Encoding.BigEndianUnicode;
 
-        public static byte[] GetBytes(UInt16 value)
+        public static byte[] GetBytes(ushort value)
         {
             var bytes = BitConverter.GetBytes(value);
             Array.Reverse(bytes);
             return bytes;
         }
 
-        public static byte[] GetBytes(UInt32 value)
+        public static byte[] GetBytes(uint value)
         {
             var bytes = BitConverter.GetBytes(value);
             Array.Reverse(bytes);
             return bytes;
         }
 
-        public static byte[] GetBytes(UInt64 value)
+        public static byte[] GetBytes(ulong value)
         {
             var bytes = BitConverter.GetBytes(value);
             Array.Reverse(bytes);
             return bytes;
         }
 
-        public static byte[] GetBytesLE(UInt16 value)
+        public static byte[] GetBytesLE(ushort value)
         {
             return BitConverter.GetBytes(value);
         }
 
-        public static byte[] GetBytesLE(UInt32 value)
+        public static byte[] GetBytesLE(uint value)
         {
             return BitConverter.GetBytes(value);
         }
 
-        public static byte[] GetBytesLE(UInt64 value)
+        public static byte[] GetBytesLE(ulong value)
         {
             return BitConverter.GetBytes(value);
         }
@@ -80,7 +81,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static byte[] GetBytes(Guid value)
         {
-            var bGuidIcq = new Byte[16];
+            var bGuidIcq = new byte[16];
 
             var bGuidNet = value.ToByteArray();
 
@@ -122,14 +123,14 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static byte[] GetBytesForUInt32Date(DateTime value)
         {
-            var seconds = value < UnixFileTime ? 0 : Convert.ToUInt32(value.Subtract(UnixFileTime).TotalSeconds);
+            uint seconds = value < UnixFileTime ? 0 : Convert.ToUInt32(value.Subtract(UnixFileTime).TotalSeconds);
 
             return GetBytes(seconds);
         }
 
         public static byte[] GetBytesForUInt64Date(DateTime value)
         {
-            var seconds = value < UnixFileTime ? 0 : Convert.ToUInt64(value.Subtract(UnixFileTime).TotalSeconds);
+            ulong seconds = value < UnixFileTime ? 0 : Convert.ToUInt64(value.Subtract(UnixFileTime).TotalSeconds);
 
             return GetBytes(seconds);
         }
@@ -140,7 +141,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             {
                 return new byte[] {0};
             }
-            if (value.Length > Byte.MaxValue)
+            if (value.Length > byte.MaxValue)
                 throw new InvalidOperationException("The string length exceeds the maximum length.");
 
             //TODO: We assume that the selected encoding encodes each char as exactly one byte.
@@ -187,7 +188,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static List<byte> GetXorHashFromPassword(char[] pwd)
         {
-            Byte[] roast =
+            byte[] roast =
             {
                 0xf3,
                 0x26,
@@ -206,12 +207,12 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 0x95,
                 0x7c
             };
-            var xorIndex = 0;
+            int xorIndex = 0;
 
-            var plainText = new List<Byte>(Encoding.GetEncoding(28599).GetBytes(pwd));
-            var xoredPassword = new List<Byte>();
+            var plainText = new List<byte>(Encoding.GetEncoding(28599).GetBytes(pwd));
+            var xoredPassword = new List<byte>();
 
-            for (var i = 0; i <= plainText.Count - 1; i++)
+            for (int i = 0; i <= plainText.Count - 1; i++)
             {
                 xoredPassword.Add(Convert.ToByte(roast[xorIndex] ^ plainText[i]));
 
@@ -253,40 +254,40 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             return new Guid(bGuid);
         }
 
-        public static UInt16 ToUInt16(IEnumerable<byte> value)
+        public static ushort ToUInt16(IEnumerable<byte> value)
         {
             var bytes = new List<byte>(value);
             bytes.Reverse();
             return BitConverter.ToUInt16(bytes.ToArray(), 0);
         }
 
-        public static UInt32 ToUInt32(IEnumerable<byte> value)
+        public static uint ToUInt32(IEnumerable<byte> value)
         {
             var bytes = new List<byte>(value);
             bytes.Reverse();
             return BitConverter.ToUInt32(bytes.ToArray(), 0);
         }
 
-        public static UInt64 ToUInt64(IEnumerable<byte> value)
+        public static ulong ToUInt64(IEnumerable<byte> value)
         {
             var bytes = new List<byte>(value);
             bytes.Reverse();
             return BitConverter.ToUInt64(bytes.ToArray(), 0);
         }
 
-        public static UInt16 ToUInt16LE(IEnumerable<byte> value)
+        public static ushort ToUInt16LE(IEnumerable<byte> value)
         {
             var bytes = new List<byte>(value);
             return BitConverter.ToUInt16(bytes.ToArray(), 0);
         }
 
-        public static UInt32 ToUInt32LE(IEnumerable<byte> value)
+        public static uint ToUInt32LE(IEnumerable<byte> value)
         {
             var bytes = new List<byte>(value);
             return BitConverter.ToUInt32(bytes.ToArray(), 0);
         }
 
-        public static UInt64 ToUInt64LE(IEnumerable<byte> value)
+        public static ulong ToUInt64LE(IEnumerable<byte> value)
         {
             var bytes = new List<byte>(value);
             return BitConverter.ToUInt64(bytes.ToArray(), 0);
@@ -297,6 +298,11 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             long seconds = ToUInt32(bytes.GetRange(0, 4));
 
             return UnixFileTime.AddSeconds(seconds);
+        }
+
+        public static DateTime ToDateTimeFromUInt32FileStamp(IEnumerable<byte> bytes)
+        {
+            return ToDateTimeFromUInt32FileStamp(bytes.ToList());
         }
 
         public static DateTime ToDateTimeFromUInt64FileStamp(List<byte> bytes)
@@ -313,11 +319,11 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static string ToStringFromByteIndex(int index, List<byte> data)
         {
-            var length = data[index];
+            byte length = data[index];
 
             //If data.Count < index + length Then Throw New NotEnoughBytesException("Text", data.Count, index + length)
 
-            var text = ToString(data.GetRange(index + 1, length));
+            string text = ToString(data.GetRange(index + 1, length));
 
             return text;
         }
@@ -328,7 +334,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             //If data.Count < index + length Then Throw New NotEnoughBytesException("Text", data.Count, index + length)
 
-            var text = ToString(data.GetRange(index + 2, length));
+            string text = ToString(data.GetRange(index + 2, length));
 
             return text;
         }
@@ -339,7 +345,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             //If data.Count < index + length Then Throw New NotEnoughBytesException("Text", data.Count, index + length)
 
-            var text = ToString(data.GetRange(index + 2, length));
+            string text = ToString(data.GetRange(index + 2, length));
 
             return text;
         }
@@ -348,7 +354,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             int length = ToUInt16LE(data.GetRange(index, 2));
 
-            var text = ToString(data.GetRange(index + 2, length - 1));
+            string text = ToString(data.GetRange(index + 2, length - 1));
 
             return text;
         }

@@ -26,31 +26,29 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.ViewModel;
+using Jcq.Core;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.ViewModel;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Services
 {
     public class MessageFormattingService : Service, IMessageFormattingService
     {
         public Paragraph FormatMessage(MessageSenderRole role, IMessage message)
         {
-            Paragraph messageContainer;
+            var messageContainer = new Paragraph
+            {
+                Margin = new Thickness(0)
+            };
 
-            Run prefix;
-            Run content;
-            Run suffix;
-
-            messageContainer = new Paragraph();
-            messageContainer.Margin = new Thickness(0);
-
-            prefix = new Run();
+            var prefix = new Run();
 
             switch (role)
             {
@@ -70,18 +68,16 @@ namespace JCsTools.JCQ.Ux
 
             prefix.Text = string.Format("{0} ~ {1}: ", DateTime.Now.ToShortTimeString(), message.Sender.Name);
 
-            content = new Run();
-
-            content.Text = message.Text;
+            var content = new Run {Text = message.Text};
 
             messageContainer.Inlines.Add(prefix);
             messageContainer.Inlines.Add(content);
 
-            if (message is IcqOfflineMessage)
-            {
-                suffix = new Run();
+            var offlineMessage = message as IcqOfflineMessage;
 
-                suffix.Text = string.Format(" [Offline Message {0}]", ((IcqOfflineMessage) message).OfflineSentDate);
+            if (offlineMessage != null)
+            {
+                var suffix = new Run {Text = string.Format(" [Offline Message {0}]", offlineMessage.OfflineSentDate)};
 
                 messageContainer.Inlines.Add(suffix);
             }
@@ -91,23 +87,15 @@ namespace JCsTools.JCQ.Ux
 
         public string[] GetTextLinesFromDocument(FlowDocument document)
         {
-            List<string> lines;
-            StringBuilder writer;
+            var lines = new List<string>();
 
-            lines = new List<string>();
-
-            foreach (Paragraph par in document.Blocks)
+            foreach (Paragraph par in document.Blocks.Cast<Paragraph>())
             {
-                writer = new StringBuilder();
+                var writer = new StringBuilder();
 
-                foreach (var inline in par.Inlines)
+                foreach (Run text in par.Inlines.OfType<Run>())
                 {
-                    var text = inline as Run;
-
-                    if (text != null)
-                    {
-                        writer.Append(text.Text);
-                    }
+                    writer.Append(text.Text);
                 }
 
                 lines.Add(writer.ToString());
@@ -118,18 +106,17 @@ namespace JCsTools.JCQ.Ux
 
         public Paragraph FormatStatus(ContactViewModel contact, IStatusCode status)
         {
-            Paragraph statusContainer;
-            Run content;
+            var statusContainer = new Paragraph
+            {
+                Margin = new Thickness(0)
+            };
 
-            statusContainer = new Paragraph();
-            statusContainer.Margin = new Thickness(0);
-
-            content = new Run();
-
-            content.Foreground = Brushes.Gray;
-
-            content.Text = string.Format("{0} ~ {1} changed his/her status to {2}", DateTime.Now.ToShortTimeString(),
-                contact.Name, status.DisplayName);
+            var content = new Run
+            {
+                Foreground = Brushes.Gray,
+                Text = string.Format("{0} ~ {1} changed his/her status to {2}", DateTime.Now.ToShortTimeString(),
+                    contact.Name, status.DisplayName)
+            };
 
             statusContainer.Inlines.Add(content);
 

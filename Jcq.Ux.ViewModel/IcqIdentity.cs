@@ -24,7 +24,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.IdentityManager;
+using Jcq.IdentityManager;
 
 namespace Jcq.Ux.ViewModel
 {

@@ -27,12 +27,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac040B : Snac
     {
-        private readonly List<byte> _RequiredCapabilities = new List<byte>();
-
         public Snac040B() : base(0x4, 0xb)
         {
         }
@@ -42,16 +40,13 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         public string ScreenName { get; set; }
         public int AckReasonCode { get; set; }
 
-        public List<byte> RequiredCapabilities
-        {
-            get { return _RequiredCapabilities; }
-        }
+        public List<byte> RequiredCapabilities { get; } = new List<byte>();
 
         public string MessageText { get; set; }
 
         public override int CalculateDataSize()
         {
-            return 8 + 2 + 1 + ScreenName.Length + 2 + 2 + 2 + _RequiredCapabilities.Count + 2 + 2 + 2 + 2 +
+            return 8 + 2 + 1 + ScreenName.Length + 2 + 2 + 2 + RequiredCapabilities.Count + 2 + 2 + 2 + 2 +
                    MessageText.Length;
         }
 
@@ -76,8 +71,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             // fragment version
             data.Add(0x1);
 
-            data.AddRange(ByteConverter.GetBytes((ushort) _RequiredCapabilities.Count));
-            data.AddRange(_RequiredCapabilities);
+            data.AddRange(ByteConverter.GetBytes((ushort) RequiredCapabilities.Count));
+            data.AddRange(RequiredCapabilities);
 
             // fragment identifier
             data.Add(0x1);

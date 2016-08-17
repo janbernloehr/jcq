@@ -27,28 +27,19 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1005 : Snac
     {
-        private readonly List<byte> _IconData = new List<byte>();
-        private readonly List<byte> _IconHash = new List<byte>();
-
         public Snac1005() : base(0x10, 0x5)
         {
         }
 
         public string Uin { get; set; }
 
-        public List<byte> IconHash
-        {
-            get { return _IconHash; }
-        }
+        public List<byte> IconHash { get; } = new List<byte>();
 
-        public List<byte> IconData
-        {
-            get { return _IconData; }
-        }
+        public List<byte> IconData { get; } = new List<byte>();
 
         public override int CalculateDataSize()
         {
@@ -62,7 +53,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             // xx   byte   uin length 
             // xx ..   ascii   uin string 
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             Uin = ByteConverter.ToStringFromByteIndex(index, data);
             index += 1 + Uin.Length;
@@ -75,10 +66,10 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             // 10   byte   md5 hash size (16) 
             // xx ..   array   requested icon md5 hash 
 
-            var length = data[index];
+            byte length = data[index];
             index += 1;
 
-            _IconHash.AddRange(data.GetRange(index, length));
+            IconHash.AddRange(data.GetRange(index, length));
             index += length;
 
             // xx xx   word   length of the icon 
@@ -88,7 +79,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             // xx ..   array   icon data (jfif - jpeg file interchange format) 
 
-            _IconData.AddRange(data.GetRange(index, iconLength));
+            IconData.AddRange(data.GetRange(index, iconLength));
             index += iconLength;
 
             TotalSize = index;

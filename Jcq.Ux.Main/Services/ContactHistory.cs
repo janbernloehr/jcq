@@ -25,11 +25,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.ViewModel;
-using Newtonsoft.Json;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.Ux.ViewModel;
 
-namespace JCsTools.JCQ.Ux
+namespace Jcq.Ux.Main.Services
 {
     public class ContactHistory
     {
@@ -39,7 +38,6 @@ namespace JCsTools.JCQ.Ux
             Messages = new List<MessageViewModel>();
         }
 
-        [JsonIgnore]
         public IContact Contact { get; private set; }
 
         public List<MessageViewModel> Messages { get; private set; }

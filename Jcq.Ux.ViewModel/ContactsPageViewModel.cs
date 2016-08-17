@@ -26,14 +26,14 @@
 
 using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Threading;
-using JCsTools.IdentityManager;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IdentityManager.Contracts;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class ContactsPageViewModel : DispatcherObject
+    public class ContactsPageViewModel : ViewModelBase
     {
         private GroupViewModel _masterGroup;
 
@@ -56,20 +56,20 @@ namespace JCsTools.JCQ.ViewModel
         {
             get
             {
-                if (_masterGroup == null)
-                {
-                    var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
+                if (_masterGroup != null) return _masterGroup;
 
-                    _masterGroup = GroupViewModelCache.GetViewModel(svStorage.MasterGroup);
-                }
+                var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
+
+                _masterGroup = GroupViewModelCache.GetViewModel(svStorage.MasterGroup);
 
                 return _masterGroup;
             }
         }
 
+        //TODO: Change to command.
         public void StartChatSessionWithContact(ContactViewModel contact)
         {
-            var vm =
+            MessageWindowViewModel vm =
                 ApplicationService.Current.Context.GetService<IContactWindowViewModelService>()
                     .GetMessageWindowViewModel(contact);
             vm.Show();
@@ -80,12 +80,13 @@ namespace JCsTools.JCQ.ViewModel
             var sv = ApplicationService.Current.Context.GetService<IContactContextMenuService>();
             menu.Items.Clear();
 
-            foreach (var x in sv.GetMenuItems(contact))
+            foreach (MenuItem x in sv.GetMenuItems(contact))
             {
                 menu.Items.Add(x);
             }
         }
 
+        //TODO: Change to command.
         public void ChangeStatus(IcqStatusCode status)
         {
             var sv = ApplicationService.Current.Context.GetService<IStatusService>();
@@ -93,6 +94,7 @@ namespace JCsTools.JCQ.ViewModel
             sv.SetIdentityStatus(status);
         }
 
+        //TODO: Change to command.
         public void SignOut()
         {
             var svConnect = ApplicationService.Current.Context.GetService<IConnector>();

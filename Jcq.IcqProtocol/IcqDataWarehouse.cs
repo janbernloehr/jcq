@@ -27,11 +27,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqDataWarehouse : ContextService, IDataWarehouseService
     {
@@ -57,14 +57,14 @@ namespace JCsTools.JCQ.IcqInterface
 
             using (var sr = new StreamReader(fiContactListData.FullName))
             {
-                var json = sr.ReadToEnd();
+                string json = sr.ReadToEnd();
 
                 groups = JsonConvert.DeserializeObject<IcqGroup[]>(json, _settings);
             }
 
-            foreach (var icqGroup in groups)
+            foreach (IcqGroup icqGroup in groups)
             {
-                foreach (var contact in icqGroup.Contacts)
+                foreach (IcqContact contact in icqGroup.Contacts)
                 {
                     contact.SetGroup(icqGroup);
 
@@ -78,7 +78,7 @@ namespace JCsTools.JCQ.IcqInterface
 
             using (var sr = new StreamReader(fiContactListInfo.FullName))
             {
-                var json = sr.ReadToEnd();
+                string json = sr.ReadToEnd();
 
                 info = JsonConvert.DeserializeObject<ContactListInfo>(json);
             }
@@ -97,7 +97,7 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 var groups = svStorage.Groups.Cast<IcqGroup>().ToArray();
 
-                var json = JsonConvert.SerializeObject(groups, Formatting.Indented, _settings);
+                string json = JsonConvert.SerializeObject(groups, Formatting.Indented, _settings);
 
                 sw.Write(json);
             }
@@ -109,7 +109,7 @@ namespace JCsTools.JCQ.IcqInterface
 
             using (var sw = new StreamWriter(fiContactListInfo.FullName))
             {
-                var json = JsonConvert.SerializeObject(svStorage.Info);
+                string json = JsonConvert.SerializeObject(svStorage.Info);
 
                 sw.Write(json);
             }
@@ -119,7 +119,7 @@ namespace JCsTools.JCQ.IcqInterface
         {
             var items = path.GetFiles("contactlist*.json");
 
-            foreach (var item in items)
+            foreach (FileInfo item in items)
             {
                 item.Delete();
             }
@@ -133,14 +133,14 @@ namespace JCsTools.JCQ.IcqInterface
             MemberSerialization memberSerialization)
         {
             //TODO: Maybe cache
-            var prop = base.CreateProperty(member, memberSerialization);
+            JsonProperty prop = base.CreateProperty(member, memberSerialization);
 
             if (prop.Writable) return prop;
 
             var property = member as PropertyInfo;
             if (property == null) return prop;
 
-            var hasPrivateSetter = property.GetSetMethod(true) != null;
+            bool hasPrivateSetter = property.GetSetMethod(true) != null;
             prop.Writable = hasPrivateSetter;
 
             return prop;

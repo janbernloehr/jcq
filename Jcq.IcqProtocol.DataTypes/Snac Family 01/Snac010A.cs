@@ -28,28 +28,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac010A : Snac
     {
-        private readonly List<RateClass> _rateClasses = new List<RateClass>();
-
         public Snac010A() : base(0x1, 0xa)
         {
         }
 
         public MessageCode MessageCode { get; set; }
 
-        public List<RateClass> RateClasses
-        {
-            get { return _rateClasses; }
-        }
+        public List<RateClass> RateClasses { get; } = new List<RateClass>();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
             //TlvDescriptor desc;
 
             //index += 2
@@ -87,7 +82,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
                 index += rc.TotalSize;
 
-                _rateClasses.Add(rc);
+                RateClasses.Add(rc);
             }
 
             TotalSize = index;
@@ -100,7 +95,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public override int CalculateDataSize()
         {
-            return 2 + _rateClasses.Sum(r => r.TotalSize);
+            return 2 + RateClasses.Sum(r => r.TotalSize);
         }
     }
 }

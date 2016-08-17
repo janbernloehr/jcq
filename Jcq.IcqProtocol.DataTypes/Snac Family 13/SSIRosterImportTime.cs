@@ -27,40 +27,35 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class SSIRosterImportTime : SSIRecord
     {
-        private readonly TlvBuddyListImportTime _ImportTime = new TlvBuddyListImportTime();
-
         public SSIRosterImportTime() : base(SSIItemType.RosterImportTime)
         {
         }
 
-        public TlvBuddyListImportTime ImportTime
-        {
-            get { return _ImportTime; }
-        }
+        public TlvBuddyListImportTime ImportTime { get; } = new TlvBuddyListImportTime();
 
         public override int CalculateDataSize()
         {
-            return _ImportTime.TotalSize;
+            return ImportTime.TotalSize;
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0xd4:
-                        _ImportTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ImportTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

@@ -27,22 +27,17 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using JCsTools.Core;
+using Jcq.Core;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac1503 : Snac
     {
-        private readonly TlvMetaResponseData _MetaData = new TlvMetaResponseData();
-
         public Snac1503() : base(0x15, 0x3)
         {
         }
 
-        public TlvMetaResponseData MetaData
-        {
-            get { return _MetaData; }
-        }
+        public TlvMetaResponseData MetaData { get; } = new TlvMetaResponseData();
 
         public override int CalculateDataSize()
         {
@@ -58,11 +53,11 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 Kernel.Logger.Log("Snac1503", TraceEventType.Information,
                     "tlv {0:X2} found at index {1}; data size: {2} total lenght: {3}", desc.TypeId, index, desc.DataSize,
@@ -71,7 +66,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _MetaData.Deserialize(data.GetRange(index, desc.TotalSize));
+                        MetaData.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

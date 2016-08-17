@@ -28,14 +28,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.IcqInterface.Internal;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
+using Jcq.IcqProtocol.Internal;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     /// <summary>
     ///     Provides the state for an authentication cookie request.
@@ -63,13 +64,14 @@ namespace JCsTools.JCQ.IcqInterface
         public event EventHandler SignInCompleted;
         public event EventHandler<SignInFailedEventArgs> SignInFailed;
         public event EventHandler<DisconnectedEventArgs> Disconnected;
+        public event EventHandler<ServerErrorEventArgs> ServerError;
 
         public async Task<bool> SignInAsync(ICredential credential)
         {
             var password = credential as IPasswordCredential;
 
             if (password == null)
-                throw new ArgumentException(@"Credential musst be of Type IPasswordCredential", "credential");
+                throw new ArgumentException(@"Credential musst be of Type IPasswordCredential", nameof(credential));
 
             try
             {
@@ -87,7 +89,7 @@ namespace JCsTools.JCQ.IcqInterface
                 // When the task is run, we can exspect a disconnect ...
                 TcpContext.SetCloseExpected();
 
-                var authenticationCookieState = await authenticationCookieTask;
+                RequestAuthenticationCookieState authenticationCookieState = await authenticationCookieTask;
 
                 if (!authenticationCookieState.AuthenticationSucceeded)
                 {
@@ -102,7 +104,7 @@ namespace JCsTools.JCQ.IcqInterface
                 // if the authentication attempt was successfull we can connect to the bos server
                 // and send the just received authentication cookie to begin the sign in procedure.
 
-                var serverEndpoint = ConvertServerAddressToEndPoint(authenticationCookieState.BosServerAddress);
+                IPEndPoint serverEndpoint = ConvertServerAddressToEndPoint(authenticationCookieState.BosServerAddress);
 
                 InnerConnect(serverEndpoint);
 
@@ -146,43 +148,46 @@ namespace JCsTools.JCQ.IcqInterface
 
         private void OnDisconnected(string message, bool expected)
         {
-            if (Disconnected != null)
-            {
-                Disconnected(this, new DisconnectedEventArgs(message, expected));
-            }
+            Disconnected?.Invoke(this, new DisconnectedEventArgs(message, expected));
         }
 
         private void OnSignInFailed(string message)
         {
-            if (SignInFailed != null)
-            {
-                SignInFailed(this, new SignInFailedEventArgs(message));
-            }
+            SignInFailed?.Invoke(this, new SignInFailedEventArgs(message));
+        }
+
+        private void OnServerError(string message)
+        {
+            ServerError?.Invoke(this, new ServerErrorEventArgs(message));
         }
 
         private void OnSignInCompleted()
         {
-            if (SignInCompleted != null)
-            {
-                SignInCompleted(this, EventArgs.Empty);
-            }
+            SignInCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         private void AnalyseSnac0101(Snac0101 dataIn)
         {
-            if (!_isSigningIn)
-                return;
-
             try
             {
-                OnSignInFailed(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode,
-                    dataIn.SubError.ErrorSubCode));
+                OnServerError(string.Format("Error: {0}, Sub Code: {1}", dataIn.ErrorCode, dataIn.SubError.ErrorSubCode));
+
+                if (dataIn.ErrorCode == ErrorCode.ServerRateLimitExceeded & !_isSigningIn)
+                {
+                    //var s = new Snac0106();
+
+                    //Send(s); // request rates limits...
+
+                    //Context.GetService<IRateLimitsService>().EmergencyThrottle();
+                }
 
                 throw new IcqException(dataIn.ServiceId, dataIn.ErrorCode, dataIn.SubError.ErrorSubCode);
             }
             catch (Exception ex)
             {
-                _signInTaskCompletionSource.SetException(ex);
+                if (_isSigningIn)
+                    _signInTaskCompletionSource.SetException(ex);
+
                 Kernel.Exceptions.PublishException(ex);
             }
         }

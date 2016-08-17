@@ -26,21 +26,16 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
     [Serializable]
     public class IntervallReceivedEventArgs : EventArgs
     {
-        private readonly TimeSpan _Intervall;
-
         public IntervallReceivedEventArgs(TimeSpan intervall)
         {
-            _Intervall = intervall;
+            Intervall = intervall;
         }
 
-        public TimeSpan Intervall
-        {
-            get { return _Intervall; }
-        }
+        public TimeSpan Intervall { get; }
     }
 }

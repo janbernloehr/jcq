@@ -27,37 +27,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class MissedMessageInfo : ISerializable
     {
-        private readonly TlvOnlineTime _OnlineTime = new TlvOnlineTime();
-        private readonly TlvSignonTime _SignOnTime = new TlvSignonTime();
-        private readonly TlvUserClass _UserClass = new TlvUserClass();
-        private readonly TlvUserStatus _UserStatus = new TlvUserStatus();
         public MessageChannel Channel { get; set; }
         public string Uin { get; set; }
         public int WarningLevel { get; set; }
 
-        public TlvUserClass UserClass
-        {
-            get { return _UserClass; }
-        }
+        public TlvUserClass UserClass { get; } = new TlvUserClass();
 
-        public TlvUserStatus UserStatus
-        {
-            get { return _UserStatus; }
-        }
+        public TlvUserStatus UserStatus { get; } = new TlvUserStatus();
 
-        public TlvOnlineTime OnlineTime
-        {
-            get { return _OnlineTime; }
-        }
+        public TlvOnlineTime OnlineTime { get; } = new TlvOnlineTime();
 
-        public TlvSignonTime SignOnTime
-        {
-            get { return _SignOnTime; }
-        }
+        public TlvSignonTime SignOnTime { get; } = new TlvSignonTime();
 
         public MissedMessageReason MissedReason { get; set; }
         public int MissedMessageCount { get; set; }
@@ -83,7 +67,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             Channel = (MessageChannel) ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
@@ -95,28 +79,28 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             index += 2;
 
             int innerTlvCount;
-            var innerTlvIndex = 0;
+            int innerTlvIndex = 0;
 
             innerTlvCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
             while (innerTlvIndex < innerTlvCount)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0x1:
-                        _UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserClass.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x6:
-                        _UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
+                        UserStatus.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0xf:
-                        _OnlineTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        OnlineTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x3:
-                        _SignOnTime.Deserialize(data.GetRange(index, desc.TotalSize));
+                        SignOnTime.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 

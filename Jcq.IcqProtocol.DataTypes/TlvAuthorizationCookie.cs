@@ -26,42 +26,37 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvAuthorizationCookie : Tlv
     {
-        private readonly List<byte> _authorizationCookie = new List<byte>();
-
         public TlvAuthorizationCookie() : base(0x6)
         {
         }
 
-        public List<byte> AuthorizationCookie
-        {
-            get { return _authorizationCookie; }
-        }
+        public List<byte> AuthorizationCookie { get; } = new List<byte>();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
-            _authorizationCookie.AddRange(data.GetRange(index, DataSize));
+            AuthorizationCookie.AddRange(data.GetRange(index, DataSize));
         }
 
         public override List<byte> Serialize()
         {
             var data = base.Serialize();
 
-            data.AddRange(_authorizationCookie);
+            data.AddRange(AuthorizationCookie);
 
             return data;
         }
 
         public override int CalculateDataSize()
         {
-            return _authorizationCookie.Count;
+            return AuthorizationCookie.Count;
         }
     }
 }

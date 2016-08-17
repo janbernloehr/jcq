@@ -26,7 +26,7 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class SnacDescriptor
     {
@@ -37,7 +37,9 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static string GetKey(SnacDescriptor descriptor)
         {
-            return string.Format("{0:X2},{1:X2}", descriptor.SubtypeId == 1 ? 1 : descriptor.ServiceId,
+            //return string.Format("{0:X2},{1:X2}", descriptor.SubtypeId == 1 ? 1 : descriptor.ServiceId,
+            //    descriptor.SubtypeId);
+            return string.Format("{0:X2},{1:X2}", descriptor.ServiceId,
                 descriptor.SubtypeId);
         }
 

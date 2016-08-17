@@ -26,7 +26,7 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
     public class TypingNotificationEventArgs : EventArgs
     {

@@ -28,28 +28,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0110 : Snac
     {
-        private readonly List<UserInfo> _UserInfos = new List<UserInfo>();
-
         public Snac0110() : base(0x1, 0x10)
         {
         }
 
         public int NewWarningLevel { get; set; }
 
-        public List<UserInfo> UserInfos
-        {
-            get { return _UserInfos; }
-        }
+        public List<UserInfo> UserInfos { get; } = new List<UserInfo>();
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             NewWarningLevel = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;

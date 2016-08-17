@@ -25,30 +25,21 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class AddContactTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _contact;
-        private readonly IcqGroup _group;
-
         public AddContactTransaction(IcqStorageService owner, IcqContact contact, IcqGroup group) : base(owner)
         {
-            _contact = contact;
-            _group = group;
+            Contact = contact;
+            Group = group;
         }
 
-        public IcqContact Contact
-        {
-            get { return _contact; }
-        }
+        public IcqContact Contact { get; }
 
-        public IcqGroup Group
-        {
-            get { return _group; }
-        }
+        public IcqGroup Group { get; }
 
         public override Snac CreateSnac()
         {

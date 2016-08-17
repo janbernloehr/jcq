@@ -25,12 +25,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using NotificationType = JCsTools.JCQ.IcqInterface.Interfaces.NotificationType;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
+using NotificationType = Jcq.IcqProtocol.Contracts.NotificationType;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqNotificationService : ContextService, INotificationService
     {
@@ -76,7 +76,7 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 NotificationType type;
 
-                var contact = Context.GetService<IStorageService>().GetContactByIdentifier(snac.ScreenName);
+                IContact contact = Context.GetService<IStorageService>().GetContactByIdentifier(snac.ScreenName);
 
                 switch (snac.NotificationType)
                 {
@@ -92,10 +92,7 @@ namespace JCsTools.JCQ.IcqInterface
                         break;
                 }
 
-                if (TypingNotification != null)
-                {
-                    TypingNotification(this, new TypingNotificationEventArgs(contact, type));
-                }
+                TypingNotification?.Invoke(this, new TypingNotificationEventArgs(contact, type));
             }
             catch (Exception ex)
             {

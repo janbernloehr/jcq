@@ -7,7 +7,7 @@
     <ProjectGuid>{BF8AE423-4549-45B9-83E3-AD7B27B72A82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JCsTools.JCQ.IcqInterface.DataTypes</RootNamespace>
+    <RootNamespace>Jcq.IcqProtocol.DataTypes</RootNamespace>
     <AssemblyName>Jcq.IcqProtocol.DataTypes</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -32,11 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ByteConverter.cs" />
@@ -218,6 +214,7 @@
     <Compile Include="Snac Family 13\TlvPersonalBuddyAlerts.cs" />
     <Compile Include="Snac Family 13\TlvPrivacySetting.cs" />
     <Compile Include="Snac Family 13\TlvSSIInnerItems.cs" />
+    <Compile Include="Snac Family 15\Snac1501.cs" />
     <Compile Include="Snac Family 15\Snac1502.cs" />
     <Compile Include="Snac Family 15\Snac1503.cs" />
     <Compile Include="Snac.cs" />

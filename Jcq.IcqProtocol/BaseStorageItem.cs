@@ -26,10 +26,9 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using JCsTools.JCQ.IcqInterface.Annotations;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public abstract class BaseStorageItem : IStorageItem
     {
@@ -68,11 +67,9 @@ namespace JCsTools.JCQ.IcqInterface
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

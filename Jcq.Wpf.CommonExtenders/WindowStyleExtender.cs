@@ -28,7 +28,7 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 
-namespace JCsTools.Wpf.Extenders
+namespace Jcq.Wpf.CommonExtenders
 {
     /// <summary>
     ///     Extends a Wpf Window to support manual resizing.

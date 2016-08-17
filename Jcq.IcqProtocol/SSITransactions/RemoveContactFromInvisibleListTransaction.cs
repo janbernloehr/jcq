@@ -25,23 +25,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class RemoveContactFromInvisibleListTransaction : BaseSsiTransaction
     {
-        private readonly IcqContact _contact;
-
         public RemoveContactFromInvisibleListTransaction(IcqStorageService owner, IcqContact contact) : base(owner)
         {
-            _contact = contact;
+            Contact = contact;
         }
 
-        public IcqContact Contact
-        {
-            get { return _contact; }
-        }
+        public IcqContact Contact { get; }
 
         public override Snac CreateSnac()
         {

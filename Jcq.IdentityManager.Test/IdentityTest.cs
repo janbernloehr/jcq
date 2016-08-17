@@ -26,7 +26,7 @@
 
 using System;
 using System.IO;
-using JCsTools.IdentityManager;
+using Jcq.IdentityManager.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jcq.IdentityManager.Test
@@ -50,12 +50,12 @@ namespace Jcq.IdentityManager.Test
         [TestMethod]
         public void ImageUrlTest()
         {
-            var id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             IIdentity target = new Identity(id);
 
-            var expected = Path.GetTempFileName();
+            string expected = Path.GetTempFileName();
             target.ImageUrl = expected;
-            var actual = target.ImageUrl;
+            string actual = target.ImageUrl;
 
             Assert.AreEqual(expected, actual, false);
         }
@@ -66,12 +66,12 @@ namespace Jcq.IdentityManager.Test
         [TestMethod]
         public void IdentifierTest()
         {
-            var id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             IIdentity target = new Identity(id);
 
             Assert.AreEqual(id, target.Identifier, "Identifier provided by constructor not set.");
 
-            var expected = Guid.NewGuid().ToString();
+            string expected = Guid.NewGuid().ToString();
             target.Identifier = expected;
 
             Assert.AreEqual(expected, target.Identifier, "Identifier provided by Property not set.");
@@ -83,12 +83,12 @@ namespace Jcq.IdentityManager.Test
         [TestMethod]
         public void DescriptionTest()
         {
-            var id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             IIdentity target = new Identity(id);
 
-            var expected = Guid.NewGuid().ToString();
+            string expected = Guid.NewGuid().ToString();
             target.Description = expected;
-            var actual = target.Description;
+            string actual = target.Description;
 
             Assert.AreEqual(expected, actual);
         }

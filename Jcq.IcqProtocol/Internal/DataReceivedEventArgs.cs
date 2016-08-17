@@ -28,29 +28,21 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace JCsTools.JCQ.IcqInterface.Internal
+namespace Jcq.IcqProtocol.Internal
 {
     public class DataReceivedEventArgs : EventArgs
     {
         private static int _ticketCounter;
-        private readonly List<byte> _data;
-        private readonly int _ticket;
 
         public DataReceivedEventArgs(List<byte> data)
         {
-            _data = data;
+            Data = data;
 
-            _ticket = Interlocked.Increment(ref _ticketCounter);
+            Ticket = Interlocked.Increment(ref _ticketCounter);
         }
 
-        public List<byte> Data
-        {
-            get { return _data; }
-        }
+        public List<byte> Data { get; }
 
-        public int Ticket
-        {
-            get { return _ticket; }
-        }
+        public int Ticket { get; }
     }
 }

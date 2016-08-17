@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public abstract class Snac : ISerializable
     {
@@ -77,7 +77,8 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             var data = new List<byte>(SizeFixPart + DataSize);
 
-            RequestId = Interlocked.Increment(ref _snacRequestId);
+            if (RequestId == 0)
+                RequestId = Interlocked.Increment(ref _snacRequestId);
 
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(ServiceId)));
             data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(SubtypeId)));
@@ -89,7 +90,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public static string GetKey(Snac snac)
         {
-            return string.Format("{0:X2},{1:X2}", snac.SubtypeId == 1 ? 1 : snac.ServiceId, snac.SubtypeId);
+            return string.Format("{0:X2},{1:X2}", snac.ServiceId, snac.SubtypeId);
         }
     }
 }

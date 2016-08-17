@@ -32,16 +32,12 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\INotifyingCollection.cs" />
     <Compile Include="Collections\IReadOnlyNotifyingCollection.cs" />
-    <Compile Include="EventArgs\ExceptionEventArgs.cs" />
+    <Compile Include="Exceptions\ExceptionEventArgs.cs" />
     <Compile Include="Exceptions\IExceptionInformation.cs" />
     <Compile Include="Exceptions\IExceptionService.cs" />
     <Compile Include="ILoggingService.cs" />

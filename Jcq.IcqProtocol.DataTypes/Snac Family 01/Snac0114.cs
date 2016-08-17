@@ -26,7 +26,7 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0114 : Snac
     {
@@ -41,6 +41,13 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
             data.AddRange(ByteConverter.GetBytes((uint) 0x3));
 
             return data;
+        }
+
+        public override void Deserialize(List<byte> data)
+        {
+            base.Deserialize(data);
+
+            TotalSize = SizeFixPart + 4;
         }
 
         public override int CalculateDataSize()

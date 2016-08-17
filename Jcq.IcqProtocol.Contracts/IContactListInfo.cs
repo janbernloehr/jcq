@@ -26,11 +26,21 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Provides statistics for the contact list.
+    /// </summary>
     public interface IContactListInfo
     {
+        /// <summary>
+        ///     Gets the number of elements in the contact list.
+        /// </summary>
         int ItemCount { get; }
+
+        /// <summary>
+        ///     Gets the DateTime when the contact list was changed last.
+        /// </summary>
         DateTime DateChanged { get; }
     }
 }

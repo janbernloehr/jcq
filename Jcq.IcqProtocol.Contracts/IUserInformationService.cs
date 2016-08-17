@@ -26,13 +26,34 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to request short user information data.
+    /// </summary>
     public interface IUserInformationService : IContextService
     {
+        /// <summary>
+        ///     Occurs when the short user information of all users is received.
+        /// </summary>
         event EventHandler RequestShortUserInfoForAllUsersCompleted;
+
+        /// <summary>
+        ///     Request the short user information for a given contact.
+        /// </summary>
+        /// <param name="contact">The contact.</param>
         void RequestShortUserInfo(IContact contact);
+
+        /// <summary>
+        ///     Request the short user information for a given contact.
+        /// </summary>
+        /// <param name="contact">The contact.</param>
+        /// <param name="force"></param>
         void RequestShortUserInfo(IContact contact, bool force);
+
+        /// <summary>
+        ///     Request the short information for all contacts in the contact list.
+        /// </summary>
         void RequestShortUserInfoForAllUsers();
     }
 }

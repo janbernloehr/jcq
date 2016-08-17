@@ -27,20 +27,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac030C : Snac
     {
-        private readonly List<UserInfo> _UserInfos = new List<UserInfo>();
-
         public Snac030C() : base(0x3, 0xc)
         {
         }
 
-        public List<UserInfo> UserInfos
-        {
-            get { return _UserInfos; }
-        }
+        public List<UserInfo> UserInfos { get; } = new List<UserInfo>();
 
         public override int CalculateDataSize()
         {
@@ -56,13 +51,14 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                UserInfo info;
-                info = new UserInfo();
+                var info = new UserInfo();
                 index += info.Deserialize(index, data);
+
+                UserInfos.Add(info);
             }
 
             TotalSize = index;

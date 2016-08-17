@@ -27,10 +27,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using JCsTools.Core.Configuration;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Configuration;
+using Jcq.Core.Contracts;
 
-namespace JCsTools.Core
+namespace Jcq.Core
 {
     public class Mapper : IMapper
     {
@@ -43,57 +43,57 @@ namespace JCsTools.Core
             LoadMappings();
         }
 
-        public T CreateImplementation<T>(params Object[] args)
+        public T CreateImplementation<T>(params object[] args)
         {
-            return (T) CreateImplementation(typeof (T), args);
+            return (T) CreateImplementation(typeof(T), args);
         }
 
-        public object CreateImplementation(Type interfaceType, params object[] args)
+        public object CreateImplementation(Type contractType, params object[] args)
         {
-            var mType = GetImplementationType(interfaceType);
+            Type mType = GetImplementationType(contractType);
 
             if (mType == null)
-                throw new ImplementationNotFoundException(interfaceType);
+                throw new ImplementationNotFoundException(contractType);
 
             return Activator.CreateInstance(mType, args);
         }
 
         public Type GetImplementationType<I>()
         {
-            return GetImplementationType(typeof (I));
+            return GetImplementationType(typeof(I));
         }
 
-        public Type GetImplementationType(Type interfaceType)
+        public Type GetImplementationType(Type contractType)
         {
             Type mappedType;
 
-            if (interfaceType.IsInterface)
+            if (contractType.IsInterface)
             {
-                if (!_mappings.ContainsKey(interfaceType))
+                if (!_mappings.ContainsKey(contractType))
                 {
-                    throw new ImplementationNotFoundException(interfaceType);
+                    throw new ImplementationNotFoundException(contractType);
                 }
-                mappedType = _mappings[interfaceType];
+                mappedType = _mappings[contractType];
             }
             else
             {
-                mappedType = interfaceType;
+                mappedType = contractType;
             }
 
             return mappedType;
         }
 
-        public bool ExistsImplementation<I>()
+        public bool ExistsContractImplementation<I>()
         {
-            return ExistsImplementation(typeof (I));
+            return ExistsContractImplementation(typeof(I));
         }
 
-        public bool ExistsImplementation(Type interfaceType)
+        public bool ExistsContractImplementation(Type contractType)
         {
-            return _mappings.ContainsKey(interfaceType);
+            return _mappings.ContainsKey(contractType);
         }
 
-        public void AddImplementationMapping(Type contractType, Type implementationType)
+        public void RegisterContractImplementation(Type contractType, Type implementationType)
         {
             lock (_mappings)
             {
@@ -110,8 +110,8 @@ namespace JCsTools.Core
 
             foreach (MappingConfigElement element in mkSection.References)
             {
-                var interfaceType = Type.GetType(element.InterfaceType, true, true);
-                var mappingType = Type.GetType(element.MappingType, true, true);
+                Type interfaceType = Type.GetType(element.InterfaceType, true, true);
+                Type mappingType = Type.GetType(element.MappingType, true, true);
 
                 _mappings.Add(interfaceType, mappingType);
             }

@@ -26,10 +26,10 @@
 
 using System;
 using System.Collections;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqStatusCode : IStatusCode, IComparable<IcqStatusCode>
     {
@@ -42,14 +42,14 @@ namespace JCsTools.JCQ.IcqInterface
             _sortIndex = sortIndex;
         }
 
-        public UserStatus UserStatus { get; private set; }
+        public UserStatus UserStatus { get; }
 
         public int CompareTo(IcqStatusCode other)
         {
             return Comparer.Default.Compare(_sortIndex, other._sortIndex);
         }
 
-        public string DisplayName { get; private set; }
+        public string DisplayName { get; }
 
         int IComparable.CompareTo(object obj)
         {

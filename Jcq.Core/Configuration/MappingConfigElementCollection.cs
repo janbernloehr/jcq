@@ -26,7 +26,7 @@
 
 using System.Configuration;
 
-namespace JCsTools.Core.Configuration
+namespace Jcq.Core.Configuration
 {
     public class MappingConfigElementCollection : ConfigTypeKeySection<MappingConfigElement>
     {

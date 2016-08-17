@@ -26,11 +26,23 @@
 
 using System;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to send and receive typing notifications.
+    /// </summary>
     public interface INotificationService : IContextService
     {
+        /// <summary>
+        ///     Occurs when a TypingNotification is received.
+        /// </summary>
         event EventHandler<TypingNotificationEventArgs> TypingNotification;
+
+        /// <summary>
+        ///     Send a typing notification to a contact.
+        /// </summary>
+        /// <param name="receiver">The receiver of the typing notficiation.</param>
+        /// <param name="type">The type of the typing notification.</param>
         void SendNotification(IContact receiver, NotificationType type);
     }
 }

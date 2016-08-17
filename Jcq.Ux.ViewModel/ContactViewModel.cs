@@ -28,33 +28,34 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.Core;
+using Jcq.IcqProtocol;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
-    public class ContactViewModel : DispatcherObject, INotifyPropertyChanged
+    public class ContactViewModel : ViewModelBase
     {
-        private ImageSource _ContactImage;
-        private bool _ContactImageCreated;
-        private GroupViewModel _GroupVm;
+        private ImageSource _contactImage;
+        private bool _contactImageCreated;
+        private GroupViewModel _groupVm;
 
         public ContactViewModel(IContact model)
         {
             Model = model;
 
-            Model.PropertyChanged += HandlePropertyChanged;
+            Model.PropertyChanged += OnModelPropertyChanged;
 
             Model.IconHashReceived += OnIconHashReceived;
             Model.IconDataReceived += OnIconDataReceived;
         }
 
-        public IContact Model { get; private set; }
+        public IContact Model { get; }
         //public Hashtable Attributes
         //{
         //    get { return Model.Attributes; }
@@ -77,10 +78,10 @@ namespace JCsTools.JCQ.ViewModel
                 if (Model.Group == null)
                     return null;
 
-                if (_GroupVm == null)
-                    _GroupVm = GroupViewModelCache.GetViewModel(Model.Group);
+                if (_groupVm == null)
+                    _groupVm = GroupViewModelCache.GetViewModel(Model.Group);
 
-                return _GroupVm;
+                return _groupVm;
             }
         }
 
@@ -160,10 +161,10 @@ namespace JCsTools.JCQ.ViewModel
         {
             get
             {
-                if (!_ContactImageCreated)
+                if (!_contactImageCreated)
                     CreateContactImage();
 
-                return _ContactImage;
+                return _contactImage;
             }
         }
 
@@ -171,7 +172,7 @@ namespace JCsTools.JCQ.ViewModel
         {
             get
             {
-                if (_ContactImage != null)
+                if (_contactImage != null)
                 {
                     return Visibility.Visible;
                 }
@@ -179,47 +180,53 @@ namespace JCsTools.JCQ.ViewModel
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(e);
 
             if (e.PropertyName != "Status") return;
 
-            OnPropertyChanged(new PropertyChangedEventArgs("StatusFlag"));
-            OnPropertyChanged(new PropertyChangedEventArgs("StatusBrush"));
+            OnPropertyChanged("StatusFlag");
+            OnPropertyChanged("StatusBrush");
         }
 
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var e = new PropertyChangedEventArgs(propertyName);
+
+            if (Group != null)
+                Group.OnContactPropertyChanged(this, e);
+
+            OnPropertyChanged(e);
+        }
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (Group != null)
                 Group.OnContactPropertyChanged(this, e);
 
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, e);
-            }
+            base.OnPropertyChanged(e);
         }
 
         private void CreateContactImage()
         {
-            _ContactImageCreated = true;
+            _contactImageCreated = true;
 
             if (Model.IconData == null || Model.IconData.Count == 0) return;
 
             var ms = new MemoryStream(Model.IconData.ToArray());
-            var decoder = BitmapDecoder.Create(ms, BitmapCreateOptions.DelayCreation, BitmapCacheOption.Default);
+            BitmapDecoder decoder = BitmapDecoder.Create(ms, BitmapCreateOptions.DelayCreation,
+                BitmapCacheOption.Default);
 
             if (decoder != null)
-                _ContactImage = decoder.Frames.First();
+                _contactImage = decoder.Frames.First();
         }
 
         private void OnIconDataReceived(object sender, EventArgs e)
         {
             try
             {
-                Dispatcher.Invoke(DispatcherPriority.Normal, new Action(CreateContactImage));
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(CreateContactImage));
 
                 OnPropertyChanged("ContactImage");
                 OnPropertyChanged("ContactImageVisibility");
@@ -241,11 +248,6 @@ namespace JCsTools.JCQ.ViewModel
             {
                 Kernel.Exceptions.PublishException(ex);
             }
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
     }
 }

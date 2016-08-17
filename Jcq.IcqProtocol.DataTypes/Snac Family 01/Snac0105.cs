@@ -26,61 +26,48 @@
 
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac0105 : Snac
     {
-        private readonly TlvAuthorizationCookie _AuthorizationCookie = new TlvAuthorizationCookie();
-        private readonly TlvServerAddress _ServerAddress = new TlvServerAddress();
-        private readonly TlvServiceFamilyId _ServiceFamily = new TlvServiceFamilyId();
-
         public Snac0105() : base(0x1, 0x5)
         {
         }
 
-        public TlvServiceFamilyId ServiceFamily
-        {
-            get { return _ServiceFamily; }
-        }
+        public TlvServiceFamilyId ServiceFamily { get; } = new TlvServiceFamilyId();
 
-        public TlvServerAddress ServerAddress
-        {
-            get { return _ServerAddress; }
-        }
+        public TlvServerAddress ServerAddress { get; } = new TlvServerAddress();
 
-        public TlvAuthorizationCookie AuthorizationCookie
-        {
-            get { return _AuthorizationCookie; }
-        }
+        public TlvAuthorizationCookie AuthorizationCookie { get; } = new TlvAuthorizationCookie();
 
         public override int CalculateDataSize()
         {
-            return _ServiceFamily.CalculateTotalSize() + _ServerAddress.CalculateTotalSize() +
-                   _AuthorizationCookie.CalculateTotalSize();
+            return ServiceFamily.CalculateTotalSize() + ServerAddress.CalculateTotalSize() +
+                   AuthorizationCookie.CalculateTotalSize();
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             index += 8;
 
             while (index < data.Count)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 switch (desc.TypeId)
                 {
                     case 0xd:
-                        _ServiceFamily.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ServiceFamily.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x5:
-                        _ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
+                        ServerAddress.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                     case 0x6:
-                        _AuthorizationCookie.Deserialize(data.GetRange(index, desc.TotalSize));
+                        AuthorizationCookie.Deserialize(data.GetRange(index, desc.TotalSize));
                         break;
                 }
 
@@ -94,9 +81,9 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             var data = base.Serialize();
 
-            data.AddRange(_ServiceFamily.Serialize());
-            data.AddRange(_ServerAddress.Serialize());
-            data.AddRange(_AuthorizationCookie.Serialize());
+            data.AddRange(ServiceFamily.Serialize());
+            data.AddRange(ServerAddress.Serialize());
+            data.AddRange(AuthorizationCookie.Serialize());
 
             return data;
         }

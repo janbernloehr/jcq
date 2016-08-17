@@ -27,17 +27,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class UploadIconNotification : ExtendedStatusNotification
     {
-        private readonly List<byte> _IconHash = new List<byte>(16);
         public UploadIconFlag IconFlag { get; set; }
 
-        public List<byte> IconHash
-        {
-            get { return _IconHash; }
-        }
+        public List<byte> IconHash { get; } = new List<byte>(16);
 
         public override int CalculateDataSize()
         {
@@ -48,19 +44,17 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
-            byte hashLength;
-
-            IconFlag = (UploadIconFlag) data[index];
+            IconFlag = (UploadIconFlag)data[index];
             index += 1;
-            hashLength = data[index];
+            byte hashLength = data[index];
             index += 1;
 
-            _IconHash.AddRange(data.GetRange(index, hashLength));
+            IconHash.AddRange(data.GetRange(index, hashLength));
             index += hashLength;
 
-            SetDataSize(index);
+            SetDataSize(index - SizeFixPart);
         }
 
         public override List<byte> Serialize()

@@ -24,7 +24,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jcq.IcqProtocol.Tests
@@ -159,7 +159,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x10, 0x01, 0x00
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1002>(f);
 
             Assert.Inconclusive("Verify that Snac1002 was deserialized correctly.");
@@ -179,7 +179,7 @@ namespace Jcq.IcqProtocol.Tests
                 0x62
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1003>(f);
 
             Assert.Inconclusive("Verify that Snac1003 was deserialized correctly.");
@@ -195,7 +195,7 @@ namespace Jcq.IcqProtocol.Tests
                 0xB7, 0x39, 0xD9, 0x69, 0x2B, 0x15, 0x60, 0x36, 0x57, 0xC5, 0xC9, 0xB4, 0x89, 0xC9, 0x13, 0x82
             };
 
-            var f = SerializationTools.DeserializeFlap(data);
+            Flap f = SerializationTools.DeserializeFlap(data);
             var s = SerializationTools.DeserializeSnac<Snac1004>(f);
 
             Assert.Inconclusive("Verify that Snac1004 was deserialized correctly.");

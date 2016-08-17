@@ -29,13 +29,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using Jcq.Core;
+using Jcq.IcqProtocol.Contracts;
+using Jcq.IcqProtocol.DataTypes;
 using Jcq.IcqProtocol.Internal;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.DataTypes;
-using JCsTools.JCQ.IcqInterface.Interfaces;
-using JCsTools.JCQ.IcqInterface.Internal;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqIconService : BaseConnector, IIconService
     {
@@ -80,8 +79,8 @@ namespace JCsTools.JCQ.IcqInterface
         {
             return;
 
-            var newIcon = default(Snac1308);
-            var editIcon = default(Snac1309);
+            Snac1308 newIcon = default(Snac1308);
+            Snac1309 editIcon = default(Snac1309);
 
             if (_uploadIconRequest != null && !_uploadIconRequest.IsCompleted)
                 return;
@@ -114,9 +113,9 @@ namespace JCsTools.JCQ.IcqInterface
 
                 var parts = dataIn.ServerAddress.ServerAddress.Split(':');
 
-                var ip = IPAddress.Parse(parts[0]);
-                var port = 0;
-                var endpoint = default(IPEndPoint);
+                IPAddress ip = IPAddress.Parse(parts[0]);
+                int port = 0;
+                IPEndPoint endpoint = default(IPEndPoint);
 
                 if (parts.Length > 1)
                 {
@@ -138,7 +137,7 @@ namespace JCsTools.JCQ.IcqInterface
                 RegisterSnacHandler(0x10, 0x3, new Action<Snac1003>(AnalyseSnac1003));
                 RegisterSnacHandler(0x10, 0x5, new Action<Snac1005>(AnalyseSnac1005));
 
-                var flap = default(FlapSendSignInCookie);
+                FlapSendSignInCookie flap = default(FlapSendSignInCookie);
 
                 flap = new FlapSendSignInCookie();
                 flap.AuthorizationCookie.AuthorizationCookie.AddRange(dataIn.AuthorizationCookie.AuthorizationCookie);
@@ -201,7 +200,7 @@ namespace JCsTools.JCQ.IcqInterface
 
                 if (dataIn.Notification.Type == ExtendedStatusNotificationType.UploadIconRequest)
                 {
-                    var notification = default(UploadIconNotification);
+                    UploadIconNotification notification = default(UploadIconNotification);
 
                     notification = (UploadIconNotification) dataIn.Notification;
 
@@ -209,7 +208,7 @@ namespace JCsTools.JCQ.IcqInterface
                     {
                         Debug.WriteLine("Icon upload requested.", "IcqIconService");
 
-                        var action = default(UploadAvatarAction);
+                        UploadAvatarAction action = default(UploadAvatarAction);
 
                         action = new UploadAvatarAction(this, _uploadIconRequest.IconData);
 
@@ -313,7 +312,7 @@ namespace JCsTools.JCQ.IcqInterface
 
             try
             {
-                var c = Context.GetService<IStorageService>().GetContactByIdentifier(dataIn.Uin);
+                IContact c = Context.GetService<IStorageService>().GetContactByIdentifier(dataIn.Uin);
 
                 if (dataIn.IconData.Count > 0)
                 {
@@ -362,7 +361,7 @@ namespace JCsTools.JCQ.IcqInterface
                 if (_uploadIconRequest.RequestId != dataIn.RequestId)
                     return;
 
-                var code = dataIn.ActionResultCodes.FirstOrDefault();
+                SSIActionResultCode code = dataIn.ActionResultCodes.FirstOrDefault();
 
                 if (code == SSIActionResultCode.Success)
                 {
@@ -490,7 +489,7 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 var infos = new List<string>();
 
-                foreach (var x in e.Flap.DataItems)
+                foreach (ISerializable x in e.Flap.DataItems)
                 {
                     infos.Add(x.ToString());
                 }
@@ -510,7 +509,7 @@ namespace JCsTools.JCQ.IcqInterface
             {
                 var infos = new List<string>();
 
-                foreach (var x in e.Flap.DataItems)
+                foreach (ISerializable x in e.Flap.DataItems)
                 {
                     infos.Add(x.ToString());
                 }

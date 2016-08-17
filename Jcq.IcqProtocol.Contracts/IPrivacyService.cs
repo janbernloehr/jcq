@@ -25,20 +25,70 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using JCsTools.Core.Interfaces;
+using Jcq.Core.Contracts.Collections;
 
-namespace JCsTools.JCQ.IcqInterface.Interfaces
+namespace Jcq.IcqProtocol.Contracts
 {
+    /// <summary>
+    ///     Defines a service contract to obtain and change the privacy configurations.
+    /// </summary>
     public interface IPrivacyService : IContextService
     {
+        /// <summary>
+        ///     Gets a list of contacts to which the identity is always visible.
+        /// </summary>
         IReadOnlyNotifyingCollection<IContact> VisibleList { get; }
+
+        /// <summary>
+        ///     Gets a list of contacts to which the identity is always invisible.
+        /// </summary>
         IReadOnlyNotifyingCollection<IContact> InvisibleList { get; }
+
+        /// <summary>
+        ///     Gets a list of contacts which are ignored by this identity.
+        /// </summary>
         IReadOnlyNotifyingCollection<IContact> IgnoreList { get; }
+
+        /// <summary>
+        ///     Adds the given contact to the visible list.
+        /// </summary>
+        /// <param name="contact">The contact to add.</param>
+        /// <returns></returns>
         Task AddContactToVisibleList(IContact contact);
+
+        /// <summary>
+        ///     Removes the given contact from the visible list.
+        /// </summary>
+        /// <param name="contact">The contact to remove.</param>
+        /// <returns></returns>
         Task RemoveContactFromVisibleList(IContact contact);
+
+        /// <summary>
+        ///     Adds the given contact to the invisible list.
+        /// </summary>
+        /// <param name="contact">The contact to add.</param>
+        /// <returns></returns>
         Task AddContactToInvisibleList(IContact contact);
+
+        /// <summary>
+        ///     Removes the given contact from the invisible list.
+        /// </summary>
+        /// <param name="contact">The contact to remove.</param>
+        /// <returns></returns>
         Task RemoveContactFromInvisibleList(IContact contact);
+
+        /// <summary>
+        ///     Adds the given contact to the ignore list.
+        /// </summary>
+        /// <param name="contact">The contact to add.</param>
+        /// <returns></returns>
         Task AddContactToIgnoreList(IContact contact);
+
+        /// <summary>
+        ///     Removes the given contact from the ignore list.
+        /// </summary>
+        /// <param name="contact">The contact to remove.</param>
+        /// <returns></returns>
         Task RemoveContactFromIgnoreList(IContact contact);
     }
 }

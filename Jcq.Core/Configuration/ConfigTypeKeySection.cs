@@ -27,7 +27,7 @@
 using System;
 using System.Configuration;
 
-namespace JCsTools.Core.Configuration
+namespace Jcq.Core.Configuration
 {
     public abstract class ConfigTypeKeySection<T> : ConfigurationElementCollection where T : ConfigurationElement
     {

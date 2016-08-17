@@ -28,7 +28,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     internal class DataTemplateSelector
     {
@@ -43,11 +43,9 @@ namespace JCsTools.JCQ.ViewModel
         {
             public DataTemplate SelectTemplate(object item, DependencyObject container)
             {
-                MethodInfo m;
-
                 Content = item;
 
-                m = typeof (ContentPresenter).GetMethod("ChangeLogicalParent",
+                MethodInfo m = typeof(ContentPresenter).GetMethod("ChangeLogicalParent",
                     BindingFlags.NonPublic | BindingFlags.Instance);
                 m.Invoke(this, new object[] {container});
 

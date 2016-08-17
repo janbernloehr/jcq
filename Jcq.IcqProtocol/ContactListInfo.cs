@@ -25,9 +25,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class ContactListInfo : IContactListInfo
     {
@@ -37,7 +37,8 @@ namespace JCsTools.JCQ.IcqInterface
             DateChanged = dateChanged;
         }
 
-        public DateTime DateChanged { get; private set; }
-        public int ItemCount { get; private set; }
+        public DateTime DateChanged { get; }
+
+        public int ItemCount { get; }
     }
 }

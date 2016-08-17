@@ -27,7 +27,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public abstract class SSIRecord : ISerializable
     {
@@ -75,7 +75,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public virtual void Deserialize(List<byte> data)
         {
-            var index = 0;
+            int index = 0;
 
             _ItemName = ByteConverter.ToStringFromUInt16Index(index, data);
             index += _ItemName.Length + 2;

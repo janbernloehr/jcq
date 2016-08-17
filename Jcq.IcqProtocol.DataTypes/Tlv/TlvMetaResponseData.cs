@@ -27,7 +27,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvMetaResponseData : Tlv
     {
@@ -51,11 +51,11 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                var desc = MetaResponseDescriptor.GetDescriptor(index, data);
+                MetaResponseDescriptor desc = MetaResponseDescriptor.GetDescriptor(index, data);
 
                 switch (desc.ResponseType)
                 {

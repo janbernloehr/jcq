@@ -32,22 +32,22 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using JCsTools.Core;
-using JCsTools.JCQ.IcqInterface.Internal;
+using Jcq.Core;
+using Jcq.IcqProtocol.Internal;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class TcpContextNet45 : ITcpContext, IDisposable
     {
-        private readonly string _id;
-        private readonly BufferBlock<List<byte>> _receivedDataBuffer = new BufferBlock<List<byte>>();
         private readonly object _sendLock = new object();
         private TcpClient _client;
         private NetworkStream _stream;
 
         public TcpContextNet45()
         {
-            _id = Guid.NewGuid().ToString();
+            Id = Guid.NewGuid().ToString();
+
+            ReceivedDataBuffer = new BufferBlock<List<byte>>();
 
             //mylog += string.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), _id);
         }
@@ -60,10 +60,7 @@ namespace JCsTools.JCQ.IcqInterface
         public long BytesReceived { get; private set; }
         public long BytesSent { get; private set; }
 
-        public string Id
-        {
-            get { return _id; }
-        }
+        public string Id { get; }
 
         public bool ConnectionCloseExpected { get; private set; }
 
@@ -88,7 +85,7 @@ namespace JCsTools.JCQ.IcqInterface
             ConnectionState = TcpConnectionState.Closed;
             _client.Close();
             OnDisconnected(ConnectionCloseExpected);
-            _receivedDataBuffer.Complete();
+            ReceivedDataBuffer.Complete();
         }
 
         public void SendData(List<byte> data)
@@ -116,7 +113,7 @@ namespace JCsTools.JCQ.IcqInterface
                 {
                     ConnectionState = TcpConnectionState.Faulted;
                     OnDisconnected(ConnectionCloseExpected);
-                    _receivedDataBuffer.Complete();
+                    ReceivedDataBuffer.Complete();
                 }
 
                 throw;
@@ -137,10 +134,7 @@ namespace JCsTools.JCQ.IcqInterface
         public event EventHandler<DisconnectEventArgs> Disconnected;
         public TcpConnectionState ConnectionState { get; private set; }
 
-        public BufferBlock<List<byte>> ReceivedDataBuffer
-        {
-            get { return _receivedDataBuffer; }
-        }
+        public BufferBlock<List<byte>> ReceivedDataBuffer { get; }
 
         //public event EventHandler<DataReceivedEventArgs> DataReceived;
 
@@ -152,7 +146,7 @@ namespace JCsTools.JCQ.IcqInterface
                 {
                     var buffer = new byte[256];
 
-                    var bytesRead = await _stream.ReadAsync(buffer, 0, 256);
+                    int bytesRead = await _stream.ReadAsync(buffer, 0, 256);
 
                     if (bytesRead == 0)
                     {
@@ -160,10 +154,10 @@ namespace JCsTools.JCQ.IcqInterface
                         {
                             ConnectionState = TcpConnectionState.Closed;
                             OnDisconnected(ConnectionCloseExpected);
-                            _receivedDataBuffer.Complete();
+                            ReceivedDataBuffer.Complete();
                         }
 
-                        Debug.WriteLine("ReadTask ended since no data was read.", _id);
+                        Debug.WriteLine("ReadTask ended since no data was read.", Id);
                         break;
                     }
 
@@ -180,7 +174,7 @@ namespace JCsTools.JCQ.IcqInterface
 
                     BytesReceived += result.Count;
 
-                    _receivedDataBuffer.Post(result);
+                    ReceivedDataBuffer.Post(result);
 
                     //OnDataReceived(result);
                 }
@@ -193,7 +187,7 @@ namespace JCsTools.JCQ.IcqInterface
                 {
                     ConnectionState = TcpConnectionState.Faulted;
                     OnDisconnected(ConnectionCloseExpected);
-                    _receivedDataBuffer.Complete();
+                    ReceivedDataBuffer.Complete();
                 }
 
                 //TODO: Close client

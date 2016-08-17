@@ -26,41 +26,41 @@
 
 using System.Collections.ObjectModel;
 using System.Linq;
-using JCsTools.JCQ.IcqInterface.Interfaces;
+using Jcq.IcqProtocol.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class PrivacyWindowViewModel
     {
-        private readonly ObservableCollection<ContactViewModel> _IgnoredContacts;
-        private readonly ObservableCollection<ContactViewModel> _InvisibleContacts;
-        private readonly ObservableCollection<ContactViewModel> _VisibleContacts;
-        private ContactNotifiyingCollectionBinding _IgnoredContactsBinding;
-        private ContactNotifiyingCollectionBinding _InvisibileContactsBinding;
-        private ContactNotifiyingCollectionBinding _VisibileContactsBinding;
+        private readonly ObservableCollection<ContactViewModel> _ignoredContacts;
+        private readonly ObservableCollection<ContactViewModel> _invisibleContacts;
+        private readonly ObservableCollection<ContactViewModel> _visibleContacts;
+        private ContactNotifiyingCollectionBinding _ignoredContactsBinding;
+        private ContactNotifiyingCollectionBinding _invisibileContactsBinding;
+        private ContactNotifiyingCollectionBinding _visibileContactsBinding;
 
         public PrivacyWindowViewModel()
         {
             var svPrivacy = ApplicationService.Current.Context.GetService<IPrivacyService>();
 
-            _VisibleContacts =
+            _visibleContacts =
                 new ObservableCollection<ContactViewModel>(
                     (from x in svPrivacy.VisibleList select ContactViewModelCache.GetViewModel(x)).ToList());
-            _InvisibleContacts =
+            _invisibleContacts =
                 new ObservableCollection<ContactViewModel>(
                     (from x in svPrivacy.InvisibleList select ContactViewModelCache.GetViewModel(x)).ToList());
-            _IgnoredContacts =
+            _ignoredContacts =
                 new ObservableCollection<ContactViewModel>(
                     (from x in svPrivacy.IgnoreList select ContactViewModelCache.GetViewModel(x)).ToList());
 
-            _VisibileContactsBinding = new ContactNotifiyingCollectionBinding(svPrivacy.VisibleList, _VisibleContacts);
-            _InvisibileContactsBinding = new ContactNotifiyingCollectionBinding(svPrivacy.InvisibleList,
-                _InvisibleContacts);
-            _IgnoredContactsBinding = new ContactNotifiyingCollectionBinding(svPrivacy.IgnoreList, _IgnoredContacts);
+            _visibileContactsBinding = new ContactNotifiyingCollectionBinding(svPrivacy.VisibleList, _visibleContacts);
+            _invisibileContactsBinding = new ContactNotifiyingCollectionBinding(svPrivacy.InvisibleList,
+                _invisibleContacts);
+            _ignoredContactsBinding = new ContactNotifiyingCollectionBinding(svPrivacy.IgnoreList, _ignoredContacts);
 
-            VisibleContacts = new ReadOnlyObservableCollection<ContactViewModel>(_VisibleContacts);
-            InvisibleContacts = new ReadOnlyObservableCollection<ContactViewModel>(_InvisibleContacts);
-            IgnoredContacts = new ReadOnlyObservableCollection<ContactViewModel>(_IgnoredContacts);
+            VisibleContacts = new ReadOnlyObservableCollection<ContactViewModel>(_visibleContacts);
+            InvisibleContacts = new ReadOnlyObservableCollection<ContactViewModel>(_invisibleContacts);
+            IgnoredContacts = new ReadOnlyObservableCollection<ContactViewModel>(_ignoredContacts);
         }
 
         public ReadOnlyObservableCollection<ContactViewModel> VisibleContacts { get; private set; }
@@ -71,7 +71,7 @@ namespace JCsTools.JCQ.ViewModel
         {
             var svPrivacy = ApplicationService.Current.Context.GetService<IPrivacyService>();
             var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
-            var contact = svStorage.GetContactByIdentifier(identifier);
+            IContact contact = svStorage.GetContactByIdentifier(identifier);
 
             svPrivacy.AddContactToInvisibleList(contact);
         }
@@ -87,7 +87,7 @@ namespace JCsTools.JCQ.ViewModel
         {
             var svPrivacy = ApplicationService.Current.Context.GetService<IPrivacyService>();
             var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
-            var contact = svStorage.GetContactByIdentifier(identifier);
+            IContact contact = svStorage.GetContactByIdentifier(identifier);
 
             svPrivacy.AddContactToVisibleList(contact);
         }
@@ -103,7 +103,7 @@ namespace JCsTools.JCQ.ViewModel
         {
             var svPrivacy = ApplicationService.Current.Context.GetService<IPrivacyService>();
             var svStorage = ApplicationService.Current.Context.GetService<IStorageService>();
-            var contact = svStorage.GetContactByIdentifier(identifier);
+            IContact contact = svStorage.GetContactByIdentifier(identifier);
 
             svPrivacy.AddContactToIgnoreList(contact);
         }

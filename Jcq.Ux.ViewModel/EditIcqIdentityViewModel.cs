@@ -27,15 +27,15 @@
 using System;
 using System.IO;
 using System.Windows;
-using Jcq.Ux.ViewModel;
-using JCsTools.Core;
+using Jcq.Core;
+using Jcq.Ux.ViewModel.Contracts;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     /// <summary>
     ///     This ViewModel features identity editing.
     /// </summary>
-    public class EditIcqIdentityViewModel
+    public class EditIcqIdentityViewModel : ViewModelBase
     {
         public EditIcqIdentityViewModel(IcqIdentity identity)
         {
@@ -43,23 +43,21 @@ namespace JCsTools.JCQ.ViewModel
 
             ImageSelector = new ImageSelectorViewModel(ApplicationService.Current.DataStorageDirectory);
 
-            //TODO: Make this work.
-            //if (Identity.HasAttribute(IdentityAttributes.ImageOriginalFilePathAttribute))
-            //{
-            //    ImageSelector.SelectedImageFile =
-            //        Identity.GetAttribute(IdentityAttributes.ImageOriginalFilePathAttribute);
-            //}
+            if (!string.IsNullOrEmpty(identity.ImageOriginalFilePathAttribute))
+            {
+                ImageSelector.SelectedImageFile = identity.ImageOriginalFilePathAttribute;
+            }
         }
 
         /// <summary>
         ///     Gets the ImageSelectorViewModel which allows to pick an identity image.
         /// </summary>
-        public ImageSelectorViewModel ImageSelector { get; private set; }
+        public ImageSelectorViewModel ImageSelector { get; }
 
         /// <summary>
         ///     Gets the Identity which is edited.
         /// </summary>
-        public IcqIdentity Identity { get; private set; }
+        public IcqIdentity Identity { get; }
 
         /// <summary>
         ///     Updates the Identity with the specified FullName, Uin, Password and the selected image. FullName, Uin and Image
@@ -72,7 +70,7 @@ namespace JCsTools.JCQ.ViewModel
             if (string.IsNullOrEmpty(uin))
                 throw new ArgumentNullException("uin");
 
-            var avatarPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
+            string avatarPath = Path.Combine(ApplicationService.Current.DataStorageDirectory.FullName,
                 string.Format("{0}.[default].jpg", fullname));
 
             AvatarImageService.CreateAvatarImageFromFile(ImageSelector.SelectedImageFile, avatarPath);

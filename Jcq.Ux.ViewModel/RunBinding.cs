@@ -27,15 +27,18 @@
 using System.Windows;
 using System.Windows.Documents;
 
-namespace JCsTools.JCQ.ViewModel
+namespace Jcq.Ux.ViewModel
 {
     public class RunBinding : DependencyObject
     {
+        public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached("Text",
+            typeof(string), typeof(RunBinding), new FrameworkPropertyMetadata(null, OnThisPropertyChanged));
+
         protected static void OnThisPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue == null) return;
 
-            var text = (string) e.NewValue;
+            string text = (string) e.NewValue;
             var run = (Run) d;
 
             run.Text = text;
@@ -50,8 +53,5 @@ namespace JCsTools.JCQ.ViewModel
         {
             obj.SetValue(TextProperty, value);
         }
-
-        public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached("Text",
-            typeof (string), typeof (RunBinding), new FrameworkPropertyMetadata(null, OnThisPropertyChanged));
     }
 }

@@ -27,32 +27,26 @@
 using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class Snac130E : Snac
     {
-        private List<SSIActionResultCode> _ActionResultCodes = new List<SSIActionResultCode>();
-
         public Snac130E() : base(0x13, 0xe)
         {
         }
 
-        public List<SSIActionResultCode> ActionResultCodes
-        {
-            get { return _ActionResultCodes; }
-            set { _ActionResultCodes = value; }
-        }
+        public List<SSIActionResultCode> ActionResultCodes { get; set; } = new List<SSIActionResultCode>();
 
         public override int CalculateDataSize()
         {
-            return _ActionResultCodes.Count*2;
+            return ActionResultCodes.Count*2;
         }
 
         public override void Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            var index = SizeFixPart;
+            int index = SizeFixPart;
 
             if (data.Count > index + 2)
             {
@@ -64,7 +58,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
             if (data.Count > index + 2)
             {
-                var desc = TlvDescriptor.GetDescriptor(index, data);
+                TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
                 index += desc.TotalSize;
             }
 
@@ -73,7 +67,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
                 SSIActionResultCode code;
 
                 code = (SSIActionResultCode) ByteConverter.ToUInt16(data.GetRange(index, 2));
-                _ActionResultCodes.Add(code);
+                ActionResultCodes.Add(code);
 
                 index += 2;
             }

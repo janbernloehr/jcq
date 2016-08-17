@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public class TlvDescriptor
     {
@@ -39,7 +39,7 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
         }
 
         public int TypeId { get; private set; }
-        public int DataSize { get; private set; }
+        public int DataSize { get; }
 
         public int TotalSize
         {

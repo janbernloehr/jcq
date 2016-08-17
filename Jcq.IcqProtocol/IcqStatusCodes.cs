@@ -24,88 +24,52 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using JCsTools.JCQ.IcqInterface.DataTypes;
+using Jcq.IcqProtocol.DataTypes;
 
-namespace JCsTools.JCQ.IcqInterface
+namespace Jcq.IcqProtocol
 {
     public class IcqStatusCodes
     {
-        private static readonly IcqStatusCode _Online = new IcqStatusCode("Online", UserStatus.Online, 0);
-        private static readonly IcqStatusCode _Free4Chat = new IcqStatusCode("Free4Chat", UserStatus.FreeForChat, 1);
-        private static readonly IcqStatusCode _Invisible = new IcqStatusCode("Invisible", UserStatus.Invisible, 2);
-        private static readonly IcqStatusCode _Away = new IcqStatusCode("Away", UserStatus.Away, 3);
-
-        private static readonly IcqStatusCode _DoNotDisturb = new IcqStatusCode("Do not disturb",
-            UserStatus.DoNotDisturb, 4);
-
-        private static readonly IcqStatusCode _Occupied = new IcqStatusCode("Occupied", UserStatus.Occupied, 5);
-
-        private static readonly IcqStatusCode _NotAvailable = new IcqStatusCode("Not Available", UserStatus.NotAvailable,
-            6);
-
-        private static readonly IcqStatusCode _Offline = new IcqStatusCode("Offline", UserStatus.Offline, 7);
         private static readonly IcqStatusCode _Unknown = new IcqStatusCode("Unknown status", UserStatus.Offline, 8);
 
-        public static IcqStatusCode Online
-        {
-            get { return _Online; }
-        }
+        public static IcqStatusCode Online { get; } = new IcqStatusCode("Online", UserStatus.Online, 0);
 
-        public static IcqStatusCode Offline
-        {
-            get { return _Offline; }
-        }
+        public static IcqStatusCode Offline { get; } = new IcqStatusCode("Offline", UserStatus.Offline, 7);
 
-        public static IcqStatusCode Occupied
-        {
-            get { return _Occupied; }
-        }
+        public static IcqStatusCode Occupied { get; } = new IcqStatusCode("Occupied", UserStatus.Occupied, 5);
 
-        public static IcqStatusCode NotAvailable
-        {
-            get { return _NotAvailable; }
-        }
+        public static IcqStatusCode NotAvailable { get; } = new IcqStatusCode("Not Available", UserStatus.NotAvailable,
+            6);
 
-        public static IcqStatusCode Invisible
-        {
-            get { return _Invisible; }
-        }
+        public static IcqStatusCode Invisible { get; } = new IcqStatusCode("Invisible", UserStatus.Invisible, 2);
 
-        public static IcqStatusCode Free4Chat
-        {
-            get { return _Free4Chat; }
-        }
+        public static IcqStatusCode Free4Chat { get; } = new IcqStatusCode("Free4Chat", UserStatus.FreeForChat, 1);
 
-        public static IcqStatusCode Away
-        {
-            get { return _Away; }
-        }
+        public static IcqStatusCode Away { get; } = new IcqStatusCode("Away", UserStatus.Away, 3);
 
-        public static IcqStatusCode DoNotDisturb
-        {
-            get { return _DoNotDisturb; }
-        }
+        public static IcqStatusCode DoNotDisturb { get; } = new IcqStatusCode("Do not disturb",
+            UserStatus.DoNotDisturb, 4);
 
         public static IcqStatusCode GetStatusCode(UserStatus status)
         {
             switch (status)
             {
                 case UserStatus.Away:
-                    return _Away;
+                    return Away;
                 case UserStatus.DoNotDisturb:
-                    return _DoNotDisturb;
+                    return DoNotDisturb;
                 case UserStatus.FreeForChat:
-                    return _Free4Chat;
+                    return Free4Chat;
                 case UserStatus.Invisible:
-                    return _Invisible;
+                    return Invisible;
                 case UserStatus.NotAvailable:
-                    return _NotAvailable;
+                    return NotAvailable;
                 case UserStatus.Occupied:
-                    return _Occupied;
+                    return Occupied;
                 case UserStatus.Offline:
-                    return _Offline;
+                    return Offline;
                 case UserStatus.Online:
-                    return _Online;
+                    return Online;
                 default:
                     return _Unknown;
             }

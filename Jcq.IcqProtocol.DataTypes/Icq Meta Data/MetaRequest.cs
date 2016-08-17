@@ -24,10 +24,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 
-namespace JCsTools.JCQ.IcqInterface.DataTypes
+namespace Jcq.IcqProtocol.DataTypes
 {
     public abstract class MetaRequest : ISerializable
     {
@@ -72,22 +71,20 @@ namespace JCsTools.JCQ.IcqInterface.DataTypes
 
         public virtual void Deserialize(List<byte> data)
         {
-            //Dim index As Integer
+            int index = 0;
 
-            //_DataSize = ByteConverter.ToUInt16LE(data.GetRange(index, 2)) - (SizeFixPart - 2)
-            //index += 2
+            DataSize = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
 
-            //_ClientUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4))
-            //index += 4
+            index += 2;
 
-            //_RequestType = DirectCast(CInt(ByteConverter.ToUInt16LE(data.GetRange(index, 2))), MetaRequestType)
-            //index += 2
+            ClientUin = ByteConverter.ToUInt32LE(data.GetRange(index, 4));
+            index += 4;
 
-            //_RequestSequenceNumber = ByteConverter.ToUInt16LE(data.GetRange(index, 2)) - (SizeFixPart - 2)
-            //index += 2
+            RequestType = (MetaRequestType) ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            index += 2;
 
-            //_HasData = True
-            throw new NotImplementedException();
+            RequestSequenceNumber = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
+            index += 2;
         }
 
         public static int GetNextSequenceNumber()

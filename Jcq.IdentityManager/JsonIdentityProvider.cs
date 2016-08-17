@@ -28,7 +28,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace JCsTools.IdentityManager
+namespace Jcq.IdentityManager
 {
     public class JsonIdentityProvider : IdentityProvider
     {
@@ -55,7 +55,7 @@ namespace JCsTools.IdentityManager
             var identities = JsonConvert.DeserializeObject<Identity[]>(json,
                 new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects});
 
-            foreach (var identity in identities)
+            foreach (Identity identity in identities)
             {
                 Identities.Add(identity);
             }
@@ -63,7 +63,7 @@ namespace JCsTools.IdentityManager
 
         public void Save()
         {
-            var json = JsonConvert.SerializeObject(Identities.ToArray(),
+            string json = JsonConvert.SerializeObject(Identities.ToArray(),
                 new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects});
 
             if (!_jsonFile.Directory.Exists)
