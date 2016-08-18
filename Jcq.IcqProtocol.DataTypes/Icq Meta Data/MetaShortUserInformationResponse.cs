@@ -72,16 +72,19 @@ namespace Jcq.IcqProtocol.DataTypes
             index += 1;
 
             Nickname = ByteConverter.ToZeroBasedStringFromUInt16LEIndex(index, data);
-            index += 2 + (string.IsNullOrEmpty(Nickname) ? 0 : Nickname.Length + 1);
+            index += 2 + (string.IsNullOrEmpty(Nickname) ? 1 : Nickname.Length + 1);
 
             FirstName = ByteConverter.ToZeroBasedStringFromUInt16LEIndex(index, data);
-            index += 2 + (string.IsNullOrEmpty(FirstName) ? 0 : FirstName.Length + 1);
+            index += 2 + (string.IsNullOrEmpty(FirstName) ? 1 : FirstName.Length + 1);
 
             LastName = ByteConverter.ToZeroBasedStringFromUInt16LEIndex(index, data);
-            index += 2 + (string.IsNullOrEmpty(LastName) ? 0 : LastName.Length + 1);
+            index += 2 + (string.IsNullOrEmpty(LastName) ? 1 : LastName.Length + 1);
 
             EmailAddress = ByteConverter.ToZeroBasedStringFromUInt16LEIndex(index, data);
-            index += 2 + (string.IsNullOrEmpty(EmailAddress) ? 0 : EmailAddress.Length + 1);
+            index += 2 + (string.IsNullOrEmpty(EmailAddress) ? 1 : EmailAddress.Length + 1);
+
+            // the following is not correct
+            // there are always 2*6 bytes following...
 
             if (data[index] == 0)
                 AuthorizationRequired = true;
@@ -91,6 +94,7 @@ namespace Jcq.IcqProtocol.DataTypes
             Gender = data[index];
             index += 1;
 
+            
             return index;
         }
     }
