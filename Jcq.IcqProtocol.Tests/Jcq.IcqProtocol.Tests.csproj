@@ -52,6 +52,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ByteConverterTests.cs" />
     <Compile Include="SerializationTools.cs" />
     <Compile Include="SnacFamily01Tests.cs" />

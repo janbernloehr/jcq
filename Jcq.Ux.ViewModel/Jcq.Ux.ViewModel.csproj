@@ -45,6 +45,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ActivityStatusPageViewModel.cs" />
     <Compile Include="EmojiHelper.cs" />
     <Compile Include="Services\ApplicationService.cs" />
