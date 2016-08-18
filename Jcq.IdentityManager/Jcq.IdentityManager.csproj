@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Contracts\IIdentity.cs" />
     <Compile Include="Contracts\IIdentityProvider.cs" />
     <Compile Include="Identity.cs" />

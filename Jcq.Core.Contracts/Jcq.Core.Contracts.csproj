@@ -37,6 +37,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Collections\INotifyingCollection.cs" />
     <Compile Include="Collections\IReadOnlyNotifyingCollection.cs" />
     <Compile Include="Exceptions\ExceptionEventArgs.cs" />
