@@ -50,14 +50,11 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public int DataSize { get; private set; }
 
-        public int TotalSize
-        {
-            get { return DataSize; }
-        }
+        public int TotalSize => DataSize;
 
         public bool HasData { get; private set; }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             int index = 0;
 
@@ -74,6 +71,7 @@ namespace Jcq.IcqProtocol.DataTypes
             index += 2;
 
             HasData = true;
+            return index;
         }
 
         public virtual List<byte> Serialize()

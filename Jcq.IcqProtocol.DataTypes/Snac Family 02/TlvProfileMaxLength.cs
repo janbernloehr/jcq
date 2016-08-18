@@ -48,11 +48,13 @@ namespace Jcq.IcqProtocol.DataTypes
             }
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             ClientMaxProfileLength = ByteConverter.ToUInt16(data.GetRange(SizeFixPart, 2));
+
+            return SizeFixPart + 2;
         }
 
         public override List<byte> Serialize()

@@ -31,7 +31,7 @@ using Jcq.Core;
 
 namespace Jcq.IcqProtocol.DataTypes
 {
-    public class Flap : ISerializable
+    public class Flap : ISerializable, IFlapDescriptor
     {
         public const int SizeFixPart = 6;
 
@@ -46,27 +46,32 @@ namespace Jcq.IcqProtocol.DataTypes
             Channel = channel;
         }
 
-        public FlapChannel Channel { get; set; }
+        public FlapChannel Channel { get; private set; }
         public int DatagramSequenceNumber { get; set; }
 
         public List<ISerializable> DataItems { get; } = new List<ISerializable>();
+        
+        public int TotalSize => SizeFixPart + DataSize;
 
-        public int FlapDataSize { get; private set; }
-
-        public int FlapTotalSize
+        public string SnacKey
         {
-            get { return SizeFixPart + FlapDataSize; }
+            get
+            {
+                if (Descriptor != null)
+                    return Descriptor.SnacKey;
+
+                if (Channel == FlapChannel.SnacData && DataItems.Any())
+                {
+                    var key = Snac.GetKey((Snac)DataItems.First());
+
+                    return $"{key.Item1:X2},{key.Item2:X2}";
+                }
+
+                return null;
+            }
         }
 
-        public int TotalSize
-        {
-            get { return SizeFixPart + FlapDataSize; }
-        }
-
-        public int DataSize
-        {
-            get { return FlapDataSize; }
-        }
+        public int DataSize { get; private set; }
 
         public bool HasData { get; private set; }
 
@@ -82,40 +87,40 @@ namespace Jcq.IcqProtocol.DataTypes
             return SizeFixPart + CalculateDataSize();
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public FlapDescriptor Descriptor { get; private set; }
+
+        public virtual int Deserialize(List<byte> data)
         {
-            int index = 0;
+            return Deserialize(FlapDescriptor.GetDescriptor(0, data), data);
+        }
 
-            index += 1;
+        public virtual int Deserialize(FlapDescriptor descriptor, List<byte> data)
+        {
+            Descriptor = descriptor;
 
-            Channel = (FlapChannel) data[index];
-            index += 1;
+            Channel = descriptor.Channel;
+            DatagramSequenceNumber = descriptor.DatagramSequenceNumber;
+            DataSize = descriptor.DataSize;
 
-            DatagramSequenceNumber = ByteConverter.ToUInt16(data.GetRange(index, 2));
-            index += 2;
-
-            FlapDataSize = ByteConverter.ToUInt16(data.GetRange(index, 2));
-            index += 2;
+            int index = SizeFixPart;
 
             switch (Channel)
             {
                 case FlapChannel.SnacData:
-                    SnacDescriptor descriptor = SnacDescriptor.GetDescriptor(index, data);
-                    Snac x = SerializationContext.DeserializeSnac(index, descriptor, data);
+                    Snac x = SerializationContext.DeserializeSnac(index, descriptor.SnacDescriptor, data);
 
                     try
                     {
                         if (x == null)
-                            throw new NotImplementedException(string.Format("Snac {0} is not implemented.",
-                                SnacDescriptor.GetKey(descriptor)));
+                            throw new NotImplementedException(
+                                $"Snac {descriptor.SnacDescriptor.Key} is not implemented.");
                         index += x.TotalSize;
 
                         DataItems.Add(x);
 
-                        if (index < FlapDataSize)
+                        if (index < DataSize)
                             throw new InvalidOperationException(
-                                string.Format("Deserialization of Snac {0} failed {1} bytes remaining.",
-                                    SnacDescriptor.GetKey(descriptor), data.Count - index));
+                                $"Deserialization of Snac {descriptor.SnacDescriptor.Key} failed {data.Count - index} bytes remaining.");
                     }
                     catch (Exception ex)
                     {
@@ -123,7 +128,7 @@ namespace Jcq.IcqProtocol.DataTypes
                     }
                     break;
                 case FlapChannel.CloseConnectionNegotiation:
-                    while (index < FlapDataSize)
+                    while (index < DataSize)
                     {
                         TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
@@ -161,24 +166,25 @@ namespace Jcq.IcqProtocol.DataTypes
             }
 
             HasData = true;
+            return index;
         }
 
         public virtual List<byte> Serialize()
         {
-            FlapDataSize = CalculateDataSize();
+            DataSize = CalculateDataSize();
 
-            var data = new List<byte>(SizeFixPart + FlapDataSize)
+            var data = new List<byte>(SizeFixPart + DataSize)
             {
                 0x2a,
                 (byte) Channel
             };
 
-            data.AddRange(ByteConverter.GetBytes((ushort) DatagramSequenceNumber));
+            data.AddRange(ByteConverter.GetBytes((ushort)DatagramSequenceNumber));
 
-            if (FlapDataSize > ushort.MaxValue)
-                throw new OverflowException(string.Format("DataSize cannot exceed {0} bytes", uint.MaxValue));
+            if (DataSize > ushort.MaxValue)
+                throw new OverflowException($"DataSize cannot exceed {uint.MaxValue} bytes");
 
-            data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(FlapDataSize)));
+            data.AddRange(ByteConverter.GetBytes(Convert.ToUInt16(DataSize)));
 
             foreach (ISerializable x in DataItems)
             {

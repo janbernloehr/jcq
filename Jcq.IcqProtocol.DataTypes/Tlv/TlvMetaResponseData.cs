@@ -47,7 +47,7 @@ namespace Jcq.IcqProtocol.DataTypes
             throw new NotImplementedException();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -60,14 +60,12 @@ namespace Jcq.IcqProtocol.DataTypes
                 switch (desc.ResponseType)
                 {
                     case MetaResponseType.EndOfOfflineMessageResponse:
-                        EndOfOfflineMessagesResponse respa;
-                        respa = new EndOfOfflineMessagesResponse();
+                        var respa = new EndOfOfflineMessagesResponse();
                         respa.Deserialize(data.GetRange(index, desc.TotalSize));
                         MetaResponse = respa;
                         break;
                     case MetaResponseType.OfflineMessageResponse:
-                        OfflineMessageResponse respb;
-                        respb = new OfflineMessageResponse();
+                        var respb = new OfflineMessageResponse();
                         respb.Deserialize(data.GetRange(index, desc.TotalSize));
                         MetaResponse = respb;
                         break;
@@ -78,6 +76,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
                 index += desc.TotalSize;
             }
+
+            return index;
         }
 
         private MetaResponse DeserializeMetaResponse(MetaResponseDescriptor desc, List<byte> data)

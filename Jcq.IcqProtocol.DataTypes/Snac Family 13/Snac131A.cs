@@ -44,7 +44,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return 1 + Uin.Length + 1 + 2 + Message.Length + 2;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
             throw new NotImplementedException();
         }
@@ -56,14 +56,7 @@ namespace Jcq.IcqProtocol.DataTypes
             data.Add((byte) Uin.Length);
             data.AddRange(ByteConverter.GetBytes(Uin));
 
-            if (AuthorizationAccepted)
-            {
-                data.Add(1);
-            }
-            else
-            {
-                data.Add(0);
-            }
+            data.Add(AuthorizationAccepted ? (byte)1 : (byte)0);
 
             data.AddRange(ByteConverter.GetBytes((ushort) Message.Length));
             data.AddRange(ByteConverter.GetBytes(Message));

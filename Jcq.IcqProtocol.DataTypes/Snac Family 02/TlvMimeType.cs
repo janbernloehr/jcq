@@ -45,11 +45,15 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            MimeTypeName = ByteConverter.ToString(data.GetRange(4, DataSize));
+            MimeTypeName = ByteConverter.ToString(data.GetRange(SizeFixPart, DataSize));
+
+            int index = SizeFixPart + DataSize;
+
+            return index;
         }
 
         public override int CalculateDataSize()

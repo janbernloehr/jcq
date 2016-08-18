@@ -36,13 +36,14 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public int MaxNumberOfContactListEntries { get; set; }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             MaxNumberOfContactListEntries = ByteConverter.ToUInt16(data.GetRange(index, 2));
+            return index + 2;
         }
 
         public override List<byte> Serialize()

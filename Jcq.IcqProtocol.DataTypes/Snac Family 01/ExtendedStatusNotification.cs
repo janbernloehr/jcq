@@ -41,27 +41,21 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public int DataSize { get; private set; }
 
-        public int TotalSize
-        {
-            get { return SizeFixPart + DataSize; }
-        }
+        public int TotalSize => SizeFixPart + DataSize;
 
         public bool HasData { get; private set; }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             Type = (ExtendedStatusNotificationType) ByteConverter.ToUInt16(data.GetRange(0, 2));
 
             HasData = true;
+            return SizeFixPart;
         }
 
         public virtual List<byte> Serialize()
         {
-            List<byte> data;
-
-            data = new List<byte>();
-
-            data.AddRange(ByteConverter.GetBytes((uint) Type));
+            var data = new List<byte>(ByteConverter.GetBytes((uint) Type));
 
             return data;
         }

@@ -25,6 +25,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace Jcq.Core.Contracts
 {
@@ -48,6 +49,7 @@ namespace Jcq.Core.Contracts
         /// <param name="severity">The severity of the entry.</param>
         /// <param name="message">The message of the entry.</param>
         /// <param name="args">The formatting arguments for the message.</param>
+        [StringFormatMethod("message")]
         void Log(string category, TraceEventType severity, string message, params object[] args);
     }
 }

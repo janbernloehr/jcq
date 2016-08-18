@@ -49,15 +49,9 @@ namespace Jcq.IcqProtocol.DataTypes
         public int ToolId { get; set; }
         public int ToolVersion { get; set; }
 
-        public int DataSize
-        {
-            get { return 0; }
-        }
+        public int DataSize => 0;
 
-        public int TotalSize
-        {
-            get { return SizeFixPart; }
-        }
+        public int TotalSize => SizeFixPart;
 
         public virtual int CalculateDataSize()
         {
@@ -69,7 +63,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return SizeFixPart;
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             FamilyNumber = ByteConverter.ToUInt16(data.GetRange(0, 2));
             FamilyVersion = ByteConverter.ToUInt16(data.GetRange(2, 2));
@@ -77,13 +71,13 @@ namespace Jcq.IcqProtocol.DataTypes
             ToolVersion = ByteConverter.ToUInt16(data.GetRange(6, 2));
 
             HasData = true;
+
+            return SizeFixPart;
         }
 
         public virtual List<byte> Serialize()
         {
-            List<byte> data;
-
-            data = new List<byte>();
+            var data = new List<byte>(SizeFixPart);
 
             data.AddRange(ByteConverter.GetBytes((ushort) FamilyNumber));
             data.AddRange(ByteConverter.GetBytes((ushort) FamilyVersion));

@@ -53,10 +53,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public int DataSize { get; private set; }
 
-        public int TotalSize
-        {
-            get { return DataSize; }
-        }
+        public int TotalSize => DataSize;
 
         public bool HasData { get; private set; }
 
@@ -74,7 +71,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return CalculateDataSize();
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             int index = 0;
 
@@ -87,10 +84,9 @@ namespace Jcq.IcqProtocol.DataTypes
             WarningLevel = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            int innerTlvCount;
             int innerTlvIndex = 0;
 
-            innerTlvCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
+            int innerTlvCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
             while (innerTlvIndex < innerTlvCount)
@@ -135,13 +131,13 @@ namespace Jcq.IcqProtocol.DataTypes
             DataSize = index;
 
             HasData = true;
+
+            return index;
         }
 
         public virtual List<byte> Serialize()
         {
-            List<byte> data;
-
-            data = new List<byte>();
+            var data = new List<byte>(CalculateTotalSize());
 
             data.AddRange(UserClass.Serialize());
             data.AddRange(DCInfo.Serialize());

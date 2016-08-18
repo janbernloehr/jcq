@@ -36,13 +36,16 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public string EncodingType { get; set; }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             EncodingType = ByteConverter.ToStringFromUInt16Index(index, data);
+            index += 2 + EncodingType.Length;
+
+            return index;
         }
 
         public override List<byte> Serialize()

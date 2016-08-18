@@ -69,9 +69,9 @@ namespace Jcq.IcqProtocol.DataTypes
             return size;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
 
@@ -82,38 +82,33 @@ namespace Jcq.IcqProtocol.DataTypes
                 switch (desc.ItemType)
                 {
                     case SSIItemType.BuddyRecord:
-                        SSIBuddyRecord buddy;
-                        buddy = new SSIBuddyRecord();
+                        var buddy = new SSIBuddyRecord();
                         buddy.Deserialize(data.GetRange(index, desc.TotalSize));
                         BuddyRecords.Add(buddy);
                         break;
                     case SSIItemType.GroupRecord:
-                        SSIGroupRecord group;
-                        group = new SSIGroupRecord();
+                        var @group = new SSIGroupRecord();
                         group.Deserialize(data.GetRange(index, desc.TotalSize));
                         GroupRecords.Add(group);
                         break;
                     case SSIItemType.PermitRecord:
-                        SSIPermitRecord permit;
-                        permit = new SSIPermitRecord();
+                        var permit = new SSIPermitRecord();
                         permit.Deserialize(data.GetRange(index, desc.TotalSize));
                         PermitRecords.Add(permit);
                         break;
                     case SSIItemType.DenyRecord:
-                        SSIDenyRecord deny;
-                        deny = new SSIDenyRecord();
+                        var deny = new SSIDenyRecord();
                         deny.Deserialize(data.GetRange(index, desc.TotalSize));
                         DenyRecords.Add(deny);
                         break;
                     case SSIItemType.IgnoreListRecord:
-                        SSIIgnoreListRecord ignore;
-                        ignore = new SSIIgnoreListRecord();
+                        var ignore = new SSIIgnoreListRecord();
                         ignore.Deserialize(data.GetRange(index, desc.TotalSize));
                         IgnoreListRecords.Add(ignore);
                         break;
                     default:
-                        Kernel.Logger.Log("Snac130A", TraceEventType.Error, "Unsupported SSI item type: {0}",
-                            desc.ItemType);
+                        Kernel.Logger.Log("Snac130A", TraceEventType.Error,
+                            $"Unsupported SSI item type: {desc.ItemType}");
                         break;
                 }
 
@@ -123,6 +118,7 @@ namespace Jcq.IcqProtocol.DataTypes
             }
 
             TotalSize = index;
+            return index;
         }
 
         public override List<byte> Serialize()

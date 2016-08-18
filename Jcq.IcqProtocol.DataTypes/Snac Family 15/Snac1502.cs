@@ -42,7 +42,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return MetaData.CalculateTotalSize();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
             throw new NotImplementedException();
         }
@@ -56,12 +56,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public override string ToString()
         {
-            if (MetaData.MetaRequest is MetaShortUserInformationRequest)
-            {
-                return string.Format("Snac1502 Search: {0}",
-                    ((MetaShortUserInformationRequest) MetaData.MetaRequest).SearchUin);
-            }
-            return base.ToString();
+            var request = MetaData.MetaRequest as MetaShortUserInformationRequest;
+            return request != null ? $"Snac1502 Search: {request.SearchUin}" : base.ToString();
         }
     }
 }

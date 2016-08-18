@@ -61,14 +61,20 @@ namespace Jcq.IcqProtocol.DataTypes
             return SizeFixPart + CalculateDataSize();
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public int Deserialize(List<byte> data)
         {
-            ServiceId = ByteConverter.ToUInt16(data.GetRange(0, 2));
-            SubtypeId = ByteConverter.ToUInt16(data.GetRange(2, 2));
-            Flags = ByteConverter.ToUInt16(data.GetRange(4, 2));
-            RequestId = ByteConverter.ToUInt16(data.GetRange(6, 4));
+            return Deserialize(SnacDescriptor.GetDescriptor(0, data), data);
+        }
+
+        public virtual int Deserialize(SnacDescriptor descriptor, List<byte> data)
+        {
+            ServiceId = descriptor.ServiceId;
+            SubtypeId = descriptor.SubtypeId;
+            Flags = descriptor.Flags;
+            RequestId = descriptor.RequestId;
 
             HasData = true;
+            return SizeFixPart;
         }
 
         public virtual List<byte> Serialize()
@@ -88,9 +94,9 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public static string GetKey(Snac snac)
+        public static Tuple<int, int> GetKey(Snac snac)
         {
-            return string.Format("{0:X2},{1:X2}", snac.ServiceId, snac.SubtypeId);
+            return new Tuple<int, int>(snac.ServiceId, snac.SubtypeId);
         }
     }
 }

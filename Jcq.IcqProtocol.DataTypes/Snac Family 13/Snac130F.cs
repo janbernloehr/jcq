@@ -43,9 +43,9 @@ namespace Jcq.IcqProtocol.DataTypes
             return 6;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
 
@@ -56,6 +56,7 @@ namespace Jcq.IcqProtocol.DataTypes
             index += 2;
 
             TotalSize = index;
+            return index;
         }
 
         public override List<byte> Serialize()

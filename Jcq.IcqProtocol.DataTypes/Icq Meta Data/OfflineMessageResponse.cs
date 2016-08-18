@@ -48,7 +48,7 @@ namespace Jcq.IcqProtocol.DataTypes
             throw new NotImplementedException();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -83,6 +83,8 @@ namespace Jcq.IcqProtocol.DataTypes
             MessageText = ByteConverter.ToStringFromUInt16LEIndex(index, data);
             if (MessageText.EndsWith(Encoding.UTF8.GetString(new byte[] {0})))
                 MessageText = MessageText.Substring(0, MessageText.Length - 1);
+
+            return index;
         }
 
         public override List<byte> Serialize()

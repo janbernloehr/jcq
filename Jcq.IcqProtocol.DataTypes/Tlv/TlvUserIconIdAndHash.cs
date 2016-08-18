@@ -45,7 +45,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return 2 + 1 + 1 + IconMD5Hash.Count;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -62,6 +62,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
             IconMD5Hash.AddRange(data.GetRange(index, IconHashLenght));
             index += IconMD5Hash.Count;
+
+            return index;
         }
 
         public override List<byte> Serialize()

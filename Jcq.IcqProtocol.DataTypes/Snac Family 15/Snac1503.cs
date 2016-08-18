@@ -49,9 +49,9 @@ namespace Jcq.IcqProtocol.DataTypes
             throw new NotImplementedException();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
 
@@ -60,8 +60,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
                 Kernel.Logger.Log("Snac1503", TraceEventType.Information,
-                    "tlv {0:X2} found at index {1}; data size: {2} total lenght: {3}", desc.TypeId, index, desc.DataSize,
-                    data.Count);
+                    $"tlv {desc.TypeId:X2} found at index {index}; data size: {desc.DataSize} total lenght: {data.Count}");
 
                 switch (desc.TypeId)
                 {
@@ -74,6 +73,7 @@ namespace Jcq.IcqProtocol.DataTypes
             }
 
             TotalSize = index;
+            return index;
         }
     }
 }

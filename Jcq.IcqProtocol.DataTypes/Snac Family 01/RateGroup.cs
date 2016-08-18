@@ -35,23 +35,20 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public List<FamilySubtypePair> ServiceFamilyIdSubTypeIdPairs { get; } = new List<FamilySubtypePair>();
 
-        public int TotalSize
-        {
-            get { return 4 + DataSize; }
-        }
+        public const int SizeFixPart = 4;
+
+        public int TotalSize => SizeFixPart + DataSize;
 
         public int DataSize { get; private set; }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
-            int pairCount;
             int pairIndex = 0;
-            int index;
 
             GroupId = ByteConverter.ToUInt16(data.GetRange(0, 2));
-            pairCount = ByteConverter.ToUInt16(data.GetRange(2, 2));
+            int pairCount = ByteConverter.ToUInt16(data.GetRange(2, 2));
 
-            index = 4;
+            int index = SizeFixPart;
 
             while (pairIndex < pairCount)
             {
@@ -64,8 +61,10 @@ namespace Jcq.IcqProtocol.DataTypes
                 index += 4;
             }
 
-            DataSize = index - 4;
+            DataSize = index - SizeFixPart;
             HasData = true;
+
+            return index;
         }
 
         public virtual List<byte> Serialize()

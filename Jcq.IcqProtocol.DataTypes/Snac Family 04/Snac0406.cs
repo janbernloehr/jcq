@@ -51,7 +51,7 @@ namespace Jcq.IcqProtocol.DataTypes
                 : 0) + (StoreMessageIfRecipientIsOffline ? 4 : 0);
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
             throw new NotImplementedException();
         }

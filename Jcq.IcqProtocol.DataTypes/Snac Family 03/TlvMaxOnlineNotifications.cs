@@ -36,13 +36,16 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public int MaxOnlineNotifications { get; set; }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             MaxOnlineNotifications = ByteConverter.ToUInt16(data.GetRange(index, 2));
+            index += 2;
+
+            return index;
         }
 
         public override List<byte> Serialize()

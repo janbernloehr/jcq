@@ -43,7 +43,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return 2 + SearchTlvs.Sum(x => x.CalculateTotalSize());
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             throw new NotImplementedException();
         }

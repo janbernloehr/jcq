@@ -35,10 +35,12 @@ namespace Jcq.IcqProtocol.DataTypes
         {
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             TypeNumber = ByteConverter.ToUInt16LE(data.GetRange(0, 2));
             SetDataSize(ByteConverter.ToUInt16LE(data.GetRange(2, 2)));
+
+            return 4;
         }
 
         public override List<byte> Serialize()

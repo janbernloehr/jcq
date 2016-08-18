@@ -49,7 +49,7 @@ namespace Jcq.IcqProtocol.DataTypes
             throw new NotImplementedException();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -57,6 +57,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
             ResponseSubType = (MetaResponseSubType) ByteConverter.ToUInt16LE(data.GetRange(index, 2));
             index += 2;
+
+            return index;
         }
     }
 }

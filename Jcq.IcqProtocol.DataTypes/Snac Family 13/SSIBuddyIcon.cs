@@ -45,7 +45,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return LocalScreenName.CalculateTotalSize() + BuddyIcon.CalculateTotalSize();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -64,13 +64,13 @@ namespace Jcq.IcqProtocol.DataTypes
 
                 index += desc.TotalSize;
             }
+
+            return index;
         }
 
         public override List<byte> Serialize()
         {
-            List<byte> data;
-
-            data = base.Serialize();
+            var data = base.Serialize();
 
             data.AddRange(LocalScreenName.Serialize());
 

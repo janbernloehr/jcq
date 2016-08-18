@@ -57,7 +57,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public TlvClientCountry ClientCountry { get; } = new TlvClientCountry();
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             throw new NotImplementedException();
         }

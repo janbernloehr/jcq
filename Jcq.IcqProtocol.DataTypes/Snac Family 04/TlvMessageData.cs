@@ -92,7 +92,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -113,10 +113,10 @@ namespace Jcq.IcqProtocol.DataTypes
 
             index += 4;
 
-            //MessageText = ByteConverter.ToString(data.GetRange(index, length - 4));
             MessageText = Encoding.BigEndianUnicode.GetString(data.GetRange(index, length - 4).ToArray());
 
             index += length - 4;
+            return index;
         }
     }
 }

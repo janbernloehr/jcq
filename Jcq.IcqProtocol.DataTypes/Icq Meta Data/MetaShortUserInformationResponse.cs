@@ -53,7 +53,7 @@ namespace Jcq.IcqProtocol.DataTypes
             throw new NotImplementedException();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -66,7 +66,7 @@ namespace Jcq.IcqProtocol.DataTypes
             else
             {
                 SearchSucceeded = false;
-                return;
+                return index;
             }
 
             index += 1;
@@ -89,6 +89,9 @@ namespace Jcq.IcqProtocol.DataTypes
             index += 1;
 
             Gender = data[index];
+            index += 1;
+
+            return index;
         }
     }
 }

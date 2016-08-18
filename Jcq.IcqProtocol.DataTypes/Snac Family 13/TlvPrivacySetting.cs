@@ -41,13 +41,16 @@ namespace Jcq.IcqProtocol.DataTypes
             return 1;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             PrivacySetting = (PrivacySetting) data[index];
+            index += 1;
+
+            return index;
         }
 
         public override List<byte> Serialize()

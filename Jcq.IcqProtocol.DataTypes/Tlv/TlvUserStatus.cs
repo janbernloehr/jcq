@@ -48,7 +48,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -56,6 +56,9 @@ namespace Jcq.IcqProtocol.DataTypes
 
             UserFlag = (UserFlag) ByteConverter.ToUInt16(data.GetRange(index, 2));
             UserStatus = (UserStatus) ByteConverter.ToUInt16(data.GetRange(index + 2, 2));
+            index += 4;
+
+            return index;
         }
 
         public override int CalculateDataSize()

@@ -41,13 +41,16 @@ namespace Jcq.IcqProtocol.DataTypes
             return BosServerAddress.Length;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             BosServerAddress = ByteConverter.ToString(data.GetRange(index, DataSize));
+            index += DataSize;
+
+            return index;
         }
 
         public override List<byte> Serialize()

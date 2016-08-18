@@ -45,11 +45,13 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
-            ErrorDescriptionUrl = ByteConverter.ToString(data.GetRange(4, DataSize));
+            ErrorDescriptionUrl = ByteConverter.ToString(data.GetRange(SizeFixPart, DataSize));
+
+            return TotalSize;
         }
 
         public override int CalculateDataSize()

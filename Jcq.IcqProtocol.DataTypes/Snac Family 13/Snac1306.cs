@@ -67,9 +67,9 @@ namespace Jcq.IcqProtocol.DataTypes
             throw new NotImplementedException();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
 
@@ -88,32 +88,27 @@ namespace Jcq.IcqProtocol.DataTypes
                 switch (desc.ItemType)
                 {
                     case SSIItemType.BuddyRecord:
-                        SSIBuddyRecord buddy;
-                        buddy = new SSIBuddyRecord();
+                        var buddy = new SSIBuddyRecord();
                         buddy.Deserialize(data.GetRange(index, desc.TotalSize));
                         BuddyRecords.Add(buddy);
                         break;
                     case SSIItemType.GroupRecord:
-                        SSIGroupRecord group;
-                        group = new SSIGroupRecord();
+                        var @group = new SSIGroupRecord();
                         group.Deserialize(data.GetRange(index, desc.TotalSize));
                         GroupRecords.Add(group);
                         break;
                     case SSIItemType.PermitRecord:
-                        SSIPermitRecord permit;
-                        permit = new SSIPermitRecord();
+                        var permit = new SSIPermitRecord();
                         permit.Deserialize(data.GetRange(index, desc.TotalSize));
                         PermitRecords.Add(permit);
                         break;
                     case SSIItemType.DenyRecord:
-                        SSIDenyRecord deny;
-                        deny = new SSIDenyRecord();
+                        var deny = new SSIDenyRecord();
                         deny.Deserialize(data.GetRange(index, desc.TotalSize));
                         DenyRecords.Add(deny);
                         break;
                     case SSIItemType.IgnoreListRecord:
-                        SSIIgnoreListRecord ignore;
-                        ignore = new SSIIgnoreListRecord();
+                        var ignore = new SSIIgnoreListRecord();
                         ignore.Deserialize(data.GetRange(index, desc.TotalSize));
                         IgnoreListRecords.Add(ignore);
                         break;
@@ -143,47 +138,7 @@ namespace Jcq.IcqProtocol.DataTypes
             index += 4;
 
             TotalSize = index;
-        }
-    }
-
-    public class TlvBuddyIcon : Tlv
-    {
-        public TlvBuddyIcon() : base(0xd5)
-        {
-        }
-
-        public List<byte> IconHash { get; } = new List<byte>();
-
-        public override int CalculateDataSize()
-        {
-            return 2 + IconHash.Count;
-        }
-
-        public override void Deserialize(List<byte> data)
-        {
-            base.Deserialize(data);
-
-            int index = SizeFixPart;
-
-            int length = ByteConverter.ToUInt16(data.GetRange(index, 2));
-            index += 2;
-
-            //_IconHash.AddRange(data.GetRange(index, length))
-        }
-
-        public override List<byte> Serialize()
-        {
-            List<byte> data;
-
-            data = base.Serialize();
-
-            // MD5 Hash Size
-            data.AddRange(ByteConverter.GetBytes((ushort) IconHash.Count));
-
-            // MD5 Hash
-            data.AddRange(IconHash);
-
-            return data;
+            return index;
         }
     }
 }

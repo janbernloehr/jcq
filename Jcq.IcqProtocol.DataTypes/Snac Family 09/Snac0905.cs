@@ -44,7 +44,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return size;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
             throw new NotImplementedException();
         }

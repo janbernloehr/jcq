@@ -31,41 +31,29 @@ namespace Jcq.IcqProtocol.DataTypes
 {
     public abstract class SSIRecord : ISerializable
     {
-        private string _ItemName;
-
         protected SSIRecord(SSIItemType type)
         {
             ItemType = type;
         }
 
-        public string ItemName
-        {
-            get { return _ItemName; }
-            set
-            {
-                if (value == "143979279")
-                    Debugger.Break();
-                _ItemName = value;
-            }
-        }
+        public string ItemName { get; set; }
 
         public int GroupId { get; set; }
-        public int ItemId { get; set; }
-        public SSIItemType ItemType { get; set; }
 
-        protected int SizeFixPart
-        {
-            get { return 2 + _ItemName.Length + 2 + 2 + 2 + 2; }
-        }
+        public int ItemId { get; set; }
+
+        public SSIItemType ItemType { get; set; }
+        
+        protected int SizeFixPart => 2 + ItemName.Length + 2 + 2 + 2 + 2;
 
         public int DataSize { get; private set; }
 
-        public int TotalSize
-        {
-            get { return SizeFixPart + DataSize; }
-        }
+        public bool HasData { get; protected set; }
 
-        public bool HasData { get; private set; }
+        public int TotalSize => SizeFixPart + DataSize;
+
+        //public bool HasData { get; }
+
         public abstract int CalculateDataSize();
 
         public int CalculateTotalSize()
@@ -73,12 +61,12 @@ namespace Jcq.IcqProtocol.DataTypes
             return SizeFixPart + CalculateDataSize();
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             int index = 0;
 
-            _ItemName = ByteConverter.ToStringFromUInt16Index(index, data);
-            index += _ItemName.Length + 2;
+            ItemName = ByteConverter.ToStringFromUInt16Index(index, data);
+            index += ItemName.Length + 2;
 
             GroupId = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
@@ -91,17 +79,18 @@ namespace Jcq.IcqProtocol.DataTypes
 
             DataSize = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
+
+            return index;
         }
 
         public virtual List<byte> Serialize()
         {
             var data = new List<byte>();
-            int dataSize;
 
-            dataSize = CalculateDataSize();
+            int dataSize = CalculateDataSize();
 
-            data.AddRange(ByteConverter.GetBytes((ushort) _ItemName.Length));
-            data.AddRange(ByteConverter.GetBytes(_ItemName));
+            data.AddRange(ByteConverter.GetBytes((ushort) ItemName.Length));
+            data.AddRange(ByteConverter.GetBytes(ItemName));
             data.AddRange(ByteConverter.GetBytes((ushort) GroupId));
             data.AddRange(ByteConverter.GetBytes((ushort) ItemId));
             data.AddRange(ByteConverter.GetBytes((ushort) ItemType));

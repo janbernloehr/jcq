@@ -43,25 +43,22 @@ namespace Jcq.IcqProtocol.DataTypes
             return MissedMessageInfos.Sum(x => x.CalculateTotalSize());
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
-            int index;
-
-            index = SizeFixPart;
+            int index = SizeFixPart;
 
             while (index < data.Count)
             {
-                MissedMessageInfo info;
-
-                info = new MissedMessageInfo();
+                var info = new MissedMessageInfo();
                 index += info.Deserialize(index, data);
 
                 MissedMessageInfos.Add(info);
             }
 
             TotalSize = index;
+            return index;
         }
 
         public override List<byte> Serialize()

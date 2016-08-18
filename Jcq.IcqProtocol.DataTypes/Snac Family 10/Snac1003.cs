@@ -47,9 +47,9 @@ namespace Jcq.IcqProtocol.DataTypes
             throw new NotImplementedException();
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             //00 00\t \tword\t \tunknown field(s)
             //01 01\t \tword\t \tunknown field(s)
@@ -58,18 +58,17 @@ namespace Jcq.IcqProtocol.DataTypes
 
             int index = SizeFixPart;
 
-            byte hashLength;
-
             index += 2;
             index += 2;
 
-            hashLength = data[index];
+            byte hashLength = data[index];
             index += 1;
 
             IconHash.AddRange(data.GetRange(index, hashLength));
             index += hashLength;
 
             TotalSize = index;
+            return index;
         }
     }
 }

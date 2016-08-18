@@ -44,7 +44,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return 1 + Uin.Length + 1 + 2 + 1 + 1 + IconHash.Count;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
             throw new NotImplementedException();
         }

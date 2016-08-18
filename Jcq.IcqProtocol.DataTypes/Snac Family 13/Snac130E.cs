@@ -42,9 +42,9 @@ namespace Jcq.IcqProtocol.DataTypes
             return ActionResultCodes.Count*2;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
 
@@ -64,15 +64,14 @@ namespace Jcq.IcqProtocol.DataTypes
 
             while (index < data.Count)
             {
-                SSIActionResultCode code;
-
-                code = (SSIActionResultCode) ByteConverter.ToUInt16(data.GetRange(index, 2));
+                var code = (SSIActionResultCode) ByteConverter.ToUInt16(data.GetRange(index, 2));
                 ActionResultCodes.Add(code);
 
                 index += 2;
             }
 
             TotalSize = index;
+            return index;
         }
 
         public override List<byte> Serialize()

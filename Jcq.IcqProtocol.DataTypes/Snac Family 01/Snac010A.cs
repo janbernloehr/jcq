@@ -40,9 +40,9 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public List<RateClass> RateClasses { get; } = new List<RateClass>();
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
             //TlvDescriptor desc;
@@ -86,6 +86,7 @@ namespace Jcq.IcqProtocol.DataTypes
             }
 
             TotalSize = index;
+            return index;
         }
 
         public override List<byte> Serialize()

@@ -46,10 +46,7 @@ namespace Jcq.IcqProtocol.DataTypes
         public MissedMessageReason MissedReason { get; set; }
         public int MissedMessageCount { get; set; }
 
-        public int TotalSize
-        {
-            get { return DataSize; }
-        }
+        public int TotalSize => DataSize;
 
         public int DataSize { get; private set; }
 
@@ -65,7 +62,7 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public bool HasData { get; private set; }
 
-        public void Deserialize(List<byte> data)
+        public int Deserialize(List<byte> data)
         {
             int index = 0;
 
@@ -77,14 +74,11 @@ namespace Jcq.IcqProtocol.DataTypes
 
             WarningLevel = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
-
-            int innerTlvCount;
-            int innerTlvIndex = 0;
-
-            innerTlvCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
+            
+            int innerTlvCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
-            while (innerTlvIndex < innerTlvCount)
+            for (int innerTlvIndex = 0; innerTlvIndex < innerTlvCount; innerTlvIndex++)
             {
                 TlvDescriptor desc = TlvDescriptor.GetDescriptor(index, data);
 
@@ -104,10 +98,9 @@ namespace Jcq.IcqProtocol.DataTypes
                         break;
                 }
 
-                innerTlvIndex += 1;
                 index += desc.TotalSize;
             }
-
+            
             MissedMessageCount = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
 
@@ -117,6 +110,8 @@ namespace Jcq.IcqProtocol.DataTypes
             HasData = true;
 
             DataSize = index;
+
+            return index;
         }
 
         public virtual List<byte> Serialize()

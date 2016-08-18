@@ -37,9 +37,9 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public List<UserInfo> UserInfos { get; } = new List<UserInfo>();
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
 
@@ -53,6 +53,7 @@ namespace Jcq.IcqProtocol.DataTypes
             }
 
             TotalSize = index;
+            return index;
         }
 
         public override List<byte> Serialize()

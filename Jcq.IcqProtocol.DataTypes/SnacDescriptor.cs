@@ -34,14 +34,8 @@ namespace Jcq.IcqProtocol.DataTypes
         public int SubtypeId { get; set; }
         public int Flags { get; set; }
         public long RequestId { get; set; }
-
-        public static string GetKey(SnacDescriptor descriptor)
-        {
-            //return string.Format("{0:X2},{1:X2}", descriptor.SubtypeId == 1 ? 1 : descriptor.ServiceId,
-            //    descriptor.SubtypeId);
-            return string.Format("{0:X2},{1:X2}", descriptor.ServiceId,
-                descriptor.SubtypeId);
-        }
+        
+        public string Key => $"{ServiceId:X2},{SubtypeId:X2}";
 
         public virtual void Deserialize(List<byte> data)
         {

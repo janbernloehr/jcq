@@ -36,7 +36,8 @@ namespace Jcq.IcqProtocol.Contracts
 
         event EventHandler RateLimitsReceived;
 
-        int Calculate(int serviceTypeId, int subTypeId);
+        TimeSpan Calculate(int serviceTypeId, int subTypeId);
+
         void EmergencyThrottle();
     }
 

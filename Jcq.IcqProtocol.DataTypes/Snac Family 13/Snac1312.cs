@@ -39,13 +39,14 @@ namespace Jcq.IcqProtocol.DataTypes
             return 0;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(SnacDescriptor descriptor, List<byte> data)
         {
-            base.Deserialize(data);
+            base.Deserialize(descriptor, data);
 
             int index = SizeFixPart;
 
             TotalSize = index;
+            return index;
         }
     }
 }

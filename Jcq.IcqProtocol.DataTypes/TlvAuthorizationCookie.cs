@@ -36,13 +36,16 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public List<byte> AuthorizationCookie { get; } = new List<byte>();
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             AuthorizationCookie.AddRange(data.GetRange(index, DataSize));
+            index += DataSize;
+
+            return index;
         }
 
         public override List<byte> Serialize()

@@ -46,7 +46,7 @@ namespace Jcq.IcqProtocol.DataTypes
         public DateTime LastExtInfoUpdate { get; set; }
         public DateTime LastExtStatusUpdate { get; set; }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -84,11 +84,17 @@ namespace Jcq.IcqProtocol.DataTypes
                 LastExtStatusUpdate = ByteConverter.ToDateTimeFromUInt32FileStamp(data.GetRange(index, 4));
                 index += 4;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (Debugger.IsAttached)
+                {
                     Debugger.Break();
+                }
+
+                throw;
             }
+
+            return index;
         }
 
         public override List<byte> Serialize()

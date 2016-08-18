@@ -34,7 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionAssemblyInfo.cs">
@@ -211,6 +210,7 @@
     <Compile Include="Snac Family 13\SSIRosterImportTime.cs" />
     <Compile Include="Snac Family 13\TlvAllowOtherToSee.cs" />
     <Compile Include="Snac Family 13\TlvBuddyCommentField.cs" />
+    <Compile Include="Snac Family 13\TlvBuddyIcon.cs" />
     <Compile Include="Snac Family 13\TlvBuddyListImportTime.cs" />
     <Compile Include="Snac Family 13\TlvLocalEmailAddress.cs" />
     <Compile Include="Snac Family 13\TlvLocalScreenName.cs" />

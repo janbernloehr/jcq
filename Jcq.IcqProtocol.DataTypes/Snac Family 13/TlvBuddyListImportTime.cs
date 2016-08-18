@@ -42,13 +42,16 @@ namespace Jcq.IcqProtocol.DataTypes
             return 4;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             ImportTime = ByteConverter.ToDateTimeFromUInt32FileStamp(data.GetRange(index, 4));
+            index += 4;
+
+            return index;
         }
 
         public override List<byte> Serialize()

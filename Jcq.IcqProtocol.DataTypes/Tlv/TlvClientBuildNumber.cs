@@ -50,13 +50,16 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             ClientBuildNumber = ByteConverter.ToUInt16(data.GetRange(index, 2));
+            index += 2;
+
+            return index;
         }
     }
 }

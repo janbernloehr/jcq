@@ -50,12 +50,9 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public int DataSize { get; private set; }
 
-        public int TotalSize
-        {
-            get { return DataSize; }
-        }
+        public int TotalSize => DataSize;
 
-        public bool HasData { get; private set; }
+        public bool HasData { get; protected set; }
 
         public virtual List<byte> Serialize()
         {
@@ -69,7 +66,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             int index = 0;
 
@@ -85,6 +82,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
             RequestSequenceNumber = ByteConverter.ToUInt16LE(data.GetRange(index, 2));
             index += 2;
+
+            return index;
         }
 
         public static int GetNextSequenceNumber()

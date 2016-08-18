@@ -49,7 +49,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return data;
         }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
@@ -61,6 +61,8 @@ namespace Jcq.IcqProtocol.DataTypes
 
                 index += 16;
             }
+
+            return index;
         }
 
         public override int CalculateDataSize()

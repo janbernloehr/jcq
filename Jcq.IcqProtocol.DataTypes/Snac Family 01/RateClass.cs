@@ -44,10 +44,7 @@ namespace Jcq.IcqProtocol.DataTypes
         public long LastTime { get; set; }
         public byte CurrentState { get; set; }
 
-        public int TotalSize
-        {
-            get { return DataSize; }
-        }
+        public int TotalSize => DataSize;
 
         public int DataSize { get; private set; }
 
@@ -61,7 +58,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return CalculateDataSize();
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             int index = 0;
 
@@ -99,6 +96,8 @@ namespace Jcq.IcqProtocol.DataTypes
             HasData = true;
 
             Kernel.Logger.Log("RateLimits", TraceEventType.Information, ToString());
+
+            return index;
         }
 
         public virtual List<byte> Serialize()

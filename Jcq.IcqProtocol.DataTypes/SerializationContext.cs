@@ -44,7 +44,7 @@ namespace Jcq.IcqProtocol.DataTypes
         private static Type GetSnacMapping(SnacDescriptor desc)
         {
             string typeName = string.Format("{1}.Snac{0}, {2}",
-                SnacDescriptor.GetKey(desc).Replace(",", ""), SnacNamespace, AssemblyName);
+                desc.Key.Replace(",", ""), SnacNamespace, AssemblyName);
 
             Type snacType = Type.GetType(typeName, false, true);
 
@@ -60,8 +60,8 @@ namespace Jcq.IcqProtocol.DataTypes
             if (type == null)
                 return null;
 
-            var x = (Snac) Activator.CreateInstance(type);
-            x.Deserialize(data);
+            var x = (Snac)Activator.CreateInstance(type);
+            x.Deserialize(desc, data);
 
             return x;
         }

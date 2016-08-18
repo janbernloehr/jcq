@@ -1,8 +1,8 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TlvSSIInnerItems.cs" company="Jan-Cornelius Molnar">
+// <copyright file="TlvBuddyIcon.cs" company="Jan-Cornelius Molnar">
 // The MIT License (MIT)
 // 
-// Copyright (c) 2015 Jan-Cornelius Molnar
+// Copyright (c) 2016 Jan-Cornelius Molnar
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,25 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#region
+
 using System.Collections.Generic;
+
+#endregion
 
 namespace Jcq.IcqProtocol.DataTypes
 {
-    public class TlvSSIInnerItems : Tlv
+    public class TlvBuddyIcon : Tlv
     {
-        public TlvSSIInnerItems() : base(0xc8)
+        public TlvBuddyIcon() : base(0xd5)
         {
         }
 
-        public List<int> InnerItems { get; } = new List<int>();
+        public List<byte> IconHash { get; } = new List<byte>();
 
         public override int CalculateDataSize()
         {
-            return InnerItems.Count*2;
+            return 2 + IconHash.Count;
         }
 
         public override int Deserialize(List<byte> data)
@@ -47,13 +51,10 @@ namespace Jcq.IcqProtocol.DataTypes
 
             int index = SizeFixPart;
 
-            while (index < data.Count)
-            {
-                InnerItems.Add(ByteConverter.ToUInt16(data.GetRange(index, 2)));
+            int length = ByteConverter.ToUInt16(data.GetRange(index, 2));
+            index += 2;
 
-                index += 2;
-            }
-
+            //_IconHash.AddRange(data.GetRange(index, length))
             return index;
         }
 
@@ -61,10 +62,11 @@ namespace Jcq.IcqProtocol.DataTypes
         {
             var data = base.Serialize();
 
-            foreach (int x in InnerItems)
-            {
-                data.AddRange(ByteConverter.GetBytes((ushort) x));
-            }
+            // MD5 Hash Size
+            data.AddRange(ByteConverter.GetBytes((ushort) IconHash.Count));
+
+            // MD5 Hash
+            data.AddRange(IconHash);
 
             return data;
         }

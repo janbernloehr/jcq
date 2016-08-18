@@ -48,22 +48,21 @@ namespace Jcq.IcqProtocol.DataTypes
         public virtual int DataSize { get; private set; }
         public abstract int CalculateDataSize();
 
-        public int TotalSize
-        {
-            get { return SizeFixPart + DataSize; }
-        }
+        public int TotalSize => SizeFixPart + DataSize;
 
         public int CalculateTotalSize()
         {
             return SizeFixPart + CalculateDataSize();
         }
 
-        public virtual void Deserialize(List<byte> data)
+        public virtual int Deserialize(List<byte> data)
         {
             TypeNumber = ByteConverter.ToUInt16(data.GetRange(0, 2));
             DataSize = ByteConverter.ToUInt16(data.GetRange(2, 2));
 
             HasData = true;
+
+            return 4;
         }
 
         public virtual List<byte> Serialize()

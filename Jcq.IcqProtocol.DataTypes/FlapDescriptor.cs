@@ -29,16 +29,23 @@ using System.Collections.Generic;
 
 namespace Jcq.IcqProtocol.DataTypes
 {
-    public class FlapDescriptor
+    public interface IFlapDescriptor
     {
-        public FlapChannel Channel { get; set; }
-        public int DatagramSequenceNumber { get; set; }
+        FlapChannel Channel { get; }
+        int DatagramSequenceNumber { get; }
+        int DataSize { get;  }
+        int TotalSize { get; }
+        string SnacKey { get; }
+    }
+
+    public class FlapDescriptor : IFlapDescriptor
+    {
+        public FlapChannel Channel { get; private set; }
+        public int DatagramSequenceNumber { get; private set; }
         public int DataSize { get; private set; }
 
-        public int TotalSize
-        {
-            get { return 6 + DataSize; }
-        }
+        public int TotalSize => 6 + DataSize;
+        public string SnacKey => SnacDescriptor?.Key;
 
         public static FlapDescriptor GetDescriptor(int offset, List<byte> bytes)
         {
@@ -50,7 +57,7 @@ namespace Jcq.IcqProtocol.DataTypes
             return desc;
         }
 
-        private void Deserialize(List<byte> data)
+        private int Deserialize(List<byte> data)
         {
             int index = 0;
 
@@ -60,10 +67,10 @@ namespace Jcq.IcqProtocol.DataTypes
 
                 for (int i = 0; i <= Flap.SizeFixPart - 1; i++)
                 {
-                    info += string.Format("{0:X} ", data[i]);
+                    info += $"{data[i]:X} ";
                 }
 
-                throw new InvalidOperationException(string.Format("No flap at this position: {0}", info));
+                throw new InvalidOperationException($"No flap at this position: {info}");
             }
 
             index += 1;
@@ -76,6 +83,15 @@ namespace Jcq.IcqProtocol.DataTypes
 
             DataSize = ByteConverter.ToUInt16(data.GetRange(index, 2));
             index += 2;
+
+            if (Channel == FlapChannel.SnacData)
+            {
+                SnacDescriptor = SnacDescriptor.GetDescriptor(index, data);
+            }
+
+            return index;
         }
+
+        public SnacDescriptor SnacDescriptor { get; private set; }
     }
 }

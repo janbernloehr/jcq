@@ -34,7 +34,7 @@ namespace Jcq.IcqProtocol.DataTypes
         int DataSize { get; }
         bool HasData { get; }
         List<byte> Serialize();
-        void Deserialize(List<byte> data);
+        int Deserialize(List<byte> data);
         int CalculateTotalSize();
         int CalculateDataSize();
     }

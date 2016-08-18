@@ -55,21 +55,18 @@ namespace Jcq.IcqProtocol
 
         public KeyedNotifiyingCollection<long, IcqRateLimitsClass> RateLimits { get; }
 
-        IReadOnlyNotifyingCollection<IRateLimitsClass> IRateLimitsService.RateLimits
-        {
-            get { return RateLimits; }
-        }
+        IReadOnlyNotifyingCollection<IRateLimitsClass> IRateLimitsService.RateLimits => RateLimits;
 
         public event EventHandler RateLimitsReceived;
 
 
-        public int Calculate(int serviceTypeId, int subTypeId)
+        public TimeSpan Calculate(int serviceTypeId, int subTypeId)
         {
             long classId;
 
-            if (!_mappings.TryGetValue(new Tuple<int, int>(serviceTypeId, subTypeId), out classId)) return 0;
+            if (!_mappings.TryGetValue(new Tuple<int, int>(serviceTypeId, subTypeId), out classId)) return TimeSpan.Zero;
 
-            if (!RateLimits.Contains(classId)) return 0;
+            if (!RateLimits.Contains(classId)) return TimeSpan.Zero;
 
             IcqRateLimitsClass cls = RateLimits[classId];
 
@@ -91,8 +88,8 @@ namespace Jcq.IcqProtocol
                 newLevel = cls.MaxLevel;
             else
             {
-                double a = (cls.WindowSize - 1)*oldLevel/(double) cls.WindowSize;
-                double b = (newTime - cls.LocalLastTime)/(double) cls.WindowSize;
+                double a = (cls.WindowSize - 1) * oldLevel / (double)cls.WindowSize;
+                double b = (newTime - cls.LocalLastTime) / (double)cls.WindowSize;
 
                 newLevel = Convert.ToInt64(a + b);
             }
@@ -100,9 +97,9 @@ namespace Jcq.IcqProtocol
             cls.LocalLastTime = newTime;
             cls.Computed = newLevel;
 
-            cls.WaitTime = Convert.ToInt32(Math.Max(cls.WindowSize*cls.ClearLevel - (cls.WindowSize - 1)*oldLevel, 0));
+            cls.WaitTime = Convert.ToInt32(Math.Max(cls.WindowSize * cls.ClearLevel - (cls.WindowSize - 1) * oldLevel, 0));
 
-            return cls.WaitTime;
+            return TimeSpan.FromSeconds(cls.WaitTime);
         }
 
         public void EmergencyThrottle()

@@ -36,13 +36,16 @@ namespace Jcq.IcqProtocol.DataTypes
 
         public string AwayMessageEncoding { get; set; }
 
-        public override void Deserialize(List<byte> data)
+        public override int Deserialize(List<byte> data)
         {
             base.Deserialize(data);
 
             int index = SizeFixPart;
 
             AwayMessageEncoding = ByteConverter.ToStringFromUInt16Index(index, data);
+            index += 2 + AwayMessageEncoding.Length;
+
+            return index;
         }
 
         public override List<byte> Serialize()
